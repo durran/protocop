@@ -2,6 +2,7 @@
 require "protocop/decodable"
 require "protocop/dsl"
 require "protocop/encodable"
+require "protocop/wire"
 
 module Protocop
 
