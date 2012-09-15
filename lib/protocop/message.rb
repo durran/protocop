@@ -9,8 +9,11 @@ module Protocop
   # Protocol Buffer specification.
   #
   # @see http://code.google.com/p/protobuf/
+  #
+  # @since 0.0.0
   module Message
-    include Decodable, Encodable
+    extend Decodable
+    include Encodable
 
     # Instantiate a new Message. If no attributes are provided, then the fields
     # will need to be set using the setters, otherwise the provided attributes
