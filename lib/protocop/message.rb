@@ -24,7 +24,7 @@ module Protocop
     # @since 0.0.0
     def initialize(attributes = {})
       attributes.each_pair do |field, value|
-        __send__("#{field}=", value)
+        __send__(field.__setter__, value)
       end
     end
 
