@@ -17,11 +17,11 @@ describe Protocop::Message do
         Object.__send__(:remove_const, :Request)
       end
 
-      let(:message) do
-        Request.new
-      end
-
       context "when setting the string via the setter" do
+
+        let(:message) do
+          Request.new
+        end
 
         let!(:string) do
           message.name = "testing"
@@ -33,6 +33,17 @@ describe Protocop::Message do
 
         it "returns the set string" do
           expect(string).to eq("testing")
+        end
+      end
+
+      context "when setting the string via the constructor" do
+
+        let(:message) do
+          Request.new(name: "testing")
+        end
+
+        it "sets the string in the message" do
+          expect(message.name).to eq("testing")
         end
       end
     end

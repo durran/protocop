@@ -7,6 +7,27 @@ module Protocop
   # @see http://code.google.com/p/protobuf/
   module Message
 
+    # Instantiate a new Message. If no attributes are provided, then the fields
+    # will need to be set using the setters, otherwise the provided attributes
+    # must be a hash of field/value pairs.
+    #
+    # @example Instantiate a Message with some fields.
+    #   class Request
+    #     include Protocop::Message
+    #     optional :string, :name, 1
+    #   end
+    #
+    #   Request.new(name: "request message")
+    #
+    # @param [ Hash ] attributes The field/value attribute pairs.
+    #
+    # @since 0.0.0
+    def initialize(attributes = {})
+      attributes.each_pair do |field, value|
+        __send__("#{field}=", value)
+      end
+    end
+
     private
 
     # When including the module into a class, we need to inject the class
