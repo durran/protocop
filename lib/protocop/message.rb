@@ -1,4 +1,8 @@
 # encoding: utf-8
+require "protocop/decodable"
+require "protocop/dsl"
+require "protocop/encodable"
+
 module Protocop
 
   # A Message is simply an encodable structure that conforms to Google's
@@ -6,6 +10,7 @@ module Protocop
   #
   # @see http://code.google.com/p/protobuf/
   module Message
+    include Decodable, Encodable
 
     # Instantiate a new Message. If no attributes are provided, then the fields
     # will need to be set using the setters, otherwise the provided attributes
