@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Protocop::Message do
+describe Protocop::DSL do
 
   describe ".required" do
 
@@ -8,7 +8,7 @@ describe Protocop::Message do
 
       before(:all) do
         class Request
-          include Protocop::Message
+          extend Protocop::DSL
           required :string, :name, 1
         end
       end
@@ -17,14 +17,22 @@ describe Protocop::Message do
         Object.__send__(:remove_const, :Request)
       end
 
-      context "when setting the string via the constructor" do
+      context "when setting the string via the setter" do
 
         let(:message) do
-          Request.new(name: "testing")
+          Request.new
+        end
+
+        let!(:string) do
+          message.name = "testing"
         end
 
         it "sets the string in the message" do
           expect(message.name).to eq("testing")
+        end
+
+        it "returns the set string" do
+          expect(string).to eq("testing")
         end
       end
     end
