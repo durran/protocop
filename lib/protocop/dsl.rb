@@ -1,4 +1,6 @@
 # encoding: utf-8
+require "protocop/fields"
+
 module Protocop
 
   # This module is the DSL that is used to define the message structure.
