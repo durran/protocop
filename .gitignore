@@ -1,7 +1,9 @@
 *.gem
 *.rbc
 .bundle
-.o
+*.o
+*.bundle
+Makefile
 .config
 coverage
 InstalledFiles

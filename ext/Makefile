@@ -11,7 +11,7 @@ ECHO = $(ECHO1:0=@echo)
 
 #### Start of system configuration section. ####
 
-srcdir = protocop
+srcdir = .
 topdir = /Users/durran/.rvm/rubies/ruby-1.9.3-p194/include/ruby-1.9.1
 hdrdir = /Users/durran/.rvm/rubies/ruby-1.9.3-p194/include/ruby-1.9.1
 arch_hdrdir = /Users/durran/.rvm/rubies/ruby-1.9.3-p194/include/ruby-1.9.1/$(arch)

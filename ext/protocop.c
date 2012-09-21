@@ -9,7 +9,6 @@
  */
 void Init_protocop()
 {
-  printf("Hey buddy!");
-  /* protocop = rb_define_module("Protobitch"); */
-  /* initialize_buffer(); */
+  VALUE protocop = rb_define_module("Protocop");
+  initialize_buffer(protocop);
 }
