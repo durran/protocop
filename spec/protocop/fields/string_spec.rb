@@ -7,7 +7,7 @@ describe Protocop::Fields::String do
   end
 
   let(:outbound) do
-    ""
+    Protocop::Buffer.new
   end
 
   describe "#encode" do
