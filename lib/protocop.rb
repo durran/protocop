@@ -3,8 +3,12 @@ require "protocop/ext"
 require "protocop/message"
 require "protocop/version"
 
-begin
-  require "./ext/protocop"
-rescue Exception => e
+if ENV["PROTOCOP"] == "noext"
   require "protocop/buffer"
+else
+  begin
+    require "./ext/protocop"
+  rescue Exception => e
+    require "protocop/buffer"
+  end
 end

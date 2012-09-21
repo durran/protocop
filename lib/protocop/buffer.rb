@@ -11,10 +11,10 @@ module Protocop
     attr_reader :bytes
 
     # Check if this buffer is equal to the other object. Simply checks the
-    # bytes against the other's string representation.
+    # bytes against the other's bytes.
     #
     # @example Check buffer equality.
-    #   buffer == "testing"
+    #   buffer == other
     #
     # @param [ Object ] other The object to check against.
     #
@@ -22,7 +22,7 @@ module Protocop
     #
     # @since 0.0.0
     def ==(other)
-      to_s == other.to_s
+      bytes == other.bytes
     end
 
     # Instantiate a new buffer.
@@ -34,16 +34,6 @@ module Protocop
     def initialize
       @bytes = ""
     end
-
-    # Alias to_s simply to the wrapped bytes string.
-    #
-    # @example Get the buffer as a string.
-    #   buffer.to_s
-    #
-    # @return [ String ] The wrapped bytes.
-    #
-    # @since 0.0.0
-    alias :to_s :bytes
 
     # Write a variable length integer to the protocol buffer.
     #

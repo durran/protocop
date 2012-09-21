@@ -21,39 +21,51 @@ describe Protocop::Buffer do
 
     context "when the string is empty" do
 
+      let(:written) do
+        buffer.write_string("")
+      end
+
       it "does not add anything to the buffer" do
-        expect(buffer.write_string("")).to eq("")
+        expect(written.bytes).to eq("")
       end
 
       it "returns the buffer" do
-        expect(buffer.write_string("")).to equal(buffer)
+        expect(written).to equal(buffer)
       end
     end
 
     context "when the string is nil" do
 
+      let(:written) do
+        buffer.write_string(nil)
+      end
+
       it "does not add anything to the buffer" do
-        expect(buffer.write_string(nil)).to eq("")
+        expect(written.bytes).to eq("")
       end
 
       it "returns the buffer" do
-        expect(buffer.write_string(nil)).to equal(buffer)
+        expect(written).to equal(buffer)
       end
     end
 
     context "when the string is not empty" do
 
+      let(:written) do
+        buffer.write_string("test")
+      end
+
       it "adds the string to the buffer" do
-        expect(buffer.write_string("test")).to eq("test")
+        expect(written.bytes).to eq("test")
       end
 
       it "returns the buffer" do
-        expect(buffer.write_string("test")).to equal(buffer)
+        expect(written).to equal(buffer)
       end
     end
   end
 
-  describe "#write_varint" do
+  pending "#write_varint" do
 
   end
 end

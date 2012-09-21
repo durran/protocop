@@ -31,4 +31,14 @@ RSpec::Core::RakeTask.new("spec:ext") do |spec|
   spec.pattern = "spec/**/*_spec.rb"
 end
 
-task :default => :spec
+task :full do
+  Rake::Task[:spec].invoke
+  Dir.chdir(Pathname(__FILE__).dirname + "ext") do
+    `bundle exec ruby extconf.rb`
+    `make`
+  end
+  ENV["PROTOCOP"] = "ext"
+  Rake::Task[:"spec:ext"].invoke
+end
+
+task :default => :full
