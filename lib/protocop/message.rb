@@ -1,7 +1,6 @@
 # encoding: utf-8
-require "protocop/decodable"
+require "protocop/buffer"
 require "protocop/dsl"
-require "protocop/encodable"
 require "protocop/wire"
 
 module Protocop
@@ -13,8 +12,6 @@ module Protocop
   #
   # @since 0.0.0
   module Message
-    extend Decodable
-    include Encodable
 
     # Instantiate a new Message. If no attributes are provided, then the fields
     # will need to be set using the setters, otherwise the provided attributes
