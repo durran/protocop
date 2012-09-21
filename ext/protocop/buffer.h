@@ -1,4 +1,5 @@
 #include <ruby.h>
+#include <protocop.h>
 
 /*
  * Check if this buffer is equal to the other object. Simply checks the
@@ -53,8 +54,6 @@ VALUE buffer_write_string(VALUE self, VALUE string);
 /*
  * Initialize the Protocop::Buffer class.
  *
- * @param [ Module ] protocop The Protocop Ruby module.
- *
  * @since 0.0.0
  */
-void initialize_buffer(VALUE protocop);
+void initialize_buffer();

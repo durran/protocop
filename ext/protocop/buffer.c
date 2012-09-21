@@ -70,11 +70,9 @@ VALUE buffer_write_string(VALUE self, VALUE string)
 /*
  * Initialize the Protocop::Buffer class.
  *
- * @param [ Module ] protocop The Protocop Ruby module.
- *
  * @since 0.0.0
  */
-void initialize_buffer(VALUE protocop)
+void initialize_buffer()
 {
   VALUE buffer = rb_define_class_under(protocop, "Buffer", rb_cObject);
   rb_define_method(buffer, "==", buffer_equals, 1);

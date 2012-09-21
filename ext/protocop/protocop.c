@@ -9,7 +9,7 @@
  */
 void Init_protocop()
 {
-  VALUE protocop = rb_const_get(rb_cObject, rb_intern("Protocop"));
-  printf("I am here");
-  initialize_buffer(protocop);
+  printf("Hey buddy!");
+  /* protocop = rb_define_module("Protobitch"); */
+  /* initialize_buffer(); */
 }
