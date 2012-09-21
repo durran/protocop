@@ -4,9 +4,7 @@ require "protocop/message"
 require "protocop/version"
 
 begin
-  require "/Users/durran/work/oss/protocop/ext/protocop"
+  require "./ext/protocop"
 rescue Exception => e
-  puts(e)
-  puts(e.backtrace)
   require "protocop/buffer"
 end
