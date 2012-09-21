@@ -27,17 +27,14 @@ module Protocop
       to_s == other.to_s
     end
 
-    # Instantiate a new buffer. Will default to empty bytes if no parameter
-    # provided.
+    # Instantiate a new buffer.
     #
     # @example Instantiate the buffer.
     #   Protocop::Buffer.new
     #
-    # @param [ String ] bytes The bytes to wrap.
-    #
     # @since 0.0.0
-    def initialize(bytes = "")
-      @bytes = bytes
+    def initialize
+      @bytes = ""
     end
 
     # Alias to_s simply to the wrapped bytes string.
