@@ -1,5 +1,4 @@
 # encoding: utf-8
-require "protocop/buffer"
 require "protocop/dsl"
 require "protocop/wire"
 

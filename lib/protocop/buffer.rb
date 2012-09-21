@@ -1,6 +1,4 @@
 # encoding: utf-8
-#
-# If we're not using JRuby, then attempt to load the c extension.
 module Protocop
 
   # Encapsulates behaviour for writing to a string of bytes that conforms to

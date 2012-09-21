@@ -14,9 +14,9 @@
  *
  * @since 0.0.0
  */
-static VALUE buffer_equals(VALUE self, VALUE other)
+VALUE buffer_equals(VALUE self, VALUE other)
 {
-  return buffer_bytes(self) == rb_funcall(other, "to_s", 0)
+  return buffer_bytes(self) == rb_funcall(other, rb_intern("to_s"), 0);
 }
 
 /*
@@ -29,7 +29,7 @@ static VALUE buffer_equals(VALUE self, VALUE other)
  *
  * @since 0.0.0
  */
-static VALUE buffer_bytes(VALUE self)
+VALUE buffer_bytes(VALUE self)
 {
   return rb_iv_get(self, "@bytes");
 }
@@ -39,7 +39,7 @@ static VALUE buffer_bytes(VALUE self)
  *
  * @since 0.0.0
  */
-static VALUE buffer_initialize(VALUE self)
+VALUE buffer_initialize(VALUE self)
 {
   VALUE bytes = rb_str_new2("");
   rb_iv_set(self, "@bytes", bytes);
@@ -60,7 +60,7 @@ static VALUE buffer_initialize(VALUE self)
  *
  * @since 0.0.0
  */
-static VALUE buffer_write_string(VALUE self, VALUE string)
+VALUE buffer_write_string(VALUE self, VALUE string)
 {
   VALUE bytes = rb_iv_get(self, "@bytes");
   rb_str_concat(bytes, string);
@@ -77,6 +77,7 @@ static VALUE buffer_write_string(VALUE self, VALUE string)
 void initialize_buffer(VALUE protocop)
 {
   VALUE buffer = rb_define_class_under(protocop, "Buffer", rb_cObject);
+  rb_define_method(buffer, "==", buffer_equals, 1);
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "bytes", buffer_bytes, 0);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);

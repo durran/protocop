@@ -13,7 +13,7 @@
  *
  * @since 0.0.0
  */
-static VALUE buffer_equals(VALUE self, VALUE other);
+VALUE buffer_equals(VALUE self, VALUE other);
 
 /*
  * Gets the wrapped bytes for the buffer.
@@ -25,14 +25,14 @@ static VALUE buffer_equals(VALUE self, VALUE other);
  *
  * @since 0.0.0
  */
-static VALUE buffer_bytes(VALUE self);
+VALUE buffer_bytes(VALUE self);
 
 /*
  * Initializes a new Protocop::Buffer.
  *
  * @since 0.0.0
  */
-static VALUE buffer_initialize(VALUE self);
+VALUE buffer_initialize(VALUE self);
 
 /*
  * Write a string to the buffer via the Protocol Buffer specification.
@@ -48,7 +48,7 @@ static VALUE buffer_initialize(VALUE self);
  *
  * @since 0.0.0
  */
-static VALUE buffer_write_string(VALUE self, VALUE string);
+VALUE buffer_write_string(VALUE self, VALUE string);
 
 /*
  * Initialize the Protocop::Buffer class.
