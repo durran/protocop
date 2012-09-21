@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    protocop (0.0.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -34,6 +39,7 @@ PLATFORMS
 DEPENDENCIES
   debugger
   guard-rspec
+  protocop!
   rake
   rb-fsevent
   rspec (~> 2.11)

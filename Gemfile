@@ -1,5 +1,6 @@
 source :rubygems
 
+gemspec
 gem "rake"
 
 platforms :mri_19 do
