@@ -38,7 +38,7 @@ module Protocop
     # Write a variable length integer to the protocol buffer.
     #
     # @example Write a varint.
-    #   buffer.write_varint(10)
+    #   buffer.write_varint64(10)
     #
     # @note This is a recursive function that will return the buffer when
     #   finished.
@@ -50,15 +50,13 @@ module Protocop
     # @see https://developers.google.com/protocol-buffers/docs/encoding#varints
     #
     # @since 0.0.0
-    def write_varint(value)
-      bits = value & 0x7F
-      value >>= 7
-      if value == 0
-        bytes << bits and self
-      else
-        bytes << (bits | 0x80)
-        write_varint(value)
+    def write_varint64(value)
+      while (value > 0x7F) do
+        bytes << ((value & 0x7F) | 0x80)
+        value >>= 7
       end
+      bytes << (value & 0x7F)
+      self
     end
 
     # Write a string to the buffer via the Protocol Buffer specification.

@@ -10,7 +10,7 @@ describe Protocop::Fields::String do
     Protocop::Buffer.new
   end
 
-  pending "#encode" do
+  describe "#encode" do
 
     context "when the string is empty" do
 
