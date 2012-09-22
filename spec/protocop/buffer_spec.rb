@@ -2,11 +2,11 @@ require "spec_helper"
 
 describe Protocop::Buffer do
 
-  describe "#initialize" do
+  let(:buffer) do
+    described_class.new
+  end
 
-    let(:buffer) do
-      described_class.new
-    end
+  describe "#initialize" do
 
     it "sets the bytes to an empty string" do
       expect(buffer.bytes).to eq("")
@@ -18,10 +18,6 @@ describe Protocop::Buffer do
   end
 
   describe "#write_string" do
-
-    let(:buffer) do
-      described_class.new
-    end
 
     context "when the string is empty" do
 
@@ -64,10 +60,6 @@ describe Protocop::Buffer do
   end
 
   describe "#write_varint64" do
-
-    let(:buffer) do
-      described_class.new
-    end
 
     context "when provided a 1 byte integer" do
 
