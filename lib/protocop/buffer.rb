@@ -7,6 +7,9 @@ module Protocop
   # @since 0.0.0
   class Buffer
 
+    # Constant for binary string encoding.
+    BINARY = "BINARY"
+
     # @attribute [r] bytes The wrapped string of bytes.
     attr_reader :bytes
 
@@ -32,7 +35,7 @@ module Protocop
     #
     # @since 0.0.0
     def initialize
-      @bytes = ""
+      @bytes = "".force_encoding(BINARY)
     end
 
     # Write a variable length integer to the protocol buffer.

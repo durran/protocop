@@ -5,3 +5,5 @@ ENV["PROTOCOP"] ||= "noext"
 
 require "protocop"
 require "rspec"
+
+Dir["./spec/support/**/*.rb"].each { |f| require f }
