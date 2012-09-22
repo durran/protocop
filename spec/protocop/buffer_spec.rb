@@ -46,6 +46,19 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#write_bytes" do
+
+    let(:written) do
+      buffer.write_bytes("\x04\x01")
+    end
+
+    it "adds the bytes to the buffer" do
+      expect(written.bytes).to eq("\x04\x01")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
   pending "#write_enum"
   pending "#write_int32"
   pending "#write_int64"
@@ -57,7 +70,6 @@ describe Protocop::Buffer do
   pending "#write_sfixed64"
   pending "#write_double"
 
-  pending "#write_bytes"
   pending "#write_embedded"
   pending "#write_repeated"
 

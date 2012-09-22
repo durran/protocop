@@ -90,5 +90,6 @@ module Protocop
     def write_string(value)
       bytes << value.to_s and self
     end
+    alias :write_bytes :write_string
   end
 end

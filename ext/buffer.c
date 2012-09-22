@@ -76,6 +76,25 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean)
 }
 
 /*
+ * Write raw bytes (a ruby string) to the buffer.
+ *
+ * @example Write bytes to the buffer.
+ *   buffer.write_bytes("\x01")
+ *
+ * @param [ String ] bytes The bytes to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_bytes(VALUE self, VALUE bytes)
+{
+  return buffer_write_string(self, bytes);
+}
+
+/*
  * Write a string to the buffer via the Protocol Buffer specification.
  *
  * @example Write a string to the buffer.
@@ -138,6 +157,7 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "bytes", buffer_bytes, 0);
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
+  rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
   rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
 }
