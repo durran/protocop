@@ -17,7 +17,35 @@ describe Protocop::Buffer do
     end
   end
 
-  pending "#write_boolean"
+  describe "#write_boolean" do
+
+    context "when the boolean is true" do
+
+      let(:written) do
+        buffer.write_boolean(true)
+      end
+
+      it "adds the boolean to the buffer" do
+        expect(written.bytes).to eq("\x01")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    context "when the boolean is false" do
+
+      let(:written) do
+        buffer.write_boolean(false)
+      end
+
+      it "adds the boolean to the buffer" do
+        expect(written.bytes).to eq("\x00")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+  end
+
   pending "#write_enum"
   pending "#write_int32"
   pending "#write_int64"

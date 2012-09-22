@@ -38,6 +38,10 @@ module Protocop
       @bytes = "".force_encoding(BINARY)
     end
 
+    def write_boolean(value)
+      write_uint64(value ? 1 : 0)
+    end
+
     # Write an unsigned 64 bit integer to the buffer.
     #
     # @example Write a varint.
