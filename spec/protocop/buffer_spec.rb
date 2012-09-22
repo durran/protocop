@@ -94,5 +94,18 @@ describe Protocop::Buffer do
 
       it_behaves_like "a fluid interface"
     end
+
+    context "when provided a 3 byte integer" do
+
+      let(:written) do
+        buffer.write_varint64(20400)
+      end
+
+      it "adds the string to the buffer" do
+        expect(written.bytes).to eq("\xB0\x9F\x01")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
   end
 end
