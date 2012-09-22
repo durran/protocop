@@ -95,6 +95,28 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
 }
 
 /*
+ * Write a 32bit float to the buffer.
+ *
+ * @example Write the float to the buffer.
+ *   buffer.write_float(1.22)
+ *
+ * @param [ Float ] value The float value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_float(VALUE self, VALUE float_val)
+{
+  VALUE bytes = rb_iv_get(self, "@bytes");
+  float value = (float) RFLOAT_VALUE(rb_to_float(float_val));
+  rb_str_concat(bytes, rb_str_new2((char*) &value));
+  return self;
+}
+
+/*
  * Write a string to the buffer via the Protocol Buffer specification.
  *
  * @example Write a string to the buffer.
@@ -158,6 +180,7 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
+  rb_define_method(buffer, "write_float", buffer_write_float, 1);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
   rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
 }

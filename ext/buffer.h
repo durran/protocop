@@ -67,6 +67,22 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean);
 VALUE buffer_write_bytes(VALUE self, VALUE bytes);
 
 /*
+ * Write a 32bit float to the buffer.
+ *
+ * @example Write the float to the buffer.
+ *   buffer.write_float(1.22)
+ *
+ * @param [ Float ] value The float value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_float(VALUE self, VALUE float_val);
+
+/*
  * Write a string to the buffer via the Protocol Buffer specification.
  *
  * @example Write a string to the buffer.

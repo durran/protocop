@@ -54,6 +54,23 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
+    # Write a 32bit float to the buffer.
+    #
+    # @example Write the float to the buffer.
+    #   buffer.write_float(1.22)
+    #
+    # @param [ Float ] value The float value.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def write_float(value)
+      bytes << [ value ].pack("e")
+      self
+    end
+
     # Write an unsigned 64 bit integer to the buffer.
     #
     # @example Write a varint.
