@@ -38,13 +38,10 @@ module Protocop
       @bytes = "".force_encoding(BINARY)
     end
 
-    # Write a variable length integer to the protocol buffer.
+    # Write an unsigned 64 bit integer to the buffer.
     #
     # @example Write a varint.
-    #   buffer.write_varint64(10)
-    #
-    # @note This is a recursive function that will return the buffer when
-    #   finished.
+    #   buffer.write_uint64(10)
     #
     # @param [ Integer ] value The integer to write.
     #
@@ -53,7 +50,7 @@ module Protocop
     # @see https://developers.google.com/protocol-buffers/docs/encoding#varints
     #
     # @since 0.0.0
-    def write_varint64(value)
+    def write_uint64(value)
       while (value > 0x7F) do
         bytes << ((value & 0x7F) | 0x80)
         value >>= 7

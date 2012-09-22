@@ -51,13 +51,10 @@ VALUE buffer_initialize(VALUE self);
 VALUE buffer_write_string(VALUE self, VALUE string);
 
 /*
- * Write a variable length integer to the protocol buffer.
+ * Write an unsigned 64 bit integer to the buffer.
  *
  * @example Write a varint.
- *   buffer.write_varint64(10)
- *
- * @note This is a recursive function that will return the buffer when
- *   finished.
+ *   buffer.write_uint64(10)
  *
  * @param [ Integer ] value The integer to write.
  *
@@ -67,7 +64,7 @@ VALUE buffer_write_string(VALUE self, VALUE string);
  *
  * @since 0.0.0
  */
-VALUE buffer_write_varint64(VALUE self, VALUE fixnum);
+VALUE buffer_write_uint64(VALUE self, VALUE fixnum);
 
 /*
  * Initialize the Protocop::Buffer class.

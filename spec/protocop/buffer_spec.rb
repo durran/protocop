@@ -17,6 +17,26 @@ describe Protocop::Buffer do
     end
   end
 
+  pending "#write_boolean"
+  pending "#write_enum"
+  pending "#write_int32"
+  pending "#write_int64"
+  pending "#write_uint32"
+  pending "#write_sint32"
+  pending "#write_sint64"
+
+  pending "#write_fixed64"
+  pending "#write_sfixed64"
+  pending "#write_double"
+
+  pending "#write_bytes"
+  pending "#write_embedded"
+  pending "#write_repeated"
+
+  pending "#write_fixed32"
+  pending "#write_sfixed32"
+  pending "#write_float"
+
   describe "#write_string" do
 
     context "when the string is empty" do
@@ -59,12 +79,12 @@ describe Protocop::Buffer do
     end
   end
 
-  describe "#write_varint64" do
+  describe "#write_uint64" do
 
     context "when provided a 1 byte integer" do
 
       let(:written) do
-        buffer.write_varint64(5)
+        buffer.write_uint64(5)
       end
 
       it "adds the string to the buffer" do
@@ -77,7 +97,7 @@ describe Protocop::Buffer do
     context "when provided a 2 byte integer" do
 
       let(:written) do
-        buffer.write_varint64(130)
+        buffer.write_uint64(130)
       end
 
       it "adds the string to the buffer" do
@@ -90,7 +110,7 @@ describe Protocop::Buffer do
     context "when provided a 3 byte integer" do
 
       let(:written) do
-        buffer.write_varint64(20400)
+        buffer.write_uint64(20400)
       end
 
       it "adds the string to the buffer" do

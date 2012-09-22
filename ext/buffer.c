@@ -75,13 +75,10 @@ VALUE buffer_write_string(VALUE self, VALUE string)
 }
 
 /*
- * Write a variable length integer to the protocol buffer.
+ * Write an unsigned 64 bit integer to the buffer.
  *
  * @example Write a varint.
- *   buffer.write_varint64(10)
- *
- * @note This is a recursive function that will return the buffer when
- *   finished.
+ *   buffer.write_uint64(10)
  *
  * @param [ Integer ] value The integer to write.
  *
@@ -91,7 +88,7 @@ VALUE buffer_write_string(VALUE self, VALUE string)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_varint64(VALUE self, VALUE fixnum)
+VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
 {
   VALUE bytes = rb_iv_get(self, "@bytes");
   int value = FIX2INT(fixnum);
@@ -117,5 +114,5 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "bytes", buffer_bytes, 0);
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
-  rb_define_method(buffer, "write_varint64", buffer_write_varint64, 1);
+  rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
 }
