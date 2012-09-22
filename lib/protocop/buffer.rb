@@ -38,6 +38,18 @@ module Protocop
       @bytes = "".force_encoding(BINARY)
     end
 
+    # Write a boolean to the buffer.
+    #
+    # @example Write a true value to the buffer.
+    #   buffer.write_boolean(true)
+    #
+    # @param [ true, false ] value The boolean value.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_boolean(value)
       write_uint64(value ? 1 : 0)
     end

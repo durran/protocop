@@ -35,6 +35,22 @@ VALUE buffer_bytes(VALUE self);
 VALUE buffer_initialize(VALUE self);
 
 /*
+ * Write a boolean to the buffer.
+ *
+ * @example Write a true value to the buffer.
+ *   buffer.write_boolean(true)
+ *
+ * @param [ true, false ] value The boolean value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_boolean(VALUE self, VALUE boolean);
+
+/*
  * Write a string to the buffer via the Protocol Buffer specification.
  *
  * @example Write a string to the buffer.
