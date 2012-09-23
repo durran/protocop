@@ -92,10 +92,14 @@ module Protocop
       write_uint64(value)
     end
 
-    # Write an unsigned 64 bit integer to the buffer.
+    def write_uint64(value)
+      write_varint(value)
+    end
+
+    # Write a varint to the buffer.
     #
     # @example Write a varint.
-    #   buffer.write_uint64(10)
+    #   buffer.write_varint(10)
     #
     # @param [ Integer ] value The integer to write.
     #
@@ -104,7 +108,7 @@ module Protocop
     # @see https://developers.google.com/protocol-buffers/docs/encoding#varints
     #
     # @since 0.0.0
-    def write_uint64(value)
+    def write_varint(value)
       while (value > 0x7F) do
         bytes << ((value & 0x7F) | 0x80)
         value >>= 7

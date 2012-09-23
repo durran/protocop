@@ -213,10 +213,28 @@ describe Protocop::Buffer do
 
   describe "#write_uint64" do
 
+    context "when the value is 64 bit" do
+
+      let(:written) do
+        buffer.write_uint64(10)
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq("\n")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    pending "when the value is negative"
+  end
+
+  describe "#write_varint" do
+
     context "when provided a 1 byte integer" do
 
       let(:written) do
-        buffer.write_uint64(5)
+        buffer.write_varint(5)
       end
 
       it "adds the string to the buffer" do
@@ -229,7 +247,7 @@ describe Protocop::Buffer do
     context "when provided a 2 byte integer" do
 
       let(:written) do
-        buffer.write_uint64(130)
+        buffer.write_varint(130)
       end
 
       it "adds the string to the buffer" do
@@ -242,7 +260,7 @@ describe Protocop::Buffer do
     context "when provided a 3 byte integer" do
 
       let(:written) do
-        buffer.write_uint64(20400)
+        buffer.write_varint(20400)
       end
 
       it "adds the string to the buffer" do

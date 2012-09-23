@@ -68,10 +68,10 @@ VALUE buffer_initialize(VALUE self)
 VALUE buffer_write_boolean(VALUE self, VALUE boolean)
 {
   if (RTEST(boolean)) {
-    return buffer_write_uint64(self, INT2FIX(1));
+    return buffer_write_varint(self, INT2FIX(1));
   }
   else {
-    return buffer_write_uint64(self, INT2FIX(0));
+    return buffer_write_varint(self, INT2FIX(0));
   }
 }
 
@@ -118,27 +118,32 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
 
 VALUE buffer_write_int32(VALUE self, VALUE integer)
 {
-  return buffer_write_uint64(self, integer);
+  return buffer_write_varint(self, integer);
 }
 
 VALUE buffer_write_int64(VALUE self, VALUE integer)
 {
-  return buffer_write_uint64(self, integer);
+  return buffer_write_varint(self, integer);
 }
 
 VALUE buffer_write_sint32(VALUE self, VALUE integer)
 {
-  return buffer_write_uint64(self, integer);
+  return buffer_write_varint(self, integer);
 }
 
 VALUE buffer_write_sint64(VALUE self, VALUE integer)
 {
-  return buffer_write_uint64(self, integer);
+  return buffer_write_varint(self, integer);
 }
 
 VALUE buffer_write_uint32(VALUE self, VALUE integer)
 {
-  return buffer_write_uint64(self, integer);
+  return buffer_write_varint(self, integer);
+}
+
+VALUE buffer_write_uint64(VALUE self, VALUE integer)
+{
+  return buffer_write_varint(self, integer);
 }
 
 /*
@@ -165,10 +170,10 @@ VALUE buffer_write_string(VALUE self, VALUE string)
 }
 
 /*
- * Write an unsigned 64 bit integer to the buffer.
+ * Write a varint to the buffer.
  *
  * @example Write a varint.
- *   buffer.write_uint64(10)
+ *   buffer.write_varint(10)
  *
  * @param [ Integer ] value The integer to write.
  *
@@ -178,7 +183,7 @@ VALUE buffer_write_string(VALUE self, VALUE string)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
+VALUE buffer_write_varint(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);
   int value = FIX2INT(fixnum);
@@ -213,4 +218,5 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
   rb_define_method(buffer, "write_uint32", buffer_write_uint32, 1);
   rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
+  rb_define_method(buffer, "write_varint", buffer_write_varint, 1);
 }

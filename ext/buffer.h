@@ -120,6 +120,8 @@ VALUE buffer_write_string(VALUE self, VALUE string);
  */
 VALUE buffer_write_uint64(VALUE self, VALUE fixnum);
 
+VALUE buffer_write_varint(VALUE self, VALUE fixnum);
+
 /*
  * Initialize the Protocop::Buffer class.
  *
