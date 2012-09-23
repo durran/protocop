@@ -110,7 +110,7 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
  */
 VALUE buffer_write_float(VALUE self, VALUE float_val)
 {
-  VALUE bytes = rb_iv_get(self, "@bytes");
+  VALUE bytes = buffer_bytes(self);
   float value = (float) RFLOAT_VALUE(rb_to_float(float_val));
   rb_str_concat(bytes, rb_str_new2((char*) &value));
   return self;
@@ -132,7 +132,7 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
  */
 VALUE buffer_write_string(VALUE self, VALUE string)
 {
-  VALUE bytes = rb_iv_get(self, "@bytes");
+  VALUE bytes = buffer_bytes(self);
   if (!NIL_P(string)) {
     rb_str_concat(bytes, string);
   }
@@ -155,7 +155,7 @@ VALUE buffer_write_string(VALUE self, VALUE string)
  */
 VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
 {
-  VALUE bytes = rb_iv_get(self, "@bytes");
+  VALUE bytes = buffer_bytes(self);
   int value = FIX2INT(fixnum);
   while (value > 0x7F) {
     rb_str_concat(bytes, INT2FIX((value & 0x7F) | 0x80));
