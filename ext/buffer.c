@@ -116,6 +116,31 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
   return self;
 }
 
+VALUE buffer_write_int32(VALUE self, VALUE integer)
+{
+  return buffer_write_uint64(self, integer);
+}
+
+VALUE buffer_write_int64(VALUE self, VALUE integer)
+{
+  return buffer_write_uint64(self, integer);
+}
+
+VALUE buffer_write_sint32(VALUE self, VALUE integer)
+{
+  return buffer_write_uint64(self, integer);
+}
+
+VALUE buffer_write_sint64(VALUE self, VALUE integer)
+{
+  return buffer_write_uint64(self, integer);
+}
+
+VALUE buffer_write_uint32(VALUE self, VALUE integer)
+{
+  return buffer_write_uint64(self, integer);
+}
+
 /*
  * Write a string to the buffer via the Protocol Buffer specification.
  *
@@ -181,6 +206,11 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
+  rb_define_method(buffer, "write_int32", buffer_write_int32, 1);
+  rb_define_method(buffer, "write_int64", buffer_write_int64, 1);
+  rb_define_method(buffer, "write_sint32", buffer_write_sint32, 1);
+  rb_define_method(buffer, "write_sint64", buffer_write_sint64, 1);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
+  rb_define_method(buffer, "write_uint32", buffer_write_uint32, 1);
   rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
 }
