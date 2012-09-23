@@ -65,8 +65,12 @@ describe Protocop::Buffer do
       buffer.write_float(1.21)
     end
 
+    let(:expected) do
+      [ 1.21 ].pack("e")
+    end
+
     it "adds the float to the buffer" do
-      expect(written.bytes).to eq("H\xE1\x9A?")
+      expect(written.bytes).to eq(expected)
     end
 
     it_behaves_like "a fluid interface"
