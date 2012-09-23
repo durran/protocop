@@ -76,12 +76,88 @@ describe Protocop::Buffer do
     it_behaves_like "a fluid interface"
   end
 
+  describe "#write_int32" do
+
+    context "when the value is 32 bit" do
+
+      let(:written) do
+        buffer.write_int32(12)
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq("\f")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    pending "when the value is greater than 32 bit"
+  end
+
+  describe "#write_int64" do
+
+    let(:written) do
+      buffer.write_int64(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xE8\a")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
+  describe "#write_uint32" do
+
+    context "when the value is 32 bit" do
+
+      let(:written) do
+        buffer.write_uint32(10)
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq("\n")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    pending "when the value is negative"
+    pending "when the value is greater than 32bit"
+  end
+
+  describe "#write_sint32" do
+
+    context "when the value is 32 bit" do
+
+      let(:written) do
+        buffer.write_sint32(10)
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq("\n")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    pending "when the value is greater than 32 bit"
+  end
+
+  describe "#write_sint64" do
+
+    let(:written) do
+      buffer.write_sint64(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xE8\a")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
   pending "#write_enum"
-  pending "#write_int32"
-  pending "#write_int64"
-  pending "#write_uint32"
-  pending "#write_sint32"
-  pending "#write_sint64"
 
   pending "#write_fixed64"
   pending "#write_sfixed64"

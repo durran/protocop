@@ -54,6 +54,7 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
+
     # Write a 32bit float to the buffer.
     #
     # @example Write the float to the buffer.
@@ -69,6 +70,26 @@ module Protocop
     def write_float(value)
       bytes << [ value ].pack("e")
       self
+    end
+
+    def write_int32(value)
+      write_uint64(value)
+    end
+
+    def write_int64(value)
+      write_uint64(value)
+    end
+
+    def write_sint32(value)
+      write_uint64(value)
+    end
+
+    def write_sint64(value)
+      write_uint64(value)
+    end
+
+    def write_uint32(value)
+      write_uint64(value)
     end
 
     # Write an unsigned 64 bit integer to the buffer.
