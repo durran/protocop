@@ -54,7 +54,6 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
-
     # Write a 32bit float to the buffer.
     #
     # @example Write the float to the buffer.
@@ -72,26 +71,98 @@ module Protocop
       self
     end
 
+    # Write a 32 bit integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_int32(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_int32(value)
       write_uint64(value)
     end
 
+    # Write a 64 bit integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_int64(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_int64(value)
       write_uint64(value)
     end
 
+    # Write a 32 bit signed integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_sint32(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_sint32(value)
       write_uint64(value)
     end
 
+    # Write a 64 bit signed integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_sint64(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_sint64(value)
       write_uint64(value)
     end
 
+    # Write a 32 bit unsigned integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_uint32(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_uint32(value)
       write_uint64(value)
     end
 
+    # Write a 64 bit unsigned integer to the buffer.
+    #
+    # @example Write the integer to the buffer.
+    #   buffer.write_uint64(14)
+    #
+    # @param [ Integer ] value The integer.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_uint64(value)
       write_varint(value)
     end
