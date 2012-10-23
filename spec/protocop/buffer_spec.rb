@@ -59,6 +59,19 @@ describe Protocop::Buffer do
     it_behaves_like "a fluid interface"
   end
 
+  describe "#write_fixed64" do
+
+    let(:written) do
+      buffer.write_fixed64(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xE8\x03\x00\x00\x00\x00\x00\x00")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
   describe "#write_float" do
 
     let(:written) do
@@ -158,19 +171,6 @@ describe Protocop::Buffer do
   end
 
   pending "#write_enum"
-
-  describe "#write_fixed64" do
-
-    let(:written) do
-      buffer.write_fixed64(1000)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xE8\x03\x00\x00\x00\x00\x00\x00")
-    end
-
-    it_behaves_like "a fluid interface"
-  end
 
   describe "#write_sfixed64" do
 
