@@ -67,6 +67,22 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean);
 VALUE buffer_write_bytes(VALUE self, VALUE bytes);
 
 /*
+ * Write a fixed size 32 bit integer to the buffer (little endian).
+ *
+ * @example Write the fixed 32 bit value.
+ *   buffer.write_fixed32(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_fixed32(VALUE self, VALUE fixnum);
+
+/*
  * Write a fixed size 64 bit integer to the buffer (little endian).
  *
  * @example Write the fixed 64 bit value.
@@ -250,6 +266,15 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum);
  * @since 0.0.0
  */
 void initialize_buffer(VALUE protocop);
+
+/*
+ * Appends a 32 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value);
 
 /*
  * Appends a 64 bit value to the end of a Ruby string.

@@ -95,6 +95,27 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
 }
 
 /*
+ * Write a fixed size 32 bit integer to the buffer (little endian).
+ *
+ * @example Write the fixed 32 bit value.
+ *   buffer.write_fixed32(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_fixed32(VALUE self, VALUE fixnum)
+{
+  VALUE bytes = buffer_bytes(self);
+  long value = FIX2LONG(fixnum);
+  return buffer_concat_fixed32(self, bytes, value);
+}
+
+/*
  * Write a fixed size 64 bit integer to the buffer (little endian).
  *
  * @example Write the fixed 64 bit value.
@@ -326,6 +347,25 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum)
 }
 
 /*
+ * Appends a 32 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value)
+{
+  char chars[4] = {
+    value & 255,
+    (value >> 8) & 255,
+    (value >> 16) & 255,
+    (value >> 24) & 255
+  };
+  rb_str_cat(bytes, chars, 4);
+  return self;
+}
+
+/*
  * Appends a 64 bit value to the end of a Ruby string.
  *
  * @api private
@@ -363,6 +403,7 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
+  rb_define_method(buffer, "write_fixed32", buffer_write_fixed32, 1);
   rb_define_method(buffer, "write_fixed64", buffer_write_fixed64, 1);
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
   rb_define_method(buffer, "write_int32", buffer_write_int32, 1);
