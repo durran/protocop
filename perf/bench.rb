@@ -9,10 +9,24 @@ Benchmark.bm do |bench|
     end
   end
 
+  bench.report("Protocop::Buffer#write_fixed64") do
+    buffer = Protocop::Buffer.new
+    2_000_000.times do |n|
+      buffer.write_fixed64(n)
+    end
+  end
+
   bench.report("Protocop::Buffer#write_float") do
     buffer = Protocop::Buffer.new
     2_000_000.times do |n|
       buffer.write_float(n.to_f)
+    end
+  end
+
+  bench.report("Protocop::Buffer#write_sfixed64") do
+    buffer = Protocop::Buffer.new
+    2_000_000.times do |n|
+      buffer.write_sfixed64(n)
     end
   end
 
