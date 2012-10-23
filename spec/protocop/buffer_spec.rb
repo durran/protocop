@@ -59,6 +59,21 @@ describe Protocop::Buffer do
     it_behaves_like "a fluid interface"
   end
 
+  describe "#write_fixed32" do
+
+    let(:written) do
+      buffer.write_fixed32(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xE8\x03\x00\x00")
+    end
+
+    it_behaves_like "a fluid interface"
+
+    pending "when the value is greater than 32 bit"
+  end
+
   describe "#write_fixed64" do
 
     let(:written) do
@@ -190,7 +205,6 @@ describe Protocop::Buffer do
   pending "#write_embedded"
   pending "#write_repeated"
 
-  pending "#write_fixed32"
   pending "#write_sfixed32"
 
   describe "#write_string" do
