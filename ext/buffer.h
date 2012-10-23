@@ -66,6 +66,20 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean);
  */
 VALUE buffer_write_bytes(VALUE self, VALUE bytes);
 
+/*
+ * Write a fixed size 64 bit integer to the buffer (little endian).
+ *
+ * @example Write the fixed 64 bit value.
+ *   buffer.write_fixed64(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_fixed64(VALUE self, VALUE integer);
 
 /*
@@ -84,11 +98,100 @@ VALUE buffer_write_fixed64(VALUE self, VALUE integer);
  */
 VALUE buffer_write_float(VALUE self, VALUE float_val);
 
+/*
+ * Write a 32bit integer to the buffer.
+ *
+ * @example Write the integer to the buffer.
+ *   buffer.write_int32(14)
+ *
+ * @param [ Integer ] value The integer value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_int32(VALUE self, VALUE integer);
+
+/*
+ * Write a 64bit integer to the buffer.
+ *
+ * @example Write the integer to the buffer.
+ *   buffer.write_int64(14)
+ *
+ * @param [ Integer ] value The integer value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_int64(VALUE self, VALUE integer);
+
+/*
+ * Write a signed fixed size 64 bit integer to the buffer (little endian).
+ *
+ * @example Write the signed fixed 64 bit value.
+ *   buffer.write_sfixed64(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_sfixed64(VALUE self, VALUE integer);
+
+/*
+ * Write a 32bit signed integer to the buffer.
+ *
+ * @example Write the integer to the buffer.
+ *   buffer.write_sint32(14)
+ *
+ * @param [ Integer ] value The integer value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_sint32(VALUE self, VALUE integer);
+
+/*
+ * Write a 64bit signed integer to the buffer.
+ *
+ * @example Write the integer to the buffer.
+ *   buffer.write_sint64(14)
+ *
+ * @param [ Integer ] value The integer value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_sint64(VALUE self, VALUE integer);
+
+/*
+ * Write a 32bit unsigned integer to the buffer.
+ *
+ * @example Write the integer to the buffer.
+ *   buffer.write_uint32(14)
+ *
+ * @param [ Integer ] value The integer value.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_uint32(VALUE self, VALUE integer);
 
 /*

@@ -94,6 +94,20 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
   return buffer_write_string(self, bytes);
 }
 
+/*
+ * Write a fixed size 64 bit integer to the buffer (little endian).
+ *
+ * @example Write the fixed 64 bit value.
+ *   buffer.write_fixed64(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_fixed64(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);
@@ -174,6 +188,20 @@ VALUE buffer_write_int64(VALUE self, VALUE fixnum)
   return buffer_write_varint(self, fixnum);
 }
 
+/*
+ * Write a signed fixed size 64 bit integer to the buffer (little endian).
+ *
+ * @example Write the signed fixed 64 bit value.
+ *   buffer.write_sfixed64(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);

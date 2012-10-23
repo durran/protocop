@@ -54,6 +54,18 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
+    # Write a fixed size 64 bit integer to the buffer (little endian).
+    #
+    # @example Write the fixed 64 bit value.
+    #   buffer.write_fixed64(1000)
+    #
+    # @param [ Integer ] value The value to write.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_fixed64(value)
       bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV")
       self
@@ -108,6 +120,18 @@ module Protocop
       write_uint64(value)
     end
 
+    # Write a signed fixed size 64 bit integer to the buffer (little endian).
+    #
+    # @example Write the signed fixed 64 bit value.
+    #   buffer.write_sfixed64(1000)
+    #
+    # @param [ Integer ] value The value to write.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def write_sfixed64(value)
       write_fixed64((value << 1) ^ (value >> 63))
     end
