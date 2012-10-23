@@ -226,6 +226,20 @@ VALUE buffer_write_string(VALUE self, VALUE string);
  */
 VALUE buffer_write_uint64(VALUE self, VALUE fixnum);
 
+/*
+ * Write a varint to the buffer.
+ *
+ * @example Write a varint.
+ *   buffer.write_varint(10)
+ *
+ * @param [ Integer ] value The integer to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding#varints
+ *
+ * @since 0.0.0
+ */
 VALUE buffer_write_varint(VALUE self, VALUE fixnum);
 
 /*
@@ -236,3 +250,12 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum);
  * @since 0.0.0
  */
 void initialize_buffer(VALUE protocop);
+
+/*
+ * Appends a 64 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value);

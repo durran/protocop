@@ -112,20 +112,7 @@ VALUE buffer_write_fixed64(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);
   long value = FIX2LONG(fixnum);
-
-  // @todo: Durran refactor out to method.
-  char chars[8] = {
-    value & 255,
-    (value >> 8) & 255,
-    (value >> 16) & 255,
-    (value >> 24) & 255,
-    (value >> 32) & 255,
-    (value >> 40) & 255,
-    (value >> 48) & 255,
-    (value >> 56) & 255
-  };
-  rb_str_cat(bytes, chars, 8);
-  return self;
+  return buffer_concat_fixed64(self, bytes, value);
 }
 
 /*
@@ -207,20 +194,7 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
   VALUE bytes = buffer_bytes(self);
   long value = FIX2LONG(fixnum);
   long converted = (value << 1) ^ (value >> 63);
-
-  // @todo: Durran refactor out to method.
-  char chars[8] = {
-    converted & 255,
-    (converted >> 8) & 255,
-    (converted >> 16) & 255,
-    (converted >> 24) & 255,
-    (converted >> 32) & 255,
-    (converted >> 40) & 255,
-    (converted >> 48) & 255,
-    (converted >> 56) & 255
-  };
-  rb_str_cat(bytes, chars, 8);
-  return self;
+  return buffer_concat_fixed64(self, bytes, converted);
 }
 
 /*
@@ -348,6 +322,29 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum)
   }
   chars[size++] = value & 0x7F;
   rb_str_cat(bytes, chars, size);
+  return self;
+}
+
+/*
+ * Appends a 64 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value)
+{
+  char chars[8] = {
+    value & 255,
+    (value >> 8) & 255,
+    (value >> 16) & 255,
+    (value >> 24) & 255,
+    (value >> 32) & 255,
+    (value >> 40) & 255,
+    (value >> 48) & 255,
+    (value >> 56) & 255
+  };
+  rb_str_cat(bytes, chars, 8);
   return self;
 }
 
