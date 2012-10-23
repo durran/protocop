@@ -94,20 +94,23 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
   return buffer_write_string(self, bytes);
 }
 
-VALUE buffer_write_fixed64(VALUE self, VALUE integer)
+VALUE buffer_write_fixed64(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);
-  char value[8] = {
-    integer & 255,
-    (integer >> 8) & 255,
-    (integer >> 16) & 255,
-    (integer >> 24) & 255,
-    (integer >> 32) & 255,
-    (integer >> 40) & 255,
-    (integer >> 48) & 255,
-    (integer >> 56) & 255
+  long value = FIX2LONG(fixnum);
+
+  // @todo: Durran refactor out to method.
+  char chars[8] = {
+    value & 255,
+    (value >> 8) & 255,
+    (value >> 16) & 255,
+    (value >> 24) & 255,
+    (value >> 32) & 255,
+    (value >> 40) & 255,
+    (value >> 48) & 255,
+    (value >> 56) & 255
   };
-  rb_str_cat(bytes, value, 8);
+  rb_str_cat(bytes, chars, 8);
   return self;
 }
 
@@ -147,9 +150,9 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int32(VALUE self, VALUE integer)
+VALUE buffer_write_int32(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
 /*
@@ -166,14 +169,30 @@ VALUE buffer_write_int32(VALUE self, VALUE integer)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int64(VALUE self, VALUE integer)
+VALUE buffer_write_int64(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
-VALUE buffer_write_sfixed64(VALUE self, VALUE integer)
+VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
 {
-  return buffer_write_fixed64(self, integer);
+  VALUE bytes = buffer_bytes(self);
+  long value = FIX2LONG(fixnum);
+  long converted = (value << 1) ^ (value >> 63);
+
+  // @todo: Durran refactor out to method.
+  char chars[8] = {
+    converted & 255,
+    (converted >> 8) & 255,
+    (converted >> 16) & 255,
+    (converted >> 24) & 255,
+    (converted >> 32) & 255,
+    (converted >> 40) & 255,
+    (converted >> 48) & 255,
+    (converted >> 56) & 255
+  };
+  rb_str_cat(bytes, chars, 8);
+  return self;
 }
 
 /*
@@ -190,9 +209,9 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE integer)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint32(VALUE self, VALUE integer)
+VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
 /*
@@ -209,9 +228,9 @@ VALUE buffer_write_sint32(VALUE self, VALUE integer)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint64(VALUE self, VALUE integer)
+VALUE buffer_write_sint64(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
 /*
@@ -228,9 +247,9 @@ VALUE buffer_write_sint64(VALUE self, VALUE integer)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint32(VALUE self, VALUE integer)
+VALUE buffer_write_uint32(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
 /*
@@ -247,9 +266,9 @@ VALUE buffer_write_uint32(VALUE self, VALUE integer)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint64(VALUE self, VALUE integer)
+VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, integer);
+  return buffer_write_varint(self, fixnum);
 }
 
 /*
@@ -295,7 +314,7 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum)
   int value = FIX2INT(fixnum);
   while (value > 0x7F) {
     rb_str_concat(bytes, INT2FIX((value & 0x7F) | 0x80));
-    value >>=7;
+    value >>= 7;
   }
   rb_str_concat(bytes, INT2FIX(value & 0x7F));
   return self;
