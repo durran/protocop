@@ -159,8 +159,32 @@ describe Protocop::Buffer do
 
   pending "#write_enum"
 
-  pending "#write_fixed64"
-  pending "#write_sfixed64"
+  describe "#write_fixed64" do
+
+    let(:written) do
+      buffer.write_fixed64(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xE8\x03\x00\x00\x00\x00\x00\x00")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
+  describe "#write_sfixed64" do
+
+    let(:written) do
+      buffer.write_sfixed64(1000)
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq("\xD0\a\x00\x00\x00\x00\x00\x00")
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
   pending "#write_double"
 
   pending "#write_embedded"

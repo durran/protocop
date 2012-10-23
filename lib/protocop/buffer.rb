@@ -54,6 +54,11 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
+    def write_fixed64(value)
+      bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV")
+      self
+    end
+
     # Write a 32bit float to the buffer.
     #
     # @example Write the float to the buffer.
@@ -101,6 +106,10 @@ module Protocop
     # @since 0.0.0
     def write_int64(value)
       write_uint64(value)
+    end
+
+    def write_sfixed64(value)
+      write_fixed64((value << 1) ^ (value >> 63))
     end
 
     # Write a 32 bit signed integer to the buffer.
