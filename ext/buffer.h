@@ -66,6 +66,8 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean);
  */
 VALUE buffer_write_bytes(VALUE self, VALUE bytes);
 
+VALUE buffer_write_fixed64(VALUE self, VALUE integer);
+
 /*
  * Write a 32bit float to the buffer.
  *
@@ -84,6 +86,7 @@ VALUE buffer_write_float(VALUE self, VALUE float_val);
 
 VALUE buffer_write_int32(VALUE self, VALUE integer);
 VALUE buffer_write_int64(VALUE self, VALUE integer);
+VALUE buffer_write_sfixed64(VALUE self, VALUE integer);
 VALUE buffer_write_sint32(VALUE self, VALUE integer);
 VALUE buffer_write_sint64(VALUE self, VALUE integer);
 VALUE buffer_write_uint32(VALUE self, VALUE integer);

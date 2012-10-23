@@ -94,6 +94,23 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
   return buffer_write_string(self, bytes);
 }
 
+VALUE buffer_write_fixed64(VALUE self, VALUE integer)
+{
+  VALUE bytes = buffer_bytes(self);
+  char value[8] = {
+    integer & 255,
+    (integer >> 8) & 255,
+    (integer >> 16) & 255,
+    (integer >> 24) & 255,
+    (integer >> 32) & 255,
+    (integer >> 40) & 255,
+    (integer >> 48) & 255,
+    (integer >> 56) & 255
+  };
+  rb_str_cat(bytes, value, 8);
+  return self;
+}
+
 /*
  * Write a 32bit float to the buffer.
  *
@@ -152,6 +169,11 @@ VALUE buffer_write_int32(VALUE self, VALUE integer)
 VALUE buffer_write_int64(VALUE self, VALUE integer)
 {
   return buffer_write_varint(self, integer);
+}
+
+VALUE buffer_write_sfixed64(VALUE self, VALUE integer)
+{
+  return buffer_write_fixed64(self, integer);
 }
 
 /*
@@ -294,9 +316,11 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
+  rb_define_method(buffer, "write_fixed64", buffer_write_fixed64, 1);
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
   rb_define_method(buffer, "write_int32", buffer_write_int32, 1);
   rb_define_method(buffer, "write_int64", buffer_write_int64, 1);
+  rb_define_method(buffer, "write_sfixed64", buffer_write_sfixed64, 1);
   rb_define_method(buffer, "write_sint32", buffer_write_sint32, 1);
   rb_define_method(buffer, "write_sint64", buffer_write_sint64, 1);
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
