@@ -340,11 +340,14 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum)
 {
   VALUE bytes = buffer_bytes(self);
   int value = FIX2INT(fixnum);
+  int size = 0;
+  char chars[4];
   while (value > 0x7F) {
-    rb_str_concat(bytes, INT2FIX((value & 0x7F) | 0x80));
+    chars[size++] = (value & 0x7F) | 0x80;
     value >>= 7;
   }
-  rb_str_concat(bytes, INT2FIX(value & 0x7F));
+  chars[size++] = value & 0x7F;
+  rb_str_cat(bytes, chars, size);
   return self;
 }
 
