@@ -97,21 +97,23 @@ describe Protocop::Buffer do
   end
 
   describe "#write_fixed64" do
-    pending "Travis boxes are 32bit, need to fix here"
 
-    let(:written) do
-      buffer.write_fixed64(1000)
+    pending "Travis boxes are 32bit, need to fix here" do
+
+      let(:written) do
+        buffer.write_fixed64(1000)
+      end
+
+      let(:value) do
+        [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq(value)
+      end
+
+      it_behaves_like "a fluid interface"
     end
-
-    let(:value) do
-      [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
-    end
-
-    it_behaves_like "a fluid interface"
   end
 
   describe "#write_float" do
@@ -163,25 +165,27 @@ describe Protocop::Buffer do
   end
 
   describe "#write_sfixed64" do
-    pending "Travis boxes are 32bit, need to fix here"
 
-    let(:written) do
-      buffer.write_sfixed64(1000)
+    pending "Travis boxes are 32bit, need to fix here" do
+
+      let(:written) do
+        buffer.write_sfixed64(1000)
+      end
+
+      let(:converted) do
+        (1000 << 1) ^ (1000 >> 63)
+      end
+
+      let(:value) do
+        [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq(value)
+      end
+
+      it_behaves_like "a fluid interface"
     end
-
-    let(:converted) do
-      (1000 << 1) ^ (1000 >> 63)
-    end
-
-    let(:value) do
-      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
-    end
-
-    it_behaves_like "a fluid interface"
   end
 
   describe "#write_sint32" do
