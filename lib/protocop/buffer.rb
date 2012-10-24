@@ -167,7 +167,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sfixed64(value)
-      write_fixed64((value << 1) ^ (value >> 63))
+      write_fixed64(zig_zag64(value))
     end
 
     # Write a 32 bit signed integer to the buffer.
@@ -183,7 +183,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint32(value)
-      write_uint64(value)
+      write_uint32(zig_zag32(value))
     end
 
     # Write a 64 bit signed integer to the buffer.
@@ -271,5 +271,43 @@ module Protocop
       bytes << value.to_s and self
     end
     alias :write_bytes :write_string
+
+    private
+
+    # "Zig-zag" shift a 32 bit value.
+    #
+    # @api private
+    #
+    # @example Zig-zag shift the value.
+    #   buffer.zig_zag32(234)
+    #
+    # @param [ Integer ] value The integer to encode.
+    #
+    # @return [ Integer ] The zig-zaged integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def zig_zag32(value)
+      (value << 1) ^ (value >> 31)
+    end
+
+    # "Zig-zag" shift a 64 bit value.
+    #
+    # @api private
+    #
+    # @example Zig-zag shift the value.
+    #   buffer.zig_zag64(234)
+    #
+    # @param [ Integer ] value The integer to encode.
+    #
+    # @return [ Integer ] The zig-zaged integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def zig_zag64(value)
+      (value << 1) ^ (value >> 63)
+    end
   end
 end

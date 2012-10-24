@@ -37,6 +37,13 @@ Benchmark.bm do |bench|
     end
   end
 
+  bench.report("Protocop::Buffer#write_sint32") do
+    buffer = Protocop::Buffer.new
+    2_000_000.times do |n|
+      buffer.write_sint32(n)
+    end
+  end
+
   bench.report("Protocop::Buffer#write_uint64") do
     buffer = Protocop::Buffer.new
     2_000_000.times do |n|

@@ -197,7 +197,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\n")
+        expect(written.bytes).to eq("\x14")
       end
 
       it_behaves_like "a fluid interface"

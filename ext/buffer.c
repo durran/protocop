@@ -256,7 +256,9 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, fixnum);
+  int value = FIX2INT(fixnum);
+  int converted = (value << 1) ^ (value >> 31);
+  return buffer_write_varint(self, INT2FIX(converted));
 }
 
 /*
