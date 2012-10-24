@@ -1,6 +1,8 @@
 # encoding: utf-8
 module Protocop
   module Fields
+
+    # Encapsulates behaviour for string fields in the message.
     class String
       include Frame
 
