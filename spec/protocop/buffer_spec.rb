@@ -59,6 +59,23 @@ describe Protocop::Buffer do
     it_behaves_like "a fluid interface"
   end
 
+  describe "#write_double" do
+
+    let(:written) do
+      buffer.write_double(1.21)
+    end
+
+    let(:expected) do
+      [ 1.21 ].pack("E")
+    end
+
+    it "adds the double to the buffer" do
+      expect(written.bytes).to eq(expected)
+    end
+
+    it_behaves_like "a fluid interface"
+  end
+
   describe "#write_fixed32" do
 
     let(:written) do
@@ -199,8 +216,6 @@ describe Protocop::Buffer do
 
     it_behaves_like "a fluid interface"
   end
-
-  pending "#write_double"
 
   pending "#write_embedded"
   pending "#write_repeated"

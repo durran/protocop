@@ -54,6 +54,23 @@ module Protocop
       write_uint64(value ? 1 : 0)
     end
 
+    # Write a 64bit double to the buffer.
+    #
+    # @example Write the double to the buffer.
+    #   buffer.write_double(1.22)
+    #
+    # @param [ Float ] value The double value.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def write_double(value)
+      bytes << [ value ].pack("E")
+      self
+    end
+
     # Write a fixed size 32 bit integer to the buffer (little endian).
     #
     # @example Write the fixed 32 bit value.
