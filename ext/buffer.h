@@ -67,6 +67,22 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean);
 VALUE buffer_write_bytes(VALUE self, VALUE bytes);
 
 /*
+* Write a 64bit double to the buffer.
+*
+* @example Write the double to the buffer.
+*   buffer.write_double(1.22)
+*
+* @param [ Float ] value The double value.
+*
+* @return [ Buffer ] The buffer.
+*
+* @see https://developers.google.com/protocol-buffers/docs/encoding
+*
+* @since 0.0.0
+*/
+VALUE buffer_write_double(VALUE self, VALUE float_val);
+
+/*
  * Write a fixed size 32 bit integer to the buffer (little endian).
  *
  * @example Write the fixed 32 bit value.

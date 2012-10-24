@@ -95,6 +95,28 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
 }
 
 /*
+* Write a 64bit double to the buffer.
+*
+* @example Write the double to the buffer.
+*   buffer.write_double(1.22)
+*
+* @param [ Float ] value The double value.
+*
+* @return [ Buffer ] The buffer.
+*
+* @see https://developers.google.com/protocol-buffers/docs/encoding
+*
+* @since 0.0.0
+*/
+VALUE buffer_write_double(VALUE self, VALUE float_val)
+{
+  VALUE bytes = buffer_bytes(self);
+  double value = (double) NUM2DBL(float_val);
+  rb_str_concat(bytes, rb_str_new2((char*) &value));
+  return self;
+}
+
+/*
  * Write a fixed size 32 bit integer to the buffer (little endian).
  *
  * @example Write the fixed 32 bit value.
@@ -310,9 +332,9 @@ VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_string(VALUE self, VALUE string)
 {
-  VALUE bytes = buffer_bytes(self);
   if (!NIL_P(string)) {
-    rb_str_concat(bytes, string);
+    VALUE bytes = buffer_bytes(self);
+    rb_str_cat(bytes, RSTRING_PTR(string), RSTRING_LEN(string));
   }
   return self;
 }
@@ -403,6 +425,7 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "initialize", buffer_initialize, 0);
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
+  rb_define_method(buffer, "write_double", buffer_write_double, 1);
   rb_define_method(buffer, "write_fixed32", buffer_write_fixed32, 1);
   rb_define_method(buffer, "write_fixed64", buffer_write_fixed64, 1);
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
