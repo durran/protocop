@@ -9,7 +9,6 @@ describe Protocop::Buffer do
   pending "#write_enum"
   pending "#write_embedded"
   pending "#write_repeated"
-  pending "#write_sfixed32"
 
   describe "#initialize" do
 
@@ -186,6 +185,27 @@ describe Protocop::Buffer do
 
       it_behaves_like "a fluid interface"
     end
+  end
+
+  describe "#write_sfixed32" do
+
+    let(:written) do
+      buffer.write_sfixed32(1000)
+    end
+
+    let(:converted) do
+      (1000 << 1) ^ (1000 >> 31)
+    end
+
+    let(:value) do
+      [ converted ].pack("V")
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq(value)
+    end
+
+    it_behaves_like "a fluid interface"
   end
 
   describe "#write_sint32" do
