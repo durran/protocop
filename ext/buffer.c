@@ -219,6 +219,28 @@ VALUE buffer_write_int64(VALUE self, VALUE fixnum)
 }
 
 /*
+ * Write a signed fixed size 32 bit integer to the buffer (little endian).
+ *
+ * @example Write the signed fixed 32 bit value.
+ *   buffer.write_sfixed32(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_sfixed32(VALUE self, VALUE fixnum)
+{
+  VALUE bytes = buffer_bytes(self);
+  int value = FIX2INT(fixnum);
+  int converted = (value << 1) ^ (value >> 31);
+  return buffer_concat_fixed32(self, bytes, converted);
+}
+
+/*
  * Write a signed fixed size 64 bit integer to the buffer (little endian).
  *
  * @example Write the signed fixed 64 bit value.
@@ -433,6 +455,7 @@ void initialize_buffer(VALUE protocop)
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
   rb_define_method(buffer, "write_int32", buffer_write_int32, 1);
   rb_define_method(buffer, "write_int64", buffer_write_int64, 1);
+  rb_define_method(buffer, "write_sfixed32", buffer_write_sfixed32, 1);
   rb_define_method(buffer, "write_sfixed64", buffer_write_sfixed64, 1);
   rb_define_method(buffer, "write_sint32", buffer_write_sint32, 1);
   rb_define_method(buffer, "write_sint64", buffer_write_sint64, 1);

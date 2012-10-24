@@ -163,6 +163,22 @@ VALUE buffer_write_int32(VALUE self, VALUE integer);
 VALUE buffer_write_int64(VALUE self, VALUE integer);
 
 /*
+ * Write a signed fixed size 32 bit integer to the buffer (little endian).
+ *
+ * @example Write the signed fixed 32 bit value.
+ *   buffer.write_sfixed32(1000)
+ *
+ * @param [ Integer ] value The value to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_write_sfixed32(VALUE self, VALUE integer);
+
+/*
  * Write a signed fixed size 64 bit integer to the buffer (little endian).
  *
  * @example Write the signed fixed 64 bit value.
