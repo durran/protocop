@@ -6,6 +6,11 @@ describe Protocop::Buffer do
     described_class.new
   end
 
+  pending "#write_enum"
+  pending "#write_embedded"
+  pending "#write_repeated"
+  pending "#write_sfixed32"
+
   describe "#initialize" do
 
     it "sets the bytes to an empty string" do
@@ -156,23 +161,25 @@ describe Protocop::Buffer do
     it_behaves_like "a fluid interface"
   end
 
-  describe "#write_uint32" do
+  describe "#write_sfixed64" do
 
-    context "when the value is 32 bit" do
-
-      let(:written) do
-        buffer.write_uint32(10)
-      end
-
-      it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\n")
-      end
-
-      it_behaves_like "a fluid interface"
+    let(:written) do
+      buffer.write_sfixed64(1000)
     end
 
-    pending "when the value is negative"
-    pending "when the value is greater than 32bit"
+    let(:converted) do
+      (1000 << 1) ^ (1000 >> 63)
+    end
+
+    let(:value) do
+      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq(value)
+    end
+
+    it_behaves_like "a fluid interface"
   end
 
   describe "#write_sint32" do
@@ -205,34 +212,6 @@ describe Protocop::Buffer do
 
     it_behaves_like "a fluid interface"
   end
-
-  pending "#write_enum"
-
-  describe "#write_sfixed64" do
-
-    let(:written) do
-      buffer.write_sfixed64(1000)
-    end
-
-    let(:converted) do
-      (1000 << 1) ^ (1000 >> 63)
-    end
-
-    let(:value) do
-      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
-    end
-
-    it_behaves_like "a fluid interface"
-  end
-
-  pending "#write_embedded"
-  pending "#write_repeated"
-
-  pending "#write_sfixed32"
 
   describe "#write_string" do
 
@@ -274,6 +253,25 @@ describe Protocop::Buffer do
 
       it_behaves_like "a fluid interface"
     end
+  end
+
+  describe "#write_uint32" do
+
+    context "when the value is 32 bit" do
+
+      let(:written) do
+        buffer.write_uint32(10)
+      end
+
+      it "adds the int to the buffer" do
+        expect(written.bytes).to eq("\n")
+      end
+
+      it_behaves_like "a fluid interface"
+    end
+
+    pending "when the value is negative"
+    pending "when the value is greater than 32bit"
   end
 
   describe "#write_uint64" do
