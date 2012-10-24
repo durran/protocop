@@ -299,7 +299,9 @@ VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sint64(VALUE self, VALUE fixnum)
 {
-  return buffer_write_varint(self, fixnum);
+  long value = FIX2LONG(fixnum);
+  long converted = (value << 1) ^ (value >> 63);
+  return buffer_write_varint(self, LONG2FIX(converted));
 }
 
 /*

@@ -177,7 +177,7 @@ module Protocop
     #
     # @param [ Integer ] value The value to write.
     #
-    # @return [ Buffer ] The buffer.
+    # return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
     #
@@ -215,7 +215,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint64(value)
-      write_uint64(value)
+      write_uint64(zig_zag64(value))
     end
 
     # Write a 32 bit unsigned integer to the buffer.

@@ -233,7 +233,7 @@ describe Protocop::Buffer do
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xE8\a")
+      expect(written.bytes).to eq("\xD0\x0F")
     end
 
     it_behaves_like "a fluid interface"
