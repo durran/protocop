@@ -97,8 +97,12 @@ describe Protocop::Buffer do
       buffer.write_fixed64(1000)
     end
 
+    let(:value) do
+      [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
+    end
+
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xE8\x03\x00\x00\x00\x00\x00\x00")
+      expect(written.bytes).to eq(value)
     end
 
     it_behaves_like "a fluid interface"
@@ -210,8 +214,16 @@ describe Protocop::Buffer do
       buffer.write_sfixed64(1000)
     end
 
+    let(:converted) do
+      (1000 << 1) ^ (1000 >> 63)
+    end
+
+    let(:value) do
+      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
+    end
+
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xD0\a\x00\x00\x00\x00\x00\x00")
+      expect(written.bytes).to eq(value)
     end
 
     it_behaves_like "a fluid interface"
