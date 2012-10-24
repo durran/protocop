@@ -4,6 +4,8 @@ module Protocop
 
     # Holds common behaviour for frames in a message, which are defined in
     # Protocop as fields.
+    #
+    # @since 0.0.0
     module Frame
 
       # @attribute [r] number The number of the field in the message.

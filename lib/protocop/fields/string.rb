@@ -3,6 +3,8 @@ module Protocop
   module Fields
 
     # Encapsulates behaviour for string fields in the message.
+    #
+    # @since 0.0.0
     class String
       include Frame
 
