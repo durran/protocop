@@ -6,7 +6,6 @@ module Protocop
     #
     # @since 0.0.0
     class Int32
-      include Frame
       include Varint
 
       # Encode the field to the buffer with the provided value.

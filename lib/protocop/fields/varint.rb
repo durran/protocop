@@ -6,6 +6,7 @@ module Protocop
     #
     # @since 0.0.0
     module Varint
+      include Frame
 
       # Get the key for this field instance.
       #

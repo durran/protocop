@@ -6,7 +6,6 @@ module Protocop
     #
     # @since 0.0.0
     class String
-      include Frame
       include LengthBased
 
       # Encode the field to the buffer with the provided value.
