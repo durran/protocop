@@ -3,7 +3,7 @@ require "spec_helper"
 describe Protocop::Fields::String do
 
   let(:field) do
-    described_class.new
+    described_class.new(1)
   end
 
   let(:outbound) do
@@ -19,7 +19,7 @@ describe Protocop::Fields::String do
       end
 
       it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\x00")
+        expect(outbound.bytes).to eq("\n\x00")
       end
     end
 
@@ -30,18 +30,18 @@ describe Protocop::Fields::String do
       end
 
       it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\x00")
+        expect(outbound.bytes).to eq("\n\x00")
       end
     end
 
     context "when the string is not empty" do
 
       before do
-        field.encode(outbound, "protocop")
+        field.encode(outbound, "testing")
       end
 
       it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\x08protocop")
+        expect(outbound.bytes).to eq("\n\x07testing")
       end
     end
   end
