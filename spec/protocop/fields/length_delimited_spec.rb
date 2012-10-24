@@ -1,12 +1,12 @@
 require "spec_helper"
 
-describe Protocop::Fields::LengthBased do
+describe Protocop::Fields::LengthDelimited do
 
   describe "#key" do
 
     let(:klass) do
       Class.new do
-        include Protocop::Fields::LengthBased
+        include Protocop::Fields::LengthDelimited
       end
     end
 

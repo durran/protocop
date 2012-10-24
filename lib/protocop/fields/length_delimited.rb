@@ -5,7 +5,7 @@ module Protocop
     # Holds common behaviour for length based frames in a message.
     #
     # @since 0.0.0
-    module LengthBased
+    module LengthDelimited
       include Frame
 
       # Get the key for this field instance.
