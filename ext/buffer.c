@@ -112,7 +112,7 @@ VALUE buffer_write_double(VALUE self, VALUE float_val)
 {
   VALUE bytes = buffer_bytes(self);
   double value = (double) NUM2DBL(float_val);
-  rb_str_concat(bytes, rb_str_new2((char*) &value));
+  rb_str_cat(bytes, (char*) &value, 8);
   return self;
 }
 
@@ -176,7 +176,7 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
 {
   VALUE bytes = buffer_bytes(self);
   float value = (float) RFLOAT_VALUE(rb_to_float(float_val));
-  rb_str_concat(bytes, rb_str_new2((char*) &value));
+  rb_str_cat(bytes, (char*) &value, 4);
   return self;
 }
 

@@ -9,6 +9,13 @@ Benchmark.bm do |bench|
     end
   end
 
+  bench.report("Protocop::Buffer#write_double") do
+    buffer = Protocop::Buffer.new
+    2_000_000.times do |n|
+      buffer.write_double(n.to_f)
+    end
+  end
+
   bench.report("Protocop::Buffer#write_fixed64") do
     buffer = Protocop::Buffer.new
     2_000_000.times do |n|
