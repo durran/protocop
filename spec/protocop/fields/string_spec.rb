@@ -6,7 +6,7 @@ describe Protocop::Fields::String do
     described_class.new(1)
   end
 
-  let(:outbound) do
+  let(:buffer) do
     Protocop::Buffer.new
   end
 
@@ -14,35 +14,28 @@ describe Protocop::Fields::String do
 
     context "when the string is empty" do
 
-      before do
-        field.encode(outbound, "")
+      let!(:written) do
+        field.encode(buffer, "")
       end
 
-      it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\n\x00")
-      end
-    end
-
-    context "when the string is nil" do
-
-      before do
-        field.encode(outbound, "")
+      it "encodes the field, type and length plus the string" do
+        expect(buffer.bytes).to eq("\n\x00")
       end
 
-      it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\n\x00")
-      end
+      it_behaves_like "a fluid interface"
     end
 
     context "when the string is not empty" do
 
-      before do
-        field.encode(outbound, "testing")
+      let!(:written) do
+        field.encode(buffer, "testing")
       end
 
-      it "encodes the length plus the string" do
-        expect(outbound.bytes).to eq("\n\x07testing")
+      it "encodes the field, type and length plus the string" do
+        expect(buffer.bytes).to eq("\n\x07testing")
       end
+
+      it_behaves_like "a fluid interface"
     end
   end
 end
