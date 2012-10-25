@@ -147,7 +147,13 @@ describe Protocop::Buffer do
       it_behaves_like "a fluid interface"
     end
 
-    pending "when the value is greater than 32 bit"
+    context "when the value is greater than 32 bit" do
+      it "raises an ArgumentError" do
+        expect do
+          buffer.write_int32(Protocop::Buffer::MAX_INT32+1)
+        end.to raise_error(Protocop::Buffer::Int32ExceededError)
+      end
+    end
   end
 
   describe "#write_int64" do

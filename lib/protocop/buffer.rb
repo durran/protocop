@@ -8,10 +8,14 @@ module Protocop
   class Buffer
 
     # Constant for binary string encoding.
-    BINARY = "BINARY"
+    BINARY    = "BINARY"
+    MAX_INT32 = 2**31
 
     # @attribute [r] bytes The wrapped string of bytes.
     attr_reader :bytes
+
+    # exceptions
+    class Int32ExceededError < StandardError; end
 
     # Check if this buffer is equal to the other object. Simply checks the
     # bytes against the other's bytes.
@@ -135,6 +139,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_int32(value)
+      raise Int32ExceededError if value > MAX_INT32
       write_uint64(value)
     end
 
