@@ -148,7 +148,7 @@ describe Protocop::Buffer do
     end
 
     context "when the value is greater than 32 bit" do
-      it "raises an ArgumentError" do
+      it "raises an Int32ExceededError " do
         expect do
           buffer.write_int32(Protocop::Buffer::MAX_INT32+1)
         end.to raise_error(Protocop::Buffer::Int32ExceededError)

@@ -9,7 +9,7 @@ module Protocop
 
     # Constant for binary string encoding.
     BINARY    = "BINARY"
-    MAX_INT32 = 2**31
+    MAX_INT32 = 2**31-1
 
     # @attribute [r] bytes The wrapped string of bytes.
     attr_reader :bytes
