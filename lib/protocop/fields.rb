@@ -19,6 +19,20 @@ require "protocop/fields/string"
 module Protocop
   module Fields
 
+    # Get all the defined fields for the message.
+    #
+    # @example Get all defined fields.
+    #   message.fields
+    #
+    # @return [ Hash ] The fields as name/field pairs.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/overview
+    #
+    # @since 0.0.0
+    def fields
+      self.class.fields
+    end
+
     # Field definition macros are provided in this module.
     #
     # @since 0.0.0

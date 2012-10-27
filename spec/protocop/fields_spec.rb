@@ -8,7 +8,7 @@ describe Protocop::Fields do
 
       before(:all) do
         class Request
-          extend Protocop::Fields::Definitions
+          include Protocop::Message
           required :string, :name, 1
         end
       end
@@ -45,6 +45,10 @@ describe Protocop::Fields do
 
         it "returns the set string" do
           expect(string).to eq("testing")
+        end
+
+        it "provides access to the fields from the instance" do
+          expect(message.fields).to eq(Request.fields)
         end
       end
     end
