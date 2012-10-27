@@ -84,6 +84,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_fixed32(value)
+      raise Errors::InvalidInt32.new(value) unless value.int32?
       bytes << [ value ].pack("V")
       self
     end
@@ -101,6 +102,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_fixed64(value)
+      raise Errors::InvalidInt64.new(value) unless value.int64?
       bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV")
       self
     end
@@ -135,7 +137,8 @@ module Protocop
     #
     # @since 0.0.0
     def write_int32(value)
-      write_uint64(value)
+      raise Errors::InvalidInt32.new(value) unless value.int32?
+      write_varint(value)
     end
 
     # Write a 64 bit integer to the buffer.
@@ -151,7 +154,8 @@ module Protocop
     #
     # @since 0.0.0
     def write_int64(value)
-      write_uint64(value)
+      raise Errors::InvalidInt64.new(value) unless value.int64?
+      write_varint(value)
     end
 
     # Write a signed fixed size 32 bit integer to the buffer (little endian).
@@ -199,7 +203,8 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint32(value)
-      write_uint32(zig_zag32(value))
+      raise Errors::InvalidInt32.new(value) unless value.int32?
+      write_varint(zig_zag32(value))
     end
 
     # Write a 64 bit signed integer to the buffer.
@@ -215,7 +220,8 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint64(value)
-      write_uint64(zig_zag64(value))
+      raise Errors::InvalidInt64.new(value) unless value.int64?
+      write_varint(zig_zag64(value))
     end
 
     # Write a 32 bit unsigned integer to the buffer.
@@ -231,7 +237,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_uint32(value)
-      write_uint64(value)
+      write_varint(value)
     end
 
     # Write a 64 bit unsigned integer to the buffer.

@@ -95,28 +95,36 @@ describe Protocop::Buffer do
     context "when the value is greater than 32 bit" do
 
       it "raises an error" do
-        pending
+        expect {
+          buffer.write_fixed32(2 ** 34)
+        }.to raise_error(Protocop::Errors::InvalidInt32)
       end
     end
   end
 
   describe "#write_fixed64" do
 
-    pending "Travis boxes are 32bit, need to fix here" do
+    let(:written) do
+      buffer.write_fixed64(1000)
+    end
 
-      let(:written) do
-        buffer.write_fixed64(1000)
+    let(:value) do
+      [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq(value)
+    end
+
+    it_behaves_like "a fluid interface"
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_fixed64(2 ** 65)
+        }.to raise_error(Protocop::Errors::InvalidInt64)
       end
-
-      let(:value) do
-        [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
-      end
-
-      it "adds the int to the buffer" do
-        expect(written.bytes).to eq(value)
-      end
-
-      it_behaves_like "a fluid interface"
     end
   end
 
@@ -130,7 +138,7 @@ describe Protocop::Buffer do
       [ 1.21 ].pack("e")
     end
 
-    pending "adds the float to the buffer" do
+    it "adds the float to the buffer" do
       expect(written.bytes).to eq(expected)
     end
 
@@ -152,7 +160,14 @@ describe Protocop::Buffer do
       it_behaves_like "a fluid interface"
     end
 
-    pending "when the value is greater than 32 bit"
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int32(2 ** 34)
+        }.to raise_error(Protocop::Errors::InvalidInt32)
+      end
+    end
   end
 
   describe "#write_int64" do
@@ -166,29 +181,14 @@ describe Protocop::Buffer do
     end
 
     it_behaves_like "a fluid interface"
-  end
 
-  describe "#write_sfixed64" do
+    context "when the value is greater than 64 bit" do
 
-    pending "Travis boxes are 32bit, need to fix here" do
-
-      let(:written) do
-        buffer.write_sfixed64(1000)
+      it "raises an error" do
+        expect {
+          buffer.write_int64(2 ** 65)
+        }.to raise_error(Protocop::Errors::InvalidInt64)
       end
-
-      let(:converted) do
-        (1000 << 1) ^ (1000 >> 63)
-      end
-
-      let(:value) do
-        [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
-      end
-
-      it "adds the int to the buffer" do
-        expect(written.bytes).to eq(value)
-      end
-
-      it_behaves_like "a fluid interface"
     end
   end
 
@@ -211,6 +211,45 @@ describe Protocop::Buffer do
     end
 
     it_behaves_like "a fluid interface"
+
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sfixed32(2 ** 34)
+        }.to raise_error(Protocop::Errors::InvalidInt32)
+      end
+    end
+  end
+
+  describe "#write_sfixed64" do
+
+    let(:written) do
+      buffer.write_sfixed64(1000)
+    end
+
+    let(:converted) do
+      (1000 << 1) ^ (1000 >> 63)
+    end
+
+    let(:value) do
+      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
+    end
+
+    it "adds the int to the buffer" do
+      expect(written.bytes).to eq(value)
+    end
+
+    it_behaves_like "a fluid interface"
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sfixed64(2 ** 65)
+        }.to raise_error(Protocop::Errors::InvalidInt64)
+      end
+    end
   end
 
   describe "#write_sint32" do
@@ -228,7 +267,14 @@ describe Protocop::Buffer do
       it_behaves_like "a fluid interface"
     end
 
-    pending "when the value is greater than 32 bit"
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sint32(2 ** 34)
+        }.to raise_error(Protocop::Errors::InvalidInt32)
+      end
+    end
   end
 
   describe "#write_sint64" do
@@ -242,6 +288,15 @@ describe Protocop::Buffer do
     end
 
     it_behaves_like "a fluid interface"
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sint64(2 ** 65)
+        }.to raise_error(Protocop::Errors::InvalidInt64)
+      end
+    end
   end
 
   describe "#write_string" do
