@@ -28,11 +28,32 @@ VALUE buffer_equals(VALUE self, VALUE other);
 VALUE buffer_bytes(VALUE self);
 
 /*
+ * Appends a 32 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value);
+
+/*
+ * Appends a 64 bit value to the end of a Ruby string.
+ *
+ * @api private
+ *
+ * @since 0.0.0
+ */
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value);
+
+/*
  * Initializes a new Protocop::Buffer.
  *
  * @since 0.0.0
  */
 VALUE buffer_initialize(VALUE self);
+
+void buffer_validate_int32(VALUE self, VALUE value);
+void buffer_validate_int64(VALUE self, VALUE value);
 
 /*
  * Write a boolean to the buffer.
@@ -298,21 +319,3 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum);
  * @since 0.0.0
  */
 void initialize_buffer(VALUE protocop);
-
-/*
- * Appends a 32 bit value to the end of a Ruby string.
- *
- * @api private
- *
- * @since 0.0.0
- */
-VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value);
-
-/*
- * Appends a 64 bit value to the end of a Ruby string.
- *
- * @api private
- *
- * @since 0.0.0
- */
-VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value);

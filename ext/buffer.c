@@ -17,38 +17,55 @@ VALUE buffer_bytes(VALUE self)
 }
 
 /*
- * Check if this buffer is equal to the other object. Simply checks the
- * bytes against the other's string representation.
+ * Appends a 32 bit value to the end of a Ruby string.
  *
- * @example Check buffer equality.
- *   buffer == "testing"
- *
- * @param [ Object ] other The object to check against.
- *
- * @return [ true, false ] If the buffer is equal to the object.
+ * @api private
  *
  * @since 0.0.0
  */
-VALUE buffer_equals(VALUE self, VALUE other)
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value)
 {
-  VALUE bytes = buffer_bytes(self);
-  VALUE other_bytes = buffer_bytes(other);
-  return (bytes == other_bytes);
+  char chars[4] = {
+    value & 255,
+    (value >> 8) & 255,
+    (value >> 16) & 255,
+    (value >> 24) & 255
+  };
+  rb_str_cat(bytes, chars, 4);
+  return self;
 }
 
 /*
- * Initializes a new Protocop::Buffer.
+ * Appends a 64 bit value to the end of a Ruby string.
  *
- * @example Initialize the buffer.
- *    Protocop::Buffer.new
+ * @api private
  *
  * @since 0.0.0
  */
-VALUE buffer_initialize(VALUE self)
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value)
 {
-  VALUE bytes = rb_str_new2("");
-  rb_iv_set(self, "@bytes", bytes);
+  char chars[8] = {
+    value & 255,
+    (value >> 8) & 255,
+    (value >> 16) & 255,
+    (value >> 24) & 255,
+    (value >> 32) & 255,
+    (value >> 40) & 255,
+    (value >> 48) & 255,
+    (value >> 56) & 255
+  };
+  rb_str_cat(bytes, chars, 8);
   return self;
+}
+
+void buffer_validate_int32(VALUE self, VALUE value)
+{
+  rb_funcall(self, rb_intern("validate_int32!"), 1, value);
+}
+
+void buffer_validate_int64(VALUE self, VALUE value)
+{
+  rb_funcall(self, rb_intern("validate_int64!"), 1, value);
 }
 
 /*
@@ -132,6 +149,7 @@ VALUE buffer_write_double(VALUE self, VALUE float_val)
  */
 VALUE buffer_write_fixed32(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int32(self, fixnum);
   VALUE bytes = buffer_bytes(self);
   long value = FIX2LONG(fixnum);
   return buffer_concat_fixed32(self, bytes, value);
@@ -153,6 +171,7 @@ VALUE buffer_write_fixed32(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_fixed64(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int64(self, fixnum);
   VALUE bytes = buffer_bytes(self);
   long value = FIX2LONG(fixnum);
   return buffer_concat_fixed64(self, bytes, value);
@@ -196,6 +215,7 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
  */
 VALUE buffer_write_int32(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int32(self, fixnum);
   return buffer_write_varint(self, fixnum);
 }
 
@@ -215,6 +235,7 @@ VALUE buffer_write_int32(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_int64(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int64(self, fixnum);
   return buffer_write_varint(self, fixnum);
 }
 
@@ -234,6 +255,7 @@ VALUE buffer_write_int64(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sfixed32(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int32(self, fixnum);
   VALUE bytes = buffer_bytes(self);
   int value = FIX2INT(fixnum);
   int converted = (value << 1) ^ (value >> 31);
@@ -256,6 +278,7 @@ VALUE buffer_write_sfixed32(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int64(self, fixnum);
   VALUE bytes = buffer_bytes(self);
   long value = FIX2LONG(fixnum);
   long converted = (value << 1) ^ (value >> 63);
@@ -278,6 +301,7 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int32(self, fixnum);
   int value = FIX2INT(fixnum);
   int converted = (value << 1) ^ (value >> 31);
   return buffer_write_varint(self, INT2FIX(converted));
@@ -299,6 +323,7 @@ VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
  */
 VALUE buffer_write_sint64(VALUE self, VALUE fixnum)
 {
+  buffer_validate_int64(self, fixnum);
   long value = FIX2LONG(fixnum);
   long converted = (value << 1) ^ (value >> 63);
   return buffer_write_varint(self, LONG2FIX(converted));
@@ -395,48 +420,6 @@ VALUE buffer_write_varint(VALUE self, VALUE fixnum)
 }
 
 /*
- * Appends a 32 bit value to the end of a Ruby string.
- *
- * @api private
- *
- * @since 0.0.0
- */
-VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value)
-{
-  char chars[4] = {
-    value & 255,
-    (value >> 8) & 255,
-    (value >> 16) & 255,
-    (value >> 24) & 255
-  };
-  rb_str_cat(bytes, chars, 4);
-  return self;
-}
-
-/*
- * Appends a 64 bit value to the end of a Ruby string.
- *
- * @api private
- *
- * @since 0.0.0
- */
-VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value)
-{
-  char chars[8] = {
-    value & 255,
-    (value >> 8) & 255,
-    (value >> 16) & 255,
-    (value >> 24) & 255,
-    (value >> 32) & 255,
-    (value >> 40) & 255,
-    (value >> 48) & 255,
-    (value >> 56) & 255
-  };
-  rb_str_cat(bytes, chars, 8);
-  return self;
-}
-
-/*
  * Initialize the Protocop::Buffer class.
  *
  * @param [ Module ] protocop The Protocop Ruby module.
@@ -445,10 +428,8 @@ VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value)
  */
 void initialize_buffer(VALUE protocop)
 {
-  VALUE buffer = rb_define_class_under(protocop, "Buffer", rb_cObject);
-  rb_define_method(buffer, "==", buffer_equals, 1);
-  rb_define_method(buffer, "bytes", buffer_bytes, 0);
-  rb_define_method(buffer, "initialize", buffer_initialize, 0);
+  VALUE buffer = rb_const_get(protocop, rb_intern("Buffer"));
+
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
   rb_define_method(buffer, "write_double", buffer_write_double, 1);

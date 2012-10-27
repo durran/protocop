@@ -84,7 +84,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_fixed32(value)
-      raise Errors::InvalidInt32.new(value) unless value.int32?
+      validate_int32!(value)
       bytes << [ value ].pack("V")
       self
     end
@@ -102,7 +102,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_fixed64(value)
-      raise Errors::InvalidInt64.new(value) unless value.int64?
+      validate_int64!(value)
       bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV")
       self
     end
@@ -137,7 +137,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_int32(value)
-      raise Errors::InvalidInt32.new(value) unless value.int32?
+      validate_int32!(value)
       write_varint(value)
     end
 
@@ -154,7 +154,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_int64(value)
-      raise Errors::InvalidInt64.new(value) unless value.int64?
+      validate_int64!(value)
       write_varint(value)
     end
 
@@ -203,7 +203,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint32(value)
-      raise Errors::InvalidInt32.new(value) unless value.int32?
+      validate_int32!(value)
       write_varint(zig_zag32(value))
     end
 
@@ -220,7 +220,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sint64(value)
-      raise Errors::InvalidInt64.new(value) unless value.int64?
+      validate_int64!(value)
       write_varint(zig_zag64(value))
     end
 
@@ -295,6 +295,22 @@ module Protocop
     alias :write_bytes :write_string
 
     private
+
+    def validate_int32!(value)
+      raise Errors::InvalidInt32.new(value) unless value.int32?
+    end
+
+    def validate_int64!(value)
+      raise Errors::InvalidInt64.new(value) unless value.int64?
+    end
+
+    def validate_uint32!(value)
+      raise Errors::InvalidUint32.new(value) unless value.uint32?
+    end
+
+    def validate_uint64!(value)
+      raise Errors::InvalidUint64.new(value) unless value.uint32?
+    end
 
     # "Zig-zag" shift a 32 bit value.
     #
