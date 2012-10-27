@@ -23,7 +23,7 @@ VALUE buffer_bytes(VALUE self)
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value)
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value)
 {
   char chars[4] = {
     value & 255,
@@ -147,11 +147,11 @@ VALUE buffer_write_double(VALUE self, VALUE float_val)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_fixed32(VALUE self, VALUE fixnum)
+VALUE buffer_write_fixed32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, fixnum);
+  buffer_validate_int32(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = FIX2LONG(fixnum);
+  int value = NUM2INT(number);
   return buffer_concat_fixed32(self, bytes, value);
 }
 
@@ -169,11 +169,11 @@ VALUE buffer_write_fixed32(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_fixed64(VALUE self, VALUE fixnum)
+VALUE buffer_write_fixed64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, fixnum);
+  buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = FIX2LONG(fixnum);
+  long value = NUM2LONG(number);
   return buffer_concat_fixed64(self, bytes, value);
 }
 
@@ -213,10 +213,10 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int32(VALUE self, VALUE fixnum)
+VALUE buffer_write_int32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, fixnum);
-  return buffer_write_varint(self, fixnum);
+  buffer_validate_int32(self, number);
+  return buffer_write_varint(self, number);
 }
 
 /*
@@ -233,10 +233,10 @@ VALUE buffer_write_int32(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int64(VALUE self, VALUE fixnum)
+VALUE buffer_write_int64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, fixnum);
-  return buffer_write_varint(self, fixnum);
+  buffer_validate_int64(self, number);
+  return buffer_write_varint(self, number);
 }
 
 /*
@@ -253,11 +253,11 @@ VALUE buffer_write_int64(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sfixed32(VALUE self, VALUE fixnum)
+VALUE buffer_write_sfixed32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, fixnum);
+  buffer_validate_int32(self, number);
   VALUE bytes = buffer_bytes(self);
-  int value = FIX2INT(fixnum);
+  int value = NUM2INT(number);
   int converted = (value << 1) ^ (value >> 31);
   return buffer_concat_fixed32(self, bytes, converted);
 }
@@ -276,11 +276,11 @@ VALUE buffer_write_sfixed32(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
+VALUE buffer_write_sfixed64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, fixnum);
+  buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = FIX2LONG(fixnum);
+  long value = NUM2LONG(number);
   long converted = (value << 1) ^ (value >> 63);
   return buffer_concat_fixed64(self, bytes, converted);
 }
@@ -299,10 +299,10 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
+VALUE buffer_write_sint32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, fixnum);
-  int value = FIX2INT(fixnum);
+  buffer_validate_int32(self, number);
+  int value = NUM2INT(number);
   int converted = (value << 1) ^ (value >> 31);
   return buffer_write_varint(self, INT2FIX(converted));
 }
@@ -321,12 +321,12 @@ VALUE buffer_write_sint32(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint64(VALUE self, VALUE fixnum)
+VALUE buffer_write_sint64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, fixnum);
-  long value = FIX2LONG(fixnum);
+  buffer_validate_int64(self, number);
+  long value = NUM2LONG(number);
   long converted = (value << 1) ^ (value >> 63);
-  return buffer_write_varint(self, LONG2FIX(converted));
+  return buffer_write_varint(self, LONG2NUM(converted));
 }
 
 /*
@@ -343,9 +343,9 @@ VALUE buffer_write_sint64(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint32(VALUE self, VALUE fixnum)
+VALUE buffer_write_uint32(VALUE self, VALUE number)
 {
-  return buffer_write_varint(self, fixnum);
+  return buffer_write_varint(self, number);
 }
 
 /*
@@ -362,9 +362,9 @@ VALUE buffer_write_uint32(VALUE self, VALUE fixnum)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint64(VALUE self, VALUE fixnum)
+VALUE buffer_write_uint64(VALUE self, VALUE number)
 {
-  return buffer_write_varint(self, fixnum);
+  return buffer_write_varint(self, number);
 }
 
 /*
@@ -404,10 +404,10 @@ VALUE buffer_write_string(VALUE self, VALUE string)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_varint(VALUE self, VALUE fixnum)
+VALUE buffer_write_varint(VALUE self, VALUE number)
 {
   VALUE bytes = buffer_bytes(self);
-  int value = FIX2INT(fixnum);
+  int value = NUM2INT(number);
   int size = 0;
   char chars[4];
   while (value > 0x7F) {

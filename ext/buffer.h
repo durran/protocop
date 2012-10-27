@@ -34,7 +34,7 @@ VALUE buffer_bytes(VALUE self);
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, long value);
+VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value);
 
 /*
  * Appends a 64 bit value to the end of a Ruby string.
