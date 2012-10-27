@@ -92,7 +92,12 @@ describe Protocop::Buffer do
 
     it_behaves_like "a fluid interface"
 
-    pending "when the value is greater than 32 bit"
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        pending
+      end
+    end
   end
 
   describe "#write_fixed64" do

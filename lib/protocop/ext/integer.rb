@@ -3,6 +3,8 @@ module Protocop
   module Ext
 
     # Provides convenience extensions to the core Integer class.
+    #
+    # @since 0.0.0
     module Integer
 
       # The maximum signed 32 bit integer value.
