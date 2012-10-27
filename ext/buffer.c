@@ -1,6 +1,12 @@
 #include <ruby.h>
 #include <buffer.h>
 
+#if (SIZEOF_LONG == 8)
+#define NUM264BIT(v) NUM2LONG(v)
+#else
+#define NUM264BIT(v) NUM2LL(v)
+#endif
+
 /*
  * Gets the wrapped bytes for the buffer.
  *
@@ -173,7 +179,7 @@ VALUE buffer_write_fixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = NUM2LONG(number);
+  long value = NUM264BIT(number);
   return buffer_concat_fixed64(self, bytes, value);
 }
 
@@ -280,7 +286,7 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = NUM2LONG(number);
+  long value = NUM264BIT(number);
   long converted = (value << 1) ^ (value >> 63);
   return buffer_concat_fixed64(self, bytes, converted);
 }
@@ -324,7 +330,7 @@ VALUE buffer_write_sint32(VALUE self, VALUE number)
 VALUE buffer_write_sint64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
-  long value = NUM2LONG(number);
+  long value = NUM264BIT(number);
   long converted = (value << 1) ^ (value >> 63);
   return buffer_write_varint(self, LONG2NUM(converted));
 }
