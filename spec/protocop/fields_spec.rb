@@ -17,8 +17,16 @@ describe Protocop::Fields do
         Object.__send__(:remove_const, :Request)
       end
 
+      let(:field) do
+        Request.fields[:name]
+      end
+
       it "adds the field to the class" do
-        Request.fields[:name].should be_a(Protocop::Fields::String)
+        expect(field).to be_a(Protocop::Fields::String)
+      end
+
+      it "sets the field number" do
+        expect(field.number).to eq(1)
       end
 
       context "when setting the string via the setter" do
