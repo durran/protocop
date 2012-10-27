@@ -11,7 +11,7 @@
  *
  * @since 0.0.0
  */
-VALUE buffer_bytes(VALUE self)
+static VALUE buffer_bytes(VALUE self)
 {
   return rb_iv_get(self, "@bytes");
 }
@@ -23,7 +23,7 @@ VALUE buffer_bytes(VALUE self)
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value)
+static VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value)
 {
   char chars[4] = {
     value & 255,
@@ -42,7 +42,7 @@ VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value)
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long long value)
+static VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long long value)
 {
   char chars[8] = {
     value & 255,
@@ -58,24 +58,76 @@ VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long long value)
   return self;
 }
 
-void buffer_validate_int32(VALUE self, VALUE value)
+static void buffer_validate_int32(VALUE self, VALUE value)
 {
   rb_funcall(self, rb_intern("validate_int32!"), 1, value);
 }
 
-void buffer_validate_int64(VALUE self, VALUE value)
+static void buffer_validate_int64(VALUE self, VALUE value)
 {
   rb_funcall(self, rb_intern("validate_int64!"), 1, value);
 }
 
-void buffer_validate_uint32(VALUE self, VALUE value)
+static void buffer_validate_uint32(VALUE self, VALUE value)
 {
   rb_funcall(self, rb_intern("validate_uint32!"), 1, value);
 }
 
-void buffer_validate_uint64(VALUE self, VALUE value)
+static void buffer_validate_uint64(VALUE self, VALUE value)
 {
   rb_funcall(self, rb_intern("validate_uint64!"), 1, value);
+}
+
+/*
+ * Write a varint to the buffer.
+ *
+ * @example Write a varint.
+ *   buffer.write_varint(10)
+ *
+ * @param [ Integer ] value The integer to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding#varints
+ *
+ * @since 0.0.0
+ */
+static VALUE buffer_write_varint(VALUE self, VALUE number)
+{
+  VALUE bytes = buffer_bytes(self);
+  int value = NUM2INT(number);
+  int size = 0;
+  char chars[4];
+  while (value > 0x7F) {
+    chars[size++] = (value & 0x7F) | 0x80;
+    value >>= 7;
+  }
+  chars[size++] = value & 0x7F;
+  rb_str_cat(bytes, chars, size);
+  return self;
+}
+
+/*
+ * Write a string to the buffer via the Protocol Buffer specification.
+ *
+ * @example Write a string to the buffer.
+ *   buffer.write_string("test")
+ *
+ * @param [ String ] value The string to write.
+ *
+ * @return [ Buffer ] The buffer.
+ *
+ * @see https://developers.google.com/protocol-buffers/docs/encoding
+ *
+ * @since 0.0.0
+ */
+static VALUE buffer_write_string(VALUE self, VALUE string)
+{
+  if (!NIL_P(string)) {
+    VALUE bytes = buffer_bytes(self);
+    rb_str_cat(bytes, RSTRING_PTR(string), RSTRING_LEN(string));
+  }
+  return self;
 }
 
 /*
@@ -92,7 +144,7 @@ void buffer_validate_uint64(VALUE self, VALUE value)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_boolean(VALUE self, VALUE boolean)
+static VALUE buffer_write_boolean(VALUE self, VALUE boolean)
 {
   if (RTEST(boolean)) {
     return buffer_write_varint(self, INT2FIX(1));
@@ -116,7 +168,7 @@ VALUE buffer_write_boolean(VALUE self, VALUE boolean)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_bytes(VALUE self, VALUE bytes)
+static VALUE buffer_write_bytes(VALUE self, VALUE bytes)
 {
   return buffer_write_string(self, bytes);
 }
@@ -135,7 +187,7 @@ VALUE buffer_write_bytes(VALUE self, VALUE bytes)
 *
 * @since 0.0.0
 */
-VALUE buffer_write_double(VALUE self, VALUE float_val)
+static VALUE buffer_write_double(VALUE self, VALUE float_val)
 {
   VALUE bytes = buffer_bytes(self);
   double value = (double) NUM2DBL(float_val);
@@ -157,7 +209,7 @@ VALUE buffer_write_double(VALUE self, VALUE float_val)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_fixed32(VALUE self, VALUE number)
+static VALUE buffer_write_fixed32(VALUE self, VALUE number)
 {
   buffer_validate_int32(self, number);
   VALUE bytes = buffer_bytes(self);
@@ -179,7 +231,7 @@ VALUE buffer_write_fixed32(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_fixed64(VALUE self, VALUE number)
+static VALUE buffer_write_fixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
@@ -201,7 +253,7 @@ VALUE buffer_write_fixed64(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_float(VALUE self, VALUE float_val)
+static VALUE buffer_write_float(VALUE self, VALUE float_val)
 {
   VALUE bytes = buffer_bytes(self);
   float value = (float) RFLOAT_VALUE(rb_to_float(float_val));
@@ -223,7 +275,7 @@ VALUE buffer_write_float(VALUE self, VALUE float_val)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int32(VALUE self, VALUE number)
+static VALUE buffer_write_int32(VALUE self, VALUE number)
 {
   buffer_validate_int32(self, number);
   return buffer_write_varint(self, number);
@@ -243,7 +295,7 @@ VALUE buffer_write_int32(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_int64(VALUE self, VALUE number)
+static VALUE buffer_write_int64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   return buffer_write_varint(self, number);
@@ -263,7 +315,7 @@ VALUE buffer_write_int64(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sfixed32(VALUE self, VALUE number)
+static VALUE buffer_write_sfixed32(VALUE self, VALUE number)
 {
   buffer_validate_int32(self, number);
   VALUE bytes = buffer_bytes(self);
@@ -286,7 +338,7 @@ VALUE buffer_write_sfixed32(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sfixed64(VALUE self, VALUE number)
+static VALUE buffer_write_sfixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
@@ -309,7 +361,7 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint32(VALUE self, VALUE number)
+static VALUE buffer_write_sint32(VALUE self, VALUE number)
 {
   buffer_validate_int32(self, number);
   int value = NUM2INT(number);
@@ -331,7 +383,7 @@ VALUE buffer_write_sint32(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_sint64(VALUE self, VALUE number)
+static VALUE buffer_write_sint64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   long value = NUM2LONG(number);
@@ -353,7 +405,7 @@ VALUE buffer_write_sint64(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint32(VALUE self, VALUE number)
+static VALUE buffer_write_uint32(VALUE self, VALUE number)
 {
   buffer_validate_uint32(self, number);
   return buffer_write_varint(self, number);
@@ -373,62 +425,10 @@ VALUE buffer_write_uint32(VALUE self, VALUE number)
  *
  * @since 0.0.0
  */
-VALUE buffer_write_uint64(VALUE self, VALUE number)
+static VALUE buffer_write_uint64(VALUE self, VALUE number)
 {
   buffer_validate_uint64(self, number);
   return buffer_write_varint(self, number);
-}
-
-/*
- * Write a string to the buffer via the Protocol Buffer specification.
- *
- * @example Write a string to the buffer.
- *   buffer.write_string("test")
- *
- * @param [ String ] value The string to write.
- *
- * @return [ Buffer ] The buffer.
- *
- * @see https://developers.google.com/protocol-buffers/docs/encoding
- *
- * @since 0.0.0
- */
-VALUE buffer_write_string(VALUE self, VALUE string)
-{
-  if (!NIL_P(string)) {
-    VALUE bytes = buffer_bytes(self);
-    rb_str_cat(bytes, RSTRING_PTR(string), RSTRING_LEN(string));
-  }
-  return self;
-}
-
-/*
- * Write a varint to the buffer.
- *
- * @example Write a varint.
- *   buffer.write_varint(10)
- *
- * @param [ Integer ] value The integer to write.
- *
- * @return [ Buffer ] The buffer.
- *
- * @see https://developers.google.com/protocol-buffers/docs/encoding#varints
- *
- * @since 0.0.0
- */
-VALUE buffer_write_varint(VALUE self, VALUE number)
-{
-  VALUE bytes = buffer_bytes(self);
-  int value = NUM2INT(number);
-  int size = 0;
-  char chars[4];
-  while (value > 0x7F) {
-    chars[size++] = (value & 0x7F) | 0x80;
-    value >>= 7;
-  }
-  chars[size++] = value & 0x7F;
-  rb_str_cat(bytes, chars, size);
-  return self;
 }
 
 /*
