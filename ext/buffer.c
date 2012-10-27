@@ -42,7 +42,7 @@ VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value)
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value)
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long long value)
 {
   char chars[8] = {
     value & 255,
@@ -173,7 +173,7 @@ VALUE buffer_write_fixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = NUM2LONG(number);
+  long long value = NUM2LONG(number);
   return buffer_concat_fixed64(self, bytes, value);
 }
 
@@ -280,8 +280,8 @@ VALUE buffer_write_sfixed64(VALUE self, VALUE number)
 {
   buffer_validate_int64(self, number);
   VALUE bytes = buffer_bytes(self);
-  long value = NUM2LONG(number);
-  long converted = (value << 1) ^ (value >> 63);
+  long long value = NUM2LONG(number);
+  long long converted = (value << 1) ^ (value >> 63);
   return buffer_concat_fixed64(self, bytes, converted);
 }
 

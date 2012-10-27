@@ -43,7 +43,7 @@ VALUE buffer_concat_fixed32(VALUE self, VALUE bytes, int value);
  *
  * @since 0.0.0
  */
-VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long value);
+VALUE buffer_concat_fixed64(VALUE self, VALUE bytes, long long value);
 
 /*
  * Initializes a new Protocop::Buffer.
