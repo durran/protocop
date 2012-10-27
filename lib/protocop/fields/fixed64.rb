@@ -2,11 +2,11 @@
 module Protocop
   module Fields
 
-    # Encapsulates behaviour for sint64 fields in the message.
+    # Encapsulates behaviour for fixed64 fields in the message.
     #
     # @since 0.0.0
-    class Sint64
-      include Varint
+    class Fixed64
+      include Bit64
 
       # Encode the field to the buffer with the provided value.
       #
@@ -14,7 +14,7 @@ module Protocop
       #   field.encode(buffer, 16)
       #
       # @param [ Buffer ] buffer The buffer to write to.
-      # @param [ Integer ] value The sint64 value to write.
+      # @param [ Integer ] value The fixed64 value to write.
       #
       # @return [ Buffer ] The buffer that was written to.
       #
@@ -22,7 +22,7 @@ module Protocop
       #
       # @since 0.0.0
       def encode(buffer, value)
-        buffer.write_varint(key).write_sint64(value)
+        buffer.write_varint(key).write_fixed64(value)
       end
     end
   end
