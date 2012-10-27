@@ -78,6 +78,8 @@ module Protocop
     #
     # @param [ Integer ] value The value to write.
     #
+    # @raise [ Errors::InvalidInt32 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
@@ -95,6 +97,8 @@ module Protocop
     #   buffer.write_fixed64(1000)
     #
     # @param [ Integer ] value The value to write.
+    #
+    # @raise [ Errors::InvalidInt64 ] If the value is invalid.
     #
     # @return [ Buffer ] The buffer.
     #
@@ -131,6 +135,8 @@ module Protocop
     #
     # @param [ Integer ] value The integer.
     #
+    # @raise [ Errors::InvalidInt32 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
@@ -147,6 +153,8 @@ module Protocop
     #   buffer.write_int64(14)
     #
     # @param [ Integer ] value The integer.
+    #
+    # @raise [ Errors::InvalidInt64 ] If the value is invalid.
     #
     # @return [ Buffer ] The buffer.
     #
@@ -165,6 +173,8 @@ module Protocop
     #
     # @param [ Integer ] value The value to write.
     #
+    # @raise [ Errors::InvalidInt32 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
@@ -181,6 +191,8 @@ module Protocop
     #
     # @param [ Integer ] value The value to write.
     #
+    # @raise [ Errors::InvalidInt64 ] If the value is invalid.
+    #
     # return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
@@ -196,6 +208,8 @@ module Protocop
     #   buffer.write_sint32(14)
     #
     # @param [ Integer ] value The integer.
+    #
+    # @raise [ Errors::InvalidInt32 ] If the value is invalid.
     #
     # @return [ Buffer ] The buffer.
     #
@@ -214,6 +228,8 @@ module Protocop
     #
     # @param [ Integer ] value The integer.
     #
+    # @raise [ Errors::InvalidInt64 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
@@ -231,12 +247,15 @@ module Protocop
     #
     # @param [ Integer ] value The integer.
     #
+    # @raise [ Errors::InvalidUint32 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
     #
     # @since 0.0.0
     def write_uint32(value)
+      validate_uint32!(value)
       write_varint(value)
     end
 
@@ -247,12 +266,15 @@ module Protocop
     #
     # @param [ Integer ] value The integer.
     #
+    # @raise [ Errors::InvalidUint64 ] If the value is invalid.
+    #
     # @return [ Buffer ] The buffer.
     #
     # @see https://developers.google.com/protocol-buffers/docs/encoding
     #
     # @since 0.0.0
     def write_uint64(value)
+      validate_uint64!(value)
       write_varint(value)
     end
 
@@ -296,18 +318,66 @@ module Protocop
 
     private
 
+    # Validate that the value is a proper signed 32 bit integer.
+    #
+    # @api private
+    #
+    # @example Validate the value.
+    #   buffer.validate_int32!(1024)
+    #
+    # @param [ Integer ] value The integer to validate.
+    #
+    # @raise [ Errors::InvalidInt32 ] If the value is invalid.
+    #
+    # @since 0.0.0
     def validate_int32!(value)
       raise Errors::InvalidInt32.new(value) unless value.int32?
     end
 
+    # Validate that the value is a proper signed 64 bit integer.
+    #
+    # @api private
+    #
+    # @example Validate the value.
+    #   buffer.validate_int64!(1024)
+    #
+    # @param [ Integer ] value The integer to validate.
+    #
+    # @raise [ Errors::InvalidInt64 ] If the value is invalid.
+    #
+    # @since 0.0.0
     def validate_int64!(value)
       raise Errors::InvalidInt64.new(value) unless value.int64?
     end
 
+    # Validate that the value is a proper unsigned 32 bit integer.
+    #
+    # @api private
+    #
+    # @example Validate the value.
+    #   buffer.validate_uint32!(1024)
+    #
+    # @param [ Integer ] value The integer to validate.
+    #
+    # @raise [ Errors::InvalidUint32 ] If the value is invalid.
+    #
+    # @since 0.0.0
     def validate_uint32!(value)
       raise Errors::InvalidUint32.new(value) unless value.uint32?
     end
 
+    # Validate that the value is a proper unsigned 64 bit integer.
+    #
+    # @api private
+    #
+    # @example Validate the value.
+    #   buffer.validate_uint64!(1024)
+    #
+    # @param [ Integer ] value The integer to validate.
+    #
+    # @raise [ Errors::InvalidUint64 ] If the value is invalid.
+    #
+    # @since 0.0.0
     def validate_uint64!(value)
       raise Errors::InvalidUint64.new(value) unless value.uint32?
     end

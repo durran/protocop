@@ -356,8 +356,23 @@ describe Protocop::Buffer do
       it_behaves_like "a fluid interface"
     end
 
-    pending "when the value is negative"
-    pending "when the value is greater than 32bit"
+    context "when the value is negative" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_uint32(-10)
+        }.to raise_error(Protocop::Errors::InvalidUint32)
+      end
+    end
+
+    context "when the value is greater than 32bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_uint32(2 ** 40)
+        }.to raise_error(Protocop::Errors::InvalidUint32)
+      end
+    end
   end
 
   describe "#write_uint64" do
@@ -375,7 +390,23 @@ describe Protocop::Buffer do
       it_behaves_like "a fluid interface"
     end
 
-    pending "when the value is negative"
+    context "when the value is negative" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_uint64(-10)
+        }.to raise_error(Protocop::Errors::InvalidUint64)
+      end
+    end
+
+    context "when the value is greater than 64bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_uint64(2 ** 70)
+        }.to raise_error(Protocop::Errors::InvalidUint64)
+      end
+    end
   end
 
   describe "#write_varint" do
