@@ -68,6 +68,16 @@ void buffer_validate_int64(VALUE self, VALUE value)
   rb_funcall(self, rb_intern("validate_int64!"), 1, value);
 }
 
+void buffer_validate_uint32(VALUE self, VALUE value)
+{
+  rb_funcall(self, rb_intern("validate_uint32!"), 1, value);
+}
+
+void buffer_validate_uint64(VALUE self, VALUE value)
+{
+  rb_funcall(self, rb_intern("validate_uint64!"), 1, value);
+}
+
 /*
  * Write a boolean to the buffer.
  *
@@ -345,6 +355,7 @@ VALUE buffer_write_sint64(VALUE self, VALUE number)
  */
 VALUE buffer_write_uint32(VALUE self, VALUE number)
 {
+  buffer_validate_uint32(self, number);
   return buffer_write_varint(self, number);
 }
 
@@ -364,6 +375,7 @@ VALUE buffer_write_uint32(VALUE self, VALUE number)
  */
 VALUE buffer_write_uint64(VALUE self, VALUE number)
 {
+  buffer_validate_uint64(self, number);
   return buffer_write_varint(self, number);
 }
 
