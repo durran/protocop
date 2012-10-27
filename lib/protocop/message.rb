@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "protocop/dsl"
+require "protocop/fields"
 require "protocop/wire"
 
 module Protocop
@@ -11,6 +11,7 @@ module Protocop
   #
   # @since 0.0.0
   module Message
+    include Fields
 
     # Instantiate a new Message. If no attributes are provided, then the fields
     # will need to be set using the setters, otherwise the provided attributes
@@ -49,7 +50,7 @@ module Protocop
     #
     # @since 0.0.0
     def self.included(klass)
-      klass.extend(DSL)
+      klass.extend(Fields::Definitions)
     end
   end
 end

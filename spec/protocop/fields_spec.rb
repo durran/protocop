@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Protocop::DSL do
+describe Protocop::Fields do
 
   describe ".required" do
 
@@ -8,7 +8,7 @@ describe Protocop::DSL do
 
       before(:all) do
         class Request
-          extend Protocop::DSL
+          extend Protocop::Fields::Definitions
           required :string, :name, 1
         end
       end
