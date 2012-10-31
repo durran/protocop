@@ -4,6 +4,45 @@ describe Protocop::Fields::Macros do
 
   describe ".required" do
 
+    context "when providing an embedded message" do
+
+      before(:all) do
+        class Command
+          include Protocop::Message
+          required :string, :name, 1
+        end
+        class Request
+          include Protocop::Message
+          required Command, :command, 2
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :Command)
+        Object.__send__(:remove_const, :Request)
+      end
+
+      let(:field) do
+        Request.fields[:command]
+      end
+
+      it "adds the field to the class" do
+        expect(field).to be_a(Protocop::Fields::Embedded)
+      end
+
+      it "sets the field number" do
+        expect(field.number).to eq(2)
+      end
+
+      it "sets the field type" do
+        expect(field.type).to eq(Command)
+      end
+
+      it "sets the empty options" do
+        expect(field.options).to be_empty
+      end
+    end
+
     context "when defining an enum" do
 
       before(:all) do
