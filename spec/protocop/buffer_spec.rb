@@ -6,9 +6,6 @@ describe Protocop::Buffer do
     described_class.new
   end
 
-  pending "#write_embedded"
-  pending "#write_repeated"
-
   describe "#initialize" do
 
     it "sets the bytes to an empty string" do
