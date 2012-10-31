@@ -24,7 +24,7 @@ module Protocop
       # @param [ Integer ] number The number of the field.
       # @param [ Hash ] options The field options.
       #
-      # @option :options [ Integer ] :default The default enumeration value.
+      # @option options [ Integer ] :default The default enumeration value.
       #
       # @since 0.0.0
       def initialize(type, name, number, options = {})

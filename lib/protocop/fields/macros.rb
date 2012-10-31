@@ -55,7 +55,7 @@ module Protocop
       # @param [ Integer ] number The field's identifier for encoding/decoding.
       # @param [ Hash ] options The field options.
       #
-      # @option :options [ Integer ] :default The default value.
+      # @option options [ Integer ] :default The default value.
       #
       # @since 0.0.0
       def required(type, name, number, options = {})

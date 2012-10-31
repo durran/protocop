@@ -19,7 +19,7 @@ module Protocop
       # @param [ Integer ] number The number of the field.
       # @param [ Hash ] options The field options.
       #
-      # @option :options [ Integer ] :default The default enumeration value.
+      # @option options [ Integer ] :default The default enumeration value.
       #
       # @return [ Fields::Frame ] The field instance.
       #
