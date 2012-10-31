@@ -3,7 +3,7 @@ require "spec_helper"
 describe Protocop::Fields::Sint64 do
 
   let(:field) do
-    described_class.new(1)
+    described_class.new(:sint64, :test, 1)
   end
 
   let(:buffer) do

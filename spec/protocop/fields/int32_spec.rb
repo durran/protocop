@@ -3,7 +3,7 @@ require "spec_helper"
 describe Protocop::Fields::Int32 do
 
   let(:field) do
-    described_class.new(1)
+    described_class.new(:int32, :test, 1)
   end
 
   let(:buffer) do

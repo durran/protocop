@@ -23,10 +23,20 @@ module Protocop
 
       # Define a required field in the message.
       #
-      # @example Define a required field
+      # @example Define a required field.
       #   class Request
       #     include Protocop::Message
       #     required :string, :name, 1
+      #   end
+      #
+      # @example Define a required enum field.
+      #   class Request
+      #     include Protocop::Message
+      #     module Type
+      #       QUERY = 0
+      #       COUNT = 1
+      #     end
+      #     required Type, :type, 1, default: Type::QUERY
       #   end
       #
       # @param [ Symbol ] type The field's type.
@@ -34,8 +44,8 @@ module Protocop
       # @param [ Integer ] number The field's identifier for encoding/decoding.
       #
       # @since 0.0.0
-      def required(type, name, number)
-        fields[name] = Fields.const_get(type.to_s.capitalize.to_sym).new(number)
+      def required(type, name, number, options = {})
+        fields[name] = type.__protofield__(type, name, number, options)
         attr_accessor(name)
       end
     end

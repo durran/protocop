@@ -11,7 +11,7 @@ describe Protocop::Fields::LengthDelimited do
     end
 
     let(:field) do
-      klass.new(1)
+      klass.new(:length_delimited, :test, 1)
     end
 
     it "returns the integer for the number and the wire type" do

@@ -3,7 +3,7 @@ require "spec_helper"
 describe Protocop::Fields::Bytes do
 
   let(:field) do
-    described_class.new(1)
+    described_class.new(:bytes, :test, 1)
   end
 
   let(:buffer) do

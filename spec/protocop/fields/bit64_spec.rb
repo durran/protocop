@@ -11,7 +11,7 @@ describe Protocop::Fields::Bit64 do
     end
 
     let(:field) do
-      klass.new(1)
+      klass.new(:bit64, :test, 1)
     end
 
     it "returns the integer for the number and the wire type" do
