@@ -9,6 +9,8 @@ module Protocop
 
       # Get a Protocol Buffer field instance for this class.
       #
+      # @api private
+      #
       # @example Get a field instance.
       #   Command.__protofield__(Command, :count, 1)
       #

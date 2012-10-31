@@ -7,6 +7,8 @@ module Protocop
 
       # Get a Protocol Buffer field instance for this symbol.
       #
+      # @api private
+      #
       # @example Get a field instance.
       #   :int32.__protofield__(:int32, :count, 1)
       #
@@ -23,6 +25,8 @@ module Protocop
       end
 
       # Get the symbol as a setter method name.
+      #
+      # @api private
       #
       # @example Get the symbol as a setter method name.
       #   "testing".__setter__

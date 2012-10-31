@@ -13,6 +13,22 @@ module Protocop
   module Message
     include Fields
 
+    # Encode the message to the provided buffer or use a new one.
+    #
+    # @example Encode the message.
+    #   message.encode
+    #
+    # @param [ Buffer ] buffer The buffer to encode the message to.
+    #
+    # @return [ Buffer ] The encoded buffer.
+    #
+    # @since 0.0.0
+    def encode(buffer = Buffer.new)
+      fields.values.each do |field|
+        field.encode(buffer, __send__(field.name))
+      end and buffer
+    end
+
     # Instantiate a new Message. If no attributes are provided, then the fields
     # will need to be set using the setters, otherwise the provided attributes
     # must be a hash of field/value pairs.
