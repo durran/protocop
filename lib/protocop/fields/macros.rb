@@ -10,7 +10,7 @@ module Protocop
       # Get all the defined fields for the message.
       #
       # @example Get all defined fields.
-      #   definitions.fields
+      #   macros.fields
       #
       # @return [ Hash ] The fields as name/field pairs.
       #
@@ -39,9 +39,23 @@ module Protocop
       #     required Type, :type, 1, default: Type::QUERY
       #   end
       #
-      # @param [ Symbol ] type The field's type.
+      # @example Define an embedded message field.
+      #   class Command
+      #     include Protocop::Message
+      #     required :string, :name, 1
+      #   end
+      #
+      #   class Request
+      #     include Protocop::Message
+      #     required Command, :command, 2
+      #   end
+      #
+      # @param [ Class, Module, Symbol ] type The field's type.
       # @param [ Symbol ] name The name of the field.
       # @param [ Integer ] number The field's identifier for encoding/decoding.
+      # @param [ Hash ] options The field options.
+      #
+      # @option :options [ Integer ] :default The default value.
       #
       # @since 0.0.0
       def required(type, name, number, options = {})
