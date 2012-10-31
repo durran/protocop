@@ -6,7 +6,6 @@ describe Protocop::Buffer do
     described_class.new
   end
 
-  pending "#write_enum"
   pending "#write_embedded"
   pending "#write_repeated"
 
