@@ -37,12 +37,40 @@ describe Protocop::Fields::Macros do
         it "sets the field number" do
           expect(field.number).to eq(1)
         end
+
+        it "sets the field type" do
+          expect(field.type).to eq(Request::Type)
+        end
+
+        it "sets the options" do
+          expect(field.options).to eq(default: Request::Type::COUNT)
+        end
       end
 
       context "when not providing a default" do
 
         before do
           Request.required(Request::Type, :type, 1)
+        end
+
+        let(:field) do
+          Request.fields[:type]
+        end
+
+        it "adds the field to the class" do
+          expect(field).to be_a(Protocop::Fields::Enum)
+        end
+
+        it "sets the field number" do
+          expect(field.number).to eq(1)
+        end
+
+        it "sets the field type" do
+          expect(field.type).to eq(Request::Type)
+        end
+
+        it "does not set a default option" do
+          expect(field.options).to be_empty
         end
       end
     end
