@@ -50,7 +50,7 @@ module Protocop
     #
     # @since 0.0.0
     def self.included(klass)
-      klass.extend(Fields::Definitions)
+      klass.extend(Fields::Macros)
     end
   end
 end
