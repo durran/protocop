@@ -22,6 +22,7 @@ module Protocop
       #
       # @since 0.0.0
       def encode(buffer, value)
+        # buffer.write_varint(key).write_uint64(value.length).write_string(value)
       end
     end
   end
