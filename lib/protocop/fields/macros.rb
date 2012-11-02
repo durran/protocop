@@ -59,7 +59,8 @@ module Protocop
       #
       # @since 0.0.0
       def required(type, name, number, options = {})
-        fields[name] = type.__protofield__(type, name, number, options)
+        frame_opts = options.merge(required: true)
+        fields[name] = type.__protofield__(type, name, number, frame_opts)
         attr_accessor(name)
       end
     end

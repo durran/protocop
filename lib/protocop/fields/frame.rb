@@ -14,6 +14,18 @@ module Protocop
       # @attribute [r] options The field options.
       attr_reader :type, :name, :number, :options
 
+      # Get the default for the field, or nil if none was defined.
+      #
+      # @example Get the default value.
+      #   frame.default
+      #
+      # @return [ Object ] The default value.
+      #
+      # @since 0.0.0
+      def default
+        options[:default]
+      end
+
       # Initialize the new frame in the message.
       #
       # @example Initialize the frame.
@@ -29,6 +41,18 @@ module Protocop
       # @since 0.0.0
       def initialize(type, name, number, options = {})
         @type, @name, @number, @options = type, name, number, options
+      end
+
+      # Is this frame required?
+      #
+      # @example Is the frame required?
+      #   frame.required?
+      #
+      # @return [ true, false ] If the frame is required.
+      #
+      # @since 0.0.0
+      def required?
+        @required ||= !!options[:required]
       end
     end
   end

@@ -38,8 +38,8 @@ describe Protocop::Fields::Macros do
         expect(field.type).to eq(Command)
       end
 
-      it "sets the empty options" do
-        expect(field.options).to be_empty
+      it "sets the field to required" do
+        expect(field).to be_required
       end
     end
 
@@ -81,8 +81,8 @@ describe Protocop::Fields::Macros do
           expect(field.type).to eq(Request::Type)
         end
 
-        it "sets the options" do
-          expect(field.options).to eq(default: Request::Type::COUNT)
+        it "sets the default options" do
+          expect(field.default).to eq(Request::Type::COUNT)
         end
       end
 
@@ -109,7 +109,7 @@ describe Protocop::Fields::Macros do
         end
 
         it "does not set a default option" do
-          expect(field.options).to be_empty
+          expect(field.default).to be_nil
         end
       end
     end
