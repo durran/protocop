@@ -442,20 +442,51 @@ void initialize_buffer(VALUE protocop)
 {
   VALUE buffer = rb_const_get(protocop, rb_intern("Buffer"));
 
+  rb_remove_method(buffer, "write_boolean");
   rb_define_method(buffer, "write_boolean", buffer_write_boolean, 1);
+
+  rb_remove_method(buffer, "write_bytes");
   rb_define_method(buffer, "write_bytes", buffer_write_bytes, 1);
+
+  rb_remove_method(buffer, "write_double");
   rb_define_method(buffer, "write_double", buffer_write_double, 1);
+
+  rb_remove_method(buffer, "write_fixed32");
   rb_define_method(buffer, "write_fixed32", buffer_write_fixed32, 1);
+
+  rb_remove_method(buffer, "write_fixed64");
   rb_define_method(buffer, "write_fixed64", buffer_write_fixed64, 1);
+
+  rb_remove_method(buffer, "write_float");
   rb_define_method(buffer, "write_float", buffer_write_float, 1);
+
+  rb_remove_method(buffer, "write_int32");
   rb_define_method(buffer, "write_int32", buffer_write_int32, 1);
+
+  rb_remove_method(buffer, "write_int64");
   rb_define_method(buffer, "write_int64", buffer_write_int64, 1);
+
+  rb_remove_method(buffer, "write_sfixed32");
   rb_define_method(buffer, "write_sfixed32", buffer_write_sfixed32, 1);
+
+  rb_remove_method(buffer, "write_sfixed64");
   rb_define_method(buffer, "write_sfixed64", buffer_write_sfixed64, 1);
+
+  rb_remove_method(buffer, "write_sint32");
   rb_define_method(buffer, "write_sint32", buffer_write_sint32, 1);
+
+  rb_remove_method(buffer, "write_sint64");
   rb_define_method(buffer, "write_sint64", buffer_write_sint64, 1);
+
+  rb_remove_method(buffer, "write_string");
   rb_define_method(buffer, "write_string", buffer_write_string, 1);
+
+  rb_remove_method(buffer, "write_uint32");
   rb_define_method(buffer, "write_uint32", buffer_write_uint32, 1);
+
+  rb_remove_method(buffer, "write_uint64");
   rb_define_method(buffer, "write_uint64", buffer_write_uint64, 1);
+
+  rb_remove_method(buffer, "write_varint");
   rb_define_method(buffer, "write_varint", buffer_write_varint, 1);
 }
