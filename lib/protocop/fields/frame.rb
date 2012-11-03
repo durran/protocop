@@ -43,6 +43,30 @@ module Protocop
         @type, @name, @number, @options = type, name, number, options
       end
 
+      # Is this frame packed?
+      #
+      # @example Is the frame packed?
+      #   frame.packed?
+      #
+      # @return [ true, false ] If the frame is packed.
+      #
+      # @since 0.0.0
+      def packed?
+        @packed ||= !!options[:packed]
+      end
+
+      # Is this frame repeated?
+      #
+      # @example Is the frame repeated?
+      #   frame.repeated?
+      #
+      # @return [ true, false ] If the frame is repeated.
+      #
+      # @since 0.0.0
+      def repeated?
+        @repeated ||= !!options[:repeated]
+      end
+
       # Is this frame required?
       #
       # @example Is the frame required?
