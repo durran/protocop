@@ -114,12 +114,12 @@ describe Protocop::Fields::Macros do
 
       context "when providing a default" do
 
-        before do
-          Request.required(Request::Type, :type, 1, default: Request::Type::COUNT)
+        before(:all) do
+          Request.required(Request::Type, :message_type, 1, default: Request::Type::COUNT)
         end
 
         let(:field) do
-          Request.fields[:type]
+          Request.fields[:message_type]
         end
 
         it "adds the field to the class" do
@@ -141,12 +141,12 @@ describe Protocop::Fields::Macros do
 
       context "when not providing a default" do
 
-        before do
-          Request.required(Request::Type, :type, 1)
+        before(:all) do
+          Request.required(Request::Type, :mess_type, 1)
         end
 
         let(:field) do
-          Request.fields[:type]
+          Request.fields[:mess_type]
         end
 
         it "adds the field to the class" do
