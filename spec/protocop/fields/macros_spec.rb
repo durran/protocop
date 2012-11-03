@@ -114,6 +114,31 @@ describe Protocop::Fields::Macros do
       end
     end
 
+    context "when defining a field with a default" do
+
+      before(:all) do
+        class Request
+          include Protocop::Message
+          required :string, :name, 1, default: "testing"
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :Request)
+      end
+
+      context "when getting the field value" do
+
+        let(:message) do
+          Request.new
+        end
+
+        it "returns the default" do
+          expect(message.name).to eq("testing")
+        end
+      end
+    end
+
     context "when defining a string field" do
 
       before(:all) do

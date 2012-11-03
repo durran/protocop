@@ -61,7 +61,42 @@ module Protocop
       def required(type, name, number, options = {})
         frame_opts = options.merge(required: true)
         fields[name] = type.__protofield__(type, name, number, frame_opts)
-        attr_accessor(name)
+        field_accessors(name)
+      end
+
+      private
+
+      # Define the accessors (getter and setter) for the field.
+      #
+      # @api private
+      #
+      # @example Define the accessors.
+      #   Macros.field_accessors(:name)
+      #
+      # @param [ Symbol ] name The name of the field.
+      #
+      # @since 0.0.0
+      def field_accessors(name)
+        field_reader(name)
+        attr_writer(name)
+      end
+
+      # Define the reader for the field with the provided name.
+      #
+      # @api private
+      #
+      # @example Define the reader.
+      #   Macros.field_reader(:name)
+      #
+      # @param [ Symbol ] name The name of the field.
+      #
+      # @since 0.0.0
+      def field_reader(name)
+        class_eval <<-READER
+          def #{name}
+            @#{name} ||= fields[:#{name}].default
+          end
+        READER
       end
     end
   end
