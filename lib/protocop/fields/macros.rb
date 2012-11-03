@@ -100,8 +100,7 @@ module Protocop
       #
       # @since 0.0.0
       def required(type, name, number, options = {})
-        frame_opts = options.merge(required: true)
-        define_field(type, name, number, frame_opts)
+        define_field(type, name, number, options.merge(required: true))
       end
 
       private
