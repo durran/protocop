@@ -20,7 +20,7 @@ describe Protocop::Fields do
     end
 
     it "returns the fields from the class" do
-      message.fields.should eq(Request.fields)
+      expect(message.fields).to eq(Request.fields)
     end
   end
 end
