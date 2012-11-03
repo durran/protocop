@@ -62,6 +62,48 @@ module Protocop
         define_field(type, name, number, options)
       end
 
+      # Define a repeated field in the message.
+      #
+      # @example Define a repeated field.
+      #   class Request
+      #     include Protocop::Message
+      #     repeated :string, :name, 1
+      #   end
+      #
+      # @example Define a repeated enum field.
+      #   class Request
+      #     include Protocop::Message
+      #     module Type
+      #       QUERY = 0
+      #       COUNT = 1
+      #     end
+      #     repeated Type, :type, 1, default: Type::QUERY
+      #   end
+      #
+      # @example Define a repeated embedded message field.
+      #   class Command
+      #     include Protocop::Message
+      #     optional :string, :name, 1
+      #   end
+      #
+      #   class Request
+      #     include Protocop::Message
+      #     repeated Command, :command, 2
+      #   end
+      #
+      # @param [ Class, Module, Symbol ] type The field's type.
+      # @param [ Symbol ] name The name of the field.
+      # @param [ Integer ] number The field's identifier for encoding/decoding.
+      # @param [ Hash ] options The field options.
+      #
+      # @option options [ Integer ] :default The default value.
+      # @option options [ true, false ] :packed If the field is packed.
+      #
+      # @since 0.0.0
+      def repeated(type, name, number, options = {})
+        define_field(type, name, number, options.merge!(repeated: true))
+      end
+
       # Define a required field in the message.
       #
       # @example Define a required field.
