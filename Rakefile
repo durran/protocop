@@ -39,9 +39,10 @@ def compile
 end
 
 task :full do
+  ENV["PROTOCOP"] = "noext"
   Rake::Task[:spec].invoke
-  compile
   ENV["PROTOCOP"] = "ext"
+  compile
   Rake::Task[:"spec:ext"].invoke
 end
 
