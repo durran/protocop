@@ -26,6 +26,27 @@ module Protocop
         options[:default]
       end
 
+      # Encode the field to the buffer with the provided value.
+      #
+      # @example Encode the field.
+      #   field.encode(buffer, "test")
+      #
+      # @param [ Buffer ] buffer The buffer to write to.
+      # @param [ Object ] value The object value to write.
+      #
+      # @return [ Buffer ] The buffer that was written to.
+      #
+      # @see https://developers.google.com/protocol-buffers/docs/encoding#structure
+      #
+      # @since 0.0.0
+      def encode(buffer, value)
+        if repeated?
+          encode_repeated(buffer, value)
+        else
+          encode_one(buffer, value)
+        end
+      end
+
       # Initialize the new frame in the message.
       #
       # @example Initialize the frame.
@@ -77,6 +98,26 @@ module Protocop
       # @since 0.0.0
       def required?
         @required ||= !!options[:required]
+      end
+
+      private
+
+      # Encode a repeated field, which iterates through the array and encodes
+      # each one by one.
+      #
+      # @api private
+      #
+      # @example Encode a repeated field.
+      #   frame.encode_repeated(buffer, [ 1, 2, 3 ])
+      #
+      # @param [ Buffer ] buffer The buffer to write to.
+      # @param [ Array ] values The values to write.
+      #
+      # @return [ Buffer ] The buffer.
+      #
+      # @since 0.0.0
+      def encode_repeated(buffer, values)
+        values.each { |value| encode_one(buffer, value) } and buffer
       end
     end
   end

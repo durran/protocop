@@ -8,10 +8,10 @@ module Protocop
     class String
       include LengthDelimited
 
-      # Encode the field to the buffer with the provided value.
+      # Encode the field to the buffer with the provided single value.
       #
       # @example Encode the field.
-      #   field.encode(buffer, "test")
+      #   field.encode_one(buffer, "test")
       #
       # @param [ Buffer ] buffer The buffer to write to.
       # @param [ String ] value The string value to write.
@@ -21,7 +21,7 @@ module Protocop
       # @see https://developers.google.com/protocol-buffers/docs/encoding#structure
       #
       # @since 0.0.0
-      def encode(buffer, value)
+      def encode_one(buffer, value)
         buffer.write_varint(key).write_uint64(value.length).write_string(value)
       end
     end
