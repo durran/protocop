@@ -2,24 +2,46 @@ require "spec_helper"
 
 describe Protocop::Fields::Double do
 
-  let(:field) do
-    described_class.new(:double, :test, 1)
-  end
-
   let(:buffer) do
     Protocop::Buffer.new
   end
 
   describe "#encode" do
 
-    let!(:written) do
-      field.encode(buffer, 10.345)
+    context "when the field is not repeated" do
+
+      let(:field) do
+        described_class.new(:double, :test, 1)
+      end
+
+      let!(:written) do
+        field.encode(buffer, 10.345)
+      end
+
+      it "encodes the field, type and double" do
+        expect(buffer.bytes).to eq("\tq=\n\xD7\xA3\xB0$@")
+      end
+
+      it_behaves_like "a fluid interface"
     end
 
-    it "encodes the field, type and double" do
-      expect(buffer.bytes).to eq("\tq=\n\xD7\xA3\xB0$@")
-    end
+    context "when the field is repeated" do
 
-    it_behaves_like "a fluid interface"
+      let(:field) do
+        described_class.new(:double, :test, 1, repeated: true)
+      end
+
+      let!(:written) do
+        field.encode(buffer, [ 10.345, 1.1 ])
+      end
+
+      it "encodes the field, type and double" do
+        expect(buffer.bytes).to eq(
+          "\tq=\n\xD7\xA3\xB0$@\t\x9A\x99\x99\x99\x99\x99\xF1?"
+        )
+      end
+
+      it_behaves_like "a fluid interface"
+    end
   end
 end
