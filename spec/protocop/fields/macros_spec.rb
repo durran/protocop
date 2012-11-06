@@ -109,6 +109,40 @@ describe Protocop::Fields::Macros do
         end
       end
     end
+
+    context "when the field is packed" do
+
+      before(:all) do
+        class Request
+          include Protocop::Message
+          repeated :string, :names, 1, packed: true
+        end
+      end
+
+      after(:all) do
+        Object.__send__(:remove_const, :Request)
+      end
+
+      let(:field) do
+        Request.fields[:names]
+      end
+
+      it "adds the field to the class" do
+        expect(field).to be_a(Protocop::Fields::String)
+      end
+
+      it "sets the field number" do
+        expect(field.number).to eq(1)
+      end
+
+      it "sets the field as repeated" do
+        expect(field).to be_repeated
+      end
+
+      it "sets the field as packed" do
+        expect(field).to be_packed
+      end
+    end
   end
 
   describe ".required" do
