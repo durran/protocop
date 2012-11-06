@@ -195,6 +195,18 @@ static VALUE buffer_write_double(VALUE self, VALUE float_val)
   return self;
 }
 
+static int buffer_convert_int(VALUE self, VALUE number)
+{
+  buffer_validate_int32(self, number);
+  return NUM2INT(number);
+}
+
+static long long buffer_convert_long(VALUE self, VALUE number)
+{
+  buffer_validate_int64(self, number);
+  return NUM2LONG(number);
+}
+
 /*
  * Write a fixed size 32 bit integer to the buffer (little endian).
  *
@@ -211,9 +223,8 @@ static VALUE buffer_write_double(VALUE self, VALUE float_val)
  */
 static VALUE buffer_write_fixed32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, number);
+  int value = buffer_convert_int(self, number);
   VALUE bytes = buffer_bytes(self);
-  int value = NUM2INT(number);
   return buffer_concat_fixed32(self, bytes, value);
 }
 
@@ -233,9 +244,8 @@ static VALUE buffer_write_fixed32(VALUE self, VALUE number)
  */
 static VALUE buffer_write_fixed64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, number);
+  long long value = buffer_convert_long(self, number);
   VALUE bytes = buffer_bytes(self);
-  long long value = NUM2LONG(number);
   return buffer_concat_fixed64(self, bytes, value);
 }
 
@@ -317,10 +327,9 @@ static VALUE buffer_write_int64(VALUE self, VALUE number)
  */
 static VALUE buffer_write_sfixed32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, number);
-  VALUE bytes = buffer_bytes(self);
-  int value = NUM2INT(number);
+  int value = buffer_convert_int(self, number);
   int converted = (value << 1) ^ (value >> 31);
+  VALUE bytes = buffer_bytes(self);
   return buffer_concat_fixed32(self, bytes, converted);
 }
 
@@ -340,10 +349,9 @@ static VALUE buffer_write_sfixed32(VALUE self, VALUE number)
  */
 static VALUE buffer_write_sfixed64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, number);
-  VALUE bytes = buffer_bytes(self);
-  long long value = NUM2LONG(number);
+  long long value = buffer_convert_long(self, number);
   long long converted = (value << 1) ^ (value >> 63);
+  VALUE bytes = buffer_bytes(self);
   return buffer_concat_fixed64(self, bytes, converted);
 }
 
@@ -363,8 +371,7 @@ static VALUE buffer_write_sfixed64(VALUE self, VALUE number)
  */
 static VALUE buffer_write_sint32(VALUE self, VALUE number)
 {
-  buffer_validate_int32(self, number);
-  int value = NUM2INT(number);
+  int value = buffer_convert_int(self, number);
   int converted = (value << 1) ^ (value >> 31);
   return buffer_write_varint(self, INT2FIX(converted));
 }
@@ -385,8 +392,7 @@ static VALUE buffer_write_sint32(VALUE self, VALUE number)
  */
 static VALUE buffer_write_sint64(VALUE self, VALUE number)
 {
-  buffer_validate_int64(self, number);
-  long value = NUM2LONG(number);
+  long value = buffer_convert_long(self, number);
   long converted = (value << 1) ^ (value >> 63);
   return buffer_write_varint(self, LONG2NUM(converted));
 }
