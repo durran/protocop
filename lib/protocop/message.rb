@@ -26,7 +26,8 @@ module Protocop
     def encode(buffer = Buffer.new)
       fields.values.each do |field|
         field.encode(buffer, __send__(field.name))
-      end and buffer
+      end
+      return buffer
     end
 
     # Instantiate a new Message. If no attributes are provided, then the fields

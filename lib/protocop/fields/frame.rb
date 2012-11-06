@@ -76,6 +76,18 @@ module Protocop
         @packed ||= !!options[:packed]
       end
 
+      # Get the key that is used for packed fields.
+      #
+      # @example Get the packed field key.
+      #   frame.packed_key
+      #
+      # @return [ Integer ] The length delimited key.
+      #
+      # @since 0.0.0
+      def packed_key
+        (number << 3) | Wire::LENGTH
+      end
+
       # Is this frame repeated?
       #
       # @example Is the frame repeated?
@@ -117,7 +129,51 @@ module Protocop
       #
       # @since 0.0.0
       def encode_repeated(buffer, values)
-        values.each { |value| encode_pair(buffer, value) } and buffer
+        if packed?
+          encode_packed(buffer, values)
+        else
+          encode_pairs(buffer, values)
+        end
+      end
+
+      # Encode the key/value pairs of repeated fields.
+      #
+      # @api private
+      #
+      # @example Encode the pairs.
+      #   frame.encode_pairs(buffer, [ 1, 2, 3 ])
+      #
+      # @param [ Buffer ] buffer The buffer to encode to.
+      # @param [ Array ] values The values to write.
+      #
+      # @return [ Buffer ] The buffer.
+      #
+      # @since 0.0.0
+      def encode_pairs(buffer, values)
+        values.each { |value| encode_pair(buffer, value) }
+        return buffer
+      end
+
+      # Execute the provided block with packing, yielding to each value in the
+      # array.
+      #
+      # @api private
+      #
+      # @example Encode with packing.
+      #   frame.with_packing(buffer, [ 1, 2, 3 ]) do |value|
+      #     buffer.write_int32(value)
+      #   end
+      #
+      # @param [ Buffer ] buffer The buffer to write to.
+      # @param [ Array ] values The values to write.
+      #
+      # @return [ Buffer ] The buffer.
+      #
+      # @since 0.0.0
+      def with_packing(buffer, values)
+        buffer.write_varint(packed_key)
+        values.each { |value| yield value }
+        return buffer
       end
     end
   end
