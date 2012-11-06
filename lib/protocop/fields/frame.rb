@@ -43,7 +43,7 @@ module Protocop
         if repeated?
           encode_repeated(buffer, value)
         else
-          encode_one(buffer, value)
+          encode_pair(buffer, value)
         end
       end
 
@@ -117,7 +117,7 @@ module Protocop
       #
       # @since 0.0.0
       def encode_repeated(buffer, values)
-        values.each { |value| encode_one(buffer, value) } and buffer
+        values.each { |value| encode_pair(buffer, value) } and buffer
       end
     end
   end

@@ -11,7 +11,7 @@ module Protocop
       # Encode the field to the buffer with the provided value.
       #
       # @example Encode the field.
-      #   field.encode_one(buffer, Type::QUERY)
+      #   field.encode_pair(buffer, Type::QUERY)
       #
       # @param [ Buffer ] buffer The buffer to write to.
       # @param [ Integer ] value The enum int value to write.
@@ -21,7 +21,7 @@ module Protocop
       # @see https://developers.google.com/protocol-buffers/docs/encoding#structure
       #
       # @since 0.0.0
-      def encode_one(buffer, value)
+      def encode_pair(buffer, value)
         buffer.write_varint(key).write_int32(value)
       end
     end
