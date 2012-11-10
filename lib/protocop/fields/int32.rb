@@ -39,7 +39,7 @@ module Protocop
       #
       # @since 0.0.0
       def encode_packed(buffer, values)
-        with_packing(buffer, values) { |value| buffer.write_int32(value) }
+        with_packing(buffer, values) { |value, buff| buff.write_int32(value) }
       end
     end
   end

@@ -171,9 +171,9 @@ module Protocop
       #
       # @since 0.0.0
       def with_packing(buffer, values)
-        buffer.write_varint(packed_key)
-        values.each { |value| yield value }
-        return buffer
+        packed = Buffer.new
+        values.each { |value| yield(value, packed) }
+        buffer.write_varint(packed_key).write_varint(packed.bytes.length).write_bytes(packed.bytes)
       end
     end
   end
