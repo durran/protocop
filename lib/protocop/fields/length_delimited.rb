@@ -21,6 +21,18 @@ module Protocop
       def key
         (number << 3) | Wire::LENGTH
       end
+
+      # Is the field packable?
+      #
+      # @example Is the field packable?
+      #   frame.packable?
+      #
+      # @return [ false ] Always false for length delimited fields.
+      #
+      # @since 0.0.0
+      def packable?
+        false
+      end
     end
   end
 end

@@ -64,6 +64,18 @@ module Protocop
         @type, @name, @number, @options = type, name, number, options
       end
 
+      # Is the field packable? This is all field types except length-delimited.
+      #
+      # @example Is the field packable?
+      #   frame.packable?
+      #
+      # @return [ true ] Always true for non length delimited fields.
+      #
+      # @since 0.0.0
+      def packable?
+        true
+      end
+
       # Is this frame packed?
       #
       # @example Is the frame packed?

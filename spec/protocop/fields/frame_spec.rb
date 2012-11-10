@@ -33,6 +33,23 @@ describe Protocop::Fields::Frame do
     end
   end
 
+  describe "#packable?" do
+
+    let(:klass) do
+      Class.new do
+        include Protocop::Fields::Frame
+      end
+    end
+
+    let(:field) do
+      klass.new(:string, :test, 1)
+    end
+
+    it "returns true" do
+      expect(field).to be_packable
+    end
+  end
+
   describe "#packed?" do
 
     let(:klass) do
