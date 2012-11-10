@@ -43,19 +43,39 @@ describe Protocop::Fields::Boolean do
 
     context "when the field is repeated" do
 
-      let(:field) do
-        described_class.new(:boolean, :test, 1, repeated: true)
+      context "when the field is not packed" do
+
+        let(:field) do
+          described_class.new(:boolean, :test, 1, repeated: true)
+        end
+
+        let!(:written) do
+          field.encode(buffer, [ true, false ])
+        end
+
+        it "encodes the field, type and integers" do
+          expect(buffer.bytes).to eq("\x08\x01\x08\x00")
+        end
+
+        it_behaves_like "a fluid interface"
       end
 
-      let!(:written) do
-        field.encode(buffer, [ true, false ])
-      end
+      context "when the field is packed" do
 
-      it "encodes the field, type and integers" do
-        expect(buffer.bytes).to eq("\x08\x01\x08\x00")
-      end
+        let(:field) do
+          described_class.new(:boolean, :test, 1, repeated: true, packed: true)
+        end
 
-      it_behaves_like "a fluid interface"
+        let!(:written) do
+          field.encode(buffer, [ true, false ])
+        end
+
+        it "encodes the field, type and integers" do
+          expect(buffer.bytes).to eq("\n\x02\x01\x00")
+        end
+
+        it_behaves_like "a fluid interface"
+      end
     end
   end
 end

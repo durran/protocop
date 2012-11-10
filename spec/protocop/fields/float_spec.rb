@@ -27,19 +27,39 @@ describe Protocop::Fields::Float do
 
     context "when the field is repeated" do
 
-      let(:field) do
-        described_class.new(:float, :test, 1, repeated: true)
+      context "when the field is not packed" do
+
+        let(:field) do
+          described_class.new(:float, :test, 1, repeated: true)
+        end
+
+        let!(:written) do
+          field.encode(buffer, [ 10.345, 1.1 ])
+        end
+
+        it "encodes the field, type and float" do
+          expect(buffer.bytes).to eq("\r\x1F\x85%A\r\xCD\xCC\x8C?")
+        end
+
+        it_behaves_like "a fluid interface"
       end
 
-      let!(:written) do
-        field.encode(buffer, [ 10.345, 1.1 ])
-      end
+      context "when the field is packed" do
 
-      it "encodes the field, type and float" do
-        expect(buffer.bytes).to eq("\r\x1F\x85%A\r\xCD\xCC\x8C?")
-      end
+        let(:field) do
+          described_class.new(:float, :test, 1, repeated: true, packed: true)
+        end
 
-      it_behaves_like "a fluid interface"
+        let!(:written) do
+          field.encode(buffer, [ 10.345, 1.1 ])
+        end
+
+        it "encodes the field, type and float" do
+          expect(buffer.bytes).to eq("\n\b\x1F\x85%A\xCD\xCC\x8C?")
+        end
+
+        it_behaves_like "a fluid interface"
+      end
     end
   end
 end

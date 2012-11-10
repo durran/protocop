@@ -27,21 +27,43 @@ describe Protocop::Fields::Double do
 
     context "when the field is repeated" do
 
-      let(:field) do
-        described_class.new(:double, :test, 1, repeated: true)
+      context "when the field is not packed" do
+
+        let(:field) do
+          described_class.new(:double, :test, 1, repeated: true)
+        end
+
+        let!(:written) do
+          field.encode(buffer, [ 10.345, 1.1 ])
+        end
+
+        it "encodes the field, type and double" do
+          expect(buffer.bytes).to eq(
+            "\tq=\n\xD7\xA3\xB0$@\t\x9A\x99\x99\x99\x99\x99\xF1?"
+          )
+        end
+
+        it_behaves_like "a fluid interface"
       end
 
-      let!(:written) do
-        field.encode(buffer, [ 10.345, 1.1 ])
-      end
+      context "when the field is packed" do
 
-      it "encodes the field, type and double" do
-        expect(buffer.bytes).to eq(
-          "\tq=\n\xD7\xA3\xB0$@\t\x9A\x99\x99\x99\x99\x99\xF1?"
-        )
-      end
+        let(:field) do
+          described_class.new(:double, :test, 1, repeated: true, packed: true)
+        end
 
-      it_behaves_like "a fluid interface"
+        let!(:written) do
+          field.encode(buffer, [ 10.345, 1.1 ])
+        end
+
+        it "encodes the field, type and double" do
+          expect(buffer.bytes).to eq(
+            "\n\x10q=\n\xD7\xA3\xB0$@\x9A\x99\x99\x99\x99\x99\xF1?"
+          )
+        end
+
+        it_behaves_like "a fluid interface"
+      end
     end
   end
 end

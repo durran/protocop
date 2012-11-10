@@ -42,27 +42,55 @@ describe Protocop::Fields::Embedded do
 
     context "when the field is repeated" do
 
-      let(:field) do
-        described_class.new(Request, :test, 1, repeated: true)
+      context "when the field is not packed" do
+
+        let(:field) do
+          described_class.new(Request, :test, 1, repeated: true)
+        end
+
+        let(:request_one) do
+          Request.new(test: "testing")
+        end
+
+        let(:request_two) do
+          Request.new(test: "test")
+        end
+
+        let!(:written) do
+          field.encode(buffer, [ request_one, request_two ])
+        end
+
+        it "encodes the field, type and integer" do
+          expect(buffer.bytes).to eq("\n\n\atesting\n\n\x04test")
+        end
+
+        it_behaves_like "a fluid interface"
       end
 
-      let(:request_one) do
-        Request.new(test: "testing")
-      end
+      pending "when the field is packed" do
 
-      let(:request_two) do
-        Request.new(test: "test")
-      end
+        let(:field) do
+          described_class.new(Request, :test, 1, repeated: true, packed: true)
+        end
 
-      let!(:written) do
-        field.encode(buffer, [ request_one, request_two ])
-      end
+        let(:request_one) do
+          Request.new(test: "testing")
+        end
 
-      it "encodes the field, type and integer" do
-        expect(buffer.bytes).to eq("\n\n\atesting\n\n\x04test")
-      end
+        let(:request_two) do
+          Request.new(test: "test")
+        end
 
-      it_behaves_like "a fluid interface"
+        let!(:written) do
+          field.encode(buffer, [ request_one, request_two ])
+        end
+
+        it "encodes the field, type and integer" do
+          expect(buffer.bytes).to eq("\n\x0F\n\atesting\n\x04test")
+        end
+
+        it_behaves_like "a fluid interface"
+      end
     end
   end
 end

@@ -43,31 +43,51 @@ describe Protocop::Fields::String do
 
     context "when the value is repeated" do
 
-      let(:field) do
-        described_class.new(:string, :test, 1, repeated: true)
-      end
+      context "when the field is not packed" do
 
-      context "when the string is empty" do
-
-        let!(:written) do
-          field.encode(buffer, [""])
+        let(:field) do
+          described_class.new(:string, :test, 1, repeated: true)
         end
 
-        it "encodes the field, type and length plus the string" do
-          expect(buffer.bytes).to eq("\n\x00")
+        context "when the string is empty" do
+
+          let!(:written) do
+            field.encode(buffer, [""])
+          end
+
+          it "encodes the field, type and length plus the string" do
+            expect(buffer.bytes).to eq("\n\x00")
+          end
+
+          it_behaves_like "a fluid interface"
         end
 
-        it_behaves_like "a fluid interface"
+        context "when the string is not empty" do
+
+          let!(:written) do
+            field.encode(buffer, [ "test", "testing" ])
+          end
+
+          it "encodes the field, type and length plus the string" do
+            expect(buffer.bytes).to eq("\n\x04test\n\x07testing")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
       end
 
-      context "when the string is not empty" do
+      pending "when the field is packed" do
+
+        let(:field) do
+          described_class.new(:string, :test, 1, repeated: true, packed: true)
+        end
 
         let!(:written) do
           field.encode(buffer, [ "test", "testing" ])
         end
 
         it "encodes the field, type and length plus the string" do
-          expect(buffer.bytes).to eq("\n\x04test\n\x07testing")
+          expect(buffer.bytes).to eq("\n\vtesttesting")
         end
 
         it_behaves_like "a fluid interface"
