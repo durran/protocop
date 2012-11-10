@@ -115,7 +115,7 @@ describe Protocop::Fields::Macros do
       before(:all) do
         class Request
           include Protocop::Message
-          repeated :string, :names, 1, packed: true
+          repeated :int32, :names, 1, packed: true
         end
       end
 
@@ -128,7 +128,7 @@ describe Protocop::Fields::Macros do
       end
 
       it "adds the field to the class" do
-        expect(field).to be_a(Protocop::Fields::String)
+        expect(field).to be_a(Protocop::Fields::Int32)
       end
 
       it "sets the field number" do

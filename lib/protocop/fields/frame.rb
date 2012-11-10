@@ -62,6 +62,7 @@ module Protocop
       # @since 0.0.0
       def initialize(type, name, number, options = {})
         @type, @name, @number, @options = type, name, number, options
+        validate_packing(type, options)
       end
 
       # Is the field packable? This is all field types except length-delimited.
@@ -164,6 +165,25 @@ module Protocop
       def encode_pairs(buffer, values)
         values.each { |value| encode_pair(buffer, value) }
         return buffer
+      end
+
+      # Validate if the field can be packed.
+      #
+      # @api private
+      #
+      # @example Validate the packing options.
+      #   frame.validate_packing(:string, packed: true)
+      #
+      # @param [ Synbol ] type The field type.
+      # @param [ Hash ] options The field options.
+      #
+      # @raise [ Errors::Unpackable ] If the packing is invalid.
+      #
+      # @since 0.0.0
+      def validate_packing(type, options = {})
+        if packed? && !packable?
+          raise Errors::Unpackable.new(type)
+        end
       end
 
       # Execute the provided block with packing, yielding to each value in the

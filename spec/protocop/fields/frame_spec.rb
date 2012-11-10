@@ -33,6 +33,27 @@ describe Protocop::Fields::Frame do
     end
   end
 
+  describe "#initialize" do
+
+    context "when the field is not packable" do
+
+      let(:klass) do
+        Class.new do
+          include Protocop::Fields::LengthDelimited
+        end
+      end
+
+      context "when providing a packed option" do
+
+        it "raises an error" do
+          expect {
+            klass.new(:string, :test, 1, packed: true)
+          }.to raise_error(Protocop::Errors::Unpackable)
+        end
+      end
+    end
+  end
+
   describe "#packable?" do
 
     let(:klass) do
