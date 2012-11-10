@@ -24,6 +24,23 @@ module Protocop
       def encode_pair(buffer, value)
         buffer.write_varint(key).write_boolean(value)
       end
+
+      # Encode the field to the buffer packed.
+      #
+      # @example Encode the packed repeated field.
+      #   field.encode_packed(buffer, [ true, false ])
+      #
+      # @param [ Buffer ] buffer The buffer to write to.
+      # @param [ Array<true, false> ] values The values to write.
+      #
+      # @return [ Buffer ] The buffer.
+      #
+      # @see https://developers.google.com/protocol-buffers/docs/encoding#optional
+      #
+      # @since 0.0.0
+      def encode_packed(buffer, values)
+        with_packing(buffer, values) { |value, buff| buff.write_boolean(value) }
+      end
     end
   end
 end
