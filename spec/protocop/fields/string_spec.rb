@@ -75,23 +75,6 @@ describe Protocop::Fields::String do
           it_behaves_like "a fluid interface"
         end
       end
-
-      pending "when the field is packed" do
-
-        let(:field) do
-          described_class.new(:string, :test, 1, repeated: true, packed: true)
-        end
-
-        let!(:written) do
-          field.encode(buffer, [ "test", "testing" ])
-        end
-
-        it "encodes the field, type and length plus the string" do
-          expect(buffer.bytes).to eq("\n\vtesttesting")
-        end
-
-        it_behaves_like "a fluid interface"
-      end
     end
   end
 end

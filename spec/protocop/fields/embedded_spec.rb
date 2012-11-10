@@ -66,31 +66,6 @@ describe Protocop::Fields::Embedded do
 
         it_behaves_like "a fluid interface"
       end
-
-      pending "when the field is packed" do
-
-        let(:field) do
-          described_class.new(Request, :test, 1, repeated: true, packed: true)
-        end
-
-        let(:request_one) do
-          Request.new(test: "testing")
-        end
-
-        let(:request_two) do
-          Request.new(test: "test")
-        end
-
-        let!(:written) do
-          field.encode(buffer, [ request_one, request_two ])
-        end
-
-        it "encodes the field, type and integer" do
-          expect(buffer.bytes).to eq("\n\x0F\n\atesting\n\x04test")
-        end
-
-        it_behaves_like "a fluid interface"
-      end
     end
   end
 end
