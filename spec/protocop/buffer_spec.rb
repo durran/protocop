@@ -225,21 +225,81 @@ describe Protocop::Buffer do
 
   describe "#write_int64" do
 
-    let(:written) do
-      buffer.write_int64(1000)
+    context "when the value is 64 bit" do
+
+      context "when the integer is positive" do
+
+        context "when appending a small integer" do
+
+          let(:written) do
+            buffer.write_int64(1)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+
+        context "when appending the largest 64bit integer" do
+
+          let(:written) do
+            buffer.write_int64(Integer::MAX_SIGNED_64BIT)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x7F")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+      end
+
+      context "when the integer is negative" do
+
+        context "when appending a small negative integer" do
+
+          let(:written) do
+            buffer.write_int64(-1)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+
+        context "when appending the smallest 64bit integer" do
+
+          let(:written) do
+            buffer.write_int64(Integer::MIN_SIGNED_64BIT)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\x80\x80\x80\x80\x80\x80\x80\x80\x80\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+      end
     end
 
-    it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xE8\a")
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 64 bit" do
+    context "when the value is too high" do
 
       it "raises an error" do
         expect {
-          buffer.write_int64(2 ** 65)
+          buffer.write_int64(Integer::MAX_SIGNED_64BIT + 1)
+        }.to raise_error(Protocop::Errors::InvalidInt64)
+      end
+    end
+
+    context "when the value is too low" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int64(Integer::MIN_SIGNED_64BIT - 1)
         }.to raise_error(Protocop::Errors::InvalidInt64)
       end
     end
