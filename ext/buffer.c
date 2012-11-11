@@ -69,7 +69,7 @@ static long long buffer_convert_long(VALUE self, VALUE number)
 static VALUE buffer_write_varint(VALUE self, VALUE number)
 {
   VALUE bytes = buffer_bytes(self);
-  int value = NUM2INT(number);
+  unsigned long long value = NUM2LL(number);
   int size = 0;
   char chars[4];
   while (value > 0x7F) {

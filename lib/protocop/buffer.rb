@@ -144,13 +144,18 @@ module Protocop
     # @since 0.0.0
     def write_int32(value)
       validate_int32!(value)
-      write_varint(value)
+      write_int64(value)
     end
 
     # Write a 64 bit integer to the buffer.
     #
     # @example Write the integer to the buffer.
     #   buffer.write_int64(14)
+    #
+    # @note The shift for negative numbers is explained in the protobuf
+    #   documentation: "If you use int32 or int64 as the type for a negative
+    #   number, the resulting varint is always ten bytes long – it is,
+    #   effectively, treated like a very large unsigned integer."
     #
     # @param [ Integer ] value The integer.
     #
@@ -163,6 +168,7 @@ module Protocop
     # @since 0.0.0
     def write_int64(value)
       validate_int64!(value)
+      value += (1 << 64) if value < 0
       write_varint(value)
     end
 

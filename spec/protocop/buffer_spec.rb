@@ -79,11 +79,11 @@ describe Protocop::Buffer do
   describe "#write_fixed32" do
 
     let(:written) do
-      buffer.write_fixed32(1000)
+      buffer.write_fixed32(1)
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xE8\x03\x00\x00")
+      expect(written.bytes).to eq("\x01\x00\x00\x00")
     end
 
     it_behaves_like "a fluid interface"
@@ -101,15 +101,11 @@ describe Protocop::Buffer do
   describe "#write_fixed64" do
 
     let(:written) do
-      buffer.write_fixed64(1000)
-    end
-
-    let(:value) do
-      [ 1000 & 0xFFFFFFFF, 1000 >> 32 ].pack("VV")
+      buffer.write_fixed64(1)
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
+      expect(written.bytes).to eq("\x01\x00\x00\x00\x00\x00\x00\x00")
     end
 
     it_behaves_like "a fluid interface"
@@ -127,15 +123,19 @@ describe Protocop::Buffer do
   describe "#write_float" do
 
     let(:written) do
-      buffer.write_float(1.21)
+      buffer.write_float(1.2)
     end
 
     let(:expected) do
-      [ 1.21 ].pack("e")
+      [ 1.2 ].pack("e")
     end
 
     it "adds the float to the buffer" do
       expect(written.bytes).to eq(expected)
+    end
+
+    it "constrains the float to 4 bytes" do
+      expect(written.bytes.length).to eq(4)
     end
 
     it_behaves_like "a fluid interface"
@@ -145,22 +145,79 @@ describe Protocop::Buffer do
 
     context "when the value is 32 bit" do
 
-      let(:written) do
-        buffer.write_int32(12)
+      context "when the integer is positive" do
+
+        context "when appending a small integer" do
+
+          let(:written) do
+            buffer.write_int32(1)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+
+        context "when appending the largest 32bit integer" do
+
+          let(:written) do
+            buffer.write_int32(Integer::MAX_SIGNED_32BIT)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\a")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
       end
 
-      it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\f")
-      end
+      context "when the integer is negative" do
 
-      it_behaves_like "a fluid interface"
+        context "when appending a small negative integer" do
+
+          let(:written) do
+            buffer.write_int32(-1)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+
+        context "when appending the smallest 32bit integer" do
+
+          let(:written) do
+            buffer.write_int32(Integer::MIN_SIGNED_32BIT)
+          end
+
+          it "adds the int to the buffer" do
+            expect(written.bytes).to eq("\x80\x80\x80\x80\xF8\xFF\xFF\xFF\xFF\x01")
+          end
+
+          it_behaves_like "a fluid interface"
+        end
+      end
     end
 
-    context "when the value is greater than 32 bit" do
+    context "when the value is too high" do
 
       it "raises an error" do
         expect {
-          buffer.write_int32(2 ** 34)
+          buffer.write_int32(Integer::MAX_SIGNED_32BIT + 1)
+        }.to raise_error(Protocop::Errors::InvalidInt32)
+      end
+    end
+
+    context "when the value is too low" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int32(Integer::MIN_SIGNED_32BIT - 1)
         }.to raise_error(Protocop::Errors::InvalidInt32)
       end
     end
