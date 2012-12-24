@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
   s.email        = ["durran@gmail.com"]
   s.summary      = "A Ruby implementation of Google Protocol Buffers."
   s.description  = s.summary
-  s.extensions   = ["ext/protcop/extconf.rb"]
   s.files        = Dir.glob("lib/**/*") + %w(README.md Rakefile)
   s.require_path = "lib"
 end
