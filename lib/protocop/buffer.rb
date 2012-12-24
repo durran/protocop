@@ -38,6 +38,27 @@ module Protocop
       @bytes = "".force_encoding(BINARY)
     end
 
+    def read_boolean
+      read(1) != "\x00"
+    end
+
+    def read_double
+      read(8).unpack("E")[0]
+    end
+
+    def read_fixed32
+      read(4).unpack("V")[0]
+    end
+
+    def read_fixed64
+      values = read(8).unpack("VV")
+      values[0] + (values[1] << 32)
+    end
+
+    def read_float
+      read(4).unpack("e")[0]
+    end
+
     # Write a boolean to the buffer.
     #
     # @example Write a true value to the buffer.
@@ -329,6 +350,10 @@ module Protocop
     class OutsideRange < Exception; end
 
     private
+
+    def read(length)
+      bytes.slice!(0, length)
+    end
 
     # Validate that the value is a proper signed 32 bit integer.
     #

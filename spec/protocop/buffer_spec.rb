@@ -17,6 +17,84 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#read_boolean" do
+
+    context "when the byte is 1" do
+
+      before do
+        buffer.write_boolean(true)
+      end
+
+      let(:read) do
+        buffer.read_boolean
+      end
+
+      it "returns true" do
+        expect(read).to eq(true)
+      end
+    end
+
+    context "when the byte is 0" do
+
+      before do
+        buffer.write_boolean(false)
+      end
+
+      let(:read) do
+        buffer.read_boolean
+      end
+
+      it "returns false" do
+        expect(read).to eq(false)
+      end
+    end
+  end
+
+  describe "#read_double" do
+
+    before do
+      buffer.write_double(1.23131)
+    end
+
+    let(:read) do
+      buffer.read_double
+    end
+
+    it "returns the double" do
+      expect(read).to eq(1.23131)
+    end
+  end
+
+  describe "#read_fixed32" do
+
+    before do
+      buffer.write_fixed32(152)
+    end
+
+    let(:read) do
+      buffer.read_fixed32
+    end
+
+    it "returns the double" do
+      expect(read).to eq(152)
+    end
+  end
+
+  describe "#read_fixed64" do
+
+    before do
+      buffer.write_fixed64(142576)
+    end
+
+    let(:read) do
+      buffer.read_fixed64
+    end
+
+    it "returns the double" do
+      expect(read).to eq(142576)
+    end
+  end
+
   describe "#write_boolean" do
 
     context "when the boolean is true" do
@@ -26,7 +104,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the boolean to the buffer" do
-        expect(written.bytes).to eq("\x01")
+        expect(written.read_boolean).to eq(true)
       end
 
       it_behaves_like "a fluid interface"
@@ -39,7 +117,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the boolean to the buffer" do
-        expect(written.bytes).to eq("\x00")
+        expect(written.read_boolean).to eq(false)
       end
 
       it_behaves_like "a fluid interface"
@@ -65,12 +143,8 @@ describe Protocop::Buffer do
       buffer.write_double(1.21)
     end
 
-    let(:expected) do
-      [ 1.21 ].pack("E")
-    end
-
     it "adds the double to the buffer" do
-      expect(written.bytes).to eq(expected)
+      expect(written.read_double).to eq(1.21)
     end
 
     it_behaves_like "a fluid interface"
@@ -83,7 +157,7 @@ describe Protocop::Buffer do
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\x01\x00\x00\x00")
+      expect(written.read_fixed32).to eq(1)
     end
 
     it_behaves_like "a fluid interface"
@@ -105,7 +179,7 @@ describe Protocop::Buffer do
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\x01\x00\x00\x00\x00\x00\x00\x00")
+      expect(written.read_fixed64).to eq(1)
     end
 
     it_behaves_like "a fluid interface"
@@ -126,16 +200,12 @@ describe Protocop::Buffer do
       buffer.write_float(1.2)
     end
 
-    let(:expected) do
-      [ 1.2 ].pack("e")
-    end
-
-    it "adds the float to the buffer" do
-      expect(written.bytes).to eq(expected)
-    end
-
     it "constrains the float to 4 bytes" do
       expect(written.bytes.length).to eq(4)
+    end
+
+    pending "adds the float to the buffer" do
+      expect(written.read_float).to eq(1.2)
     end
 
     it_behaves_like "a fluid interface"
