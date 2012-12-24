@@ -93,7 +93,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_fixed32(2 ** 34)
-        }.to raise_error(Protocop::Errors::InvalidInt32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -115,7 +115,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_fixed64(2 ** 65)
-        }.to raise_error(Protocop::Errors::InvalidInt64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -209,7 +209,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_int32(Integer::MAX_SIGNED_32BIT + 1)
-        }.to raise_error(Protocop::Errors::InvalidInt32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
 
@@ -218,7 +218,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_int32(Integer::MIN_SIGNED_32BIT - 1)
-        }.to raise_error(Protocop::Errors::InvalidInt32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -291,7 +291,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_int64(Integer::MAX_SIGNED_64BIT + 1)
-        }.to raise_error(Protocop::Errors::InvalidInt64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
 
@@ -300,7 +300,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_int64(Integer::MIN_SIGNED_64BIT - 1)
-        }.to raise_error(Protocop::Errors::InvalidInt64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -330,7 +330,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_sfixed32(2 ** 34)
-        }.to raise_error(Protocop::Errors::InvalidInt32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -360,7 +360,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_sfixed64(2 ** 65)
-        }.to raise_error(Protocop::Errors::InvalidInt64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -385,7 +385,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_sint32(2 ** 34)
-        }.to raise_error(Protocop::Errors::InvalidInt32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -407,7 +407,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_sint64(2 ** 65)
-        }.to raise_error(Protocop::Errors::InvalidInt64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -474,7 +474,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_uint32(-10)
-        }.to raise_error(Protocop::Errors::InvalidUint32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
 
@@ -483,7 +483,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_uint32(2 ** 40)
-        }.to raise_error(Protocop::Errors::InvalidUint32)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end
@@ -508,7 +508,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_uint64(-10)
-        }.to raise_error(Protocop::Errors::InvalidUint64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
 
@@ -517,7 +517,7 @@ describe Protocop::Buffer do
       it "raises an error" do
         expect {
           buffer.write_uint64(2 ** 70)
-        }.to raise_error(Protocop::Errors::InvalidUint64)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
     end
   end

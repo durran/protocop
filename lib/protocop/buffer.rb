@@ -322,6 +322,12 @@ module Protocop
     end
     alias :write_bytes :write_string
 
+    # Exception used for validating integers are in the valid range for the
+    # specified type.
+    #
+    # @since 0.0.0
+    class OutsideRange < Exception; end
+
     private
 
     # Validate that the value is a proper signed 32 bit integer.
@@ -337,7 +343,9 @@ module Protocop
     #
     # @since 0.0.0
     def validate_int32!(value)
-      raise Errors::InvalidInt32.new(value) unless value.int32?
+      unless value.int32?
+        raise OutsideRange.new("#{value} is not a valid 32 bit int.")
+      end
     end
 
     # Validate that the value is a proper signed 64 bit integer.
@@ -353,7 +361,9 @@ module Protocop
     #
     # @since 0.0.0
     def validate_int64!(value)
-      raise Errors::InvalidInt64.new(value) unless value.int64?
+      unless value.int64?
+        raise OutsideRange.new("#{value} is not a valid 64 bit int.")
+      end
     end
 
     # Validate that the value is a proper unsigned 32 bit integer.
@@ -369,7 +379,9 @@ module Protocop
     #
     # @since 0.0.0
     def validate_uint32!(value)
-      raise Errors::InvalidUint32.new(value) unless value.uint32?
+      unless value.uint32?
+        raise OutsideRange.new("#{value} is not a valid 32 bit unsigned int.")
+      end
     end
 
     # Validate that the value is a proper unsigned 64 bit integer.
@@ -385,7 +397,9 @@ module Protocop
     #
     # @since 0.0.0
     def validate_uint64!(value)
-      raise Errors::InvalidUint64.new(value) unless value.uint32?
+      unless value.uint32?
+        raise OutsideRange.new("#{value} is not a valid 64 bit unsigned int.")
+      end
     end
 
     # "Zig-zag" shift a 32 bit value.

@@ -125,6 +125,12 @@ module Protocop
         @required ||= !!options[:required]
       end
 
+      # Raised when attempting to define a packed repeated field that is not
+      # length delimited.
+      #
+      # @since 0.0.0
+      class Unpackable < Exception; end
+
       private
 
       # Encode a repeated field, which iterates through the array and encodes
@@ -182,7 +188,7 @@ module Protocop
       # @since 0.0.0
       def validate_packing(type, options = {})
         if packed? && !packable?
-          raise Errors::Unpackable.new(type)
+          raise Unpackable.new("#{type} is not a packable field type.")
         end
       end
 

@@ -48,7 +48,7 @@ describe Protocop::Fields::Frame do
         it "raises an error" do
           expect {
             klass.new(:string, :test, 1, packed: true)
-          }.to raise_error(Protocop::Errors::Unpackable)
+          }.to raise_error(Protocop::Fields::Frame::Unpackable)
         end
       end
     end
