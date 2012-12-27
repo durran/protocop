@@ -202,9 +202,23 @@ module Protocop
       un_zig_zag(read_varint)
     end
 
+    # Read a string from the buffer.
+    #
+    # @example Read a string from the buffer.
+    #   buffer.read_string
+    #
+    # @note Will first read a varint length to get the length of the string,
+    #   then will read the number of bytes equivalent to the length.
+    #
+    # @return [ String ] The string.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_string
       read(read_varint)
     end
+    alias :read_bytes :read_string
 
     def read_uint32
       read_varint
