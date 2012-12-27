@@ -68,6 +68,17 @@ module Protocop
       read(8).unpack("E")[0]
     end
 
+    # Read a fixed size 32 bit integer from the buffer (little endian).
+    #
+    # @example Read the fixed 32 bit value.
+    #   buffer.read_fixed32
+    #
+    #
+    # @return [ Integer ] The integer value.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_fixed32
       read(4).unpack("V")[0]
     end
