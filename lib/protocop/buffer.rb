@@ -495,10 +495,35 @@ module Protocop
 
     private
 
+    # Read the provided number of bytes from the buffer and remove them.
+    #
+    # @api private
+    #
+    # @example Read 4 bytes from the buffer.
+    #   buffer.read(4)
+    #
+    # @param [ Integer ] length The number of bytes to read.
+    #
+    # @return [ String ] The raw bytes.
+    #
+    # @since 0.0.0
     def read(length)
       bytes.slice!(0, length)
     end
 
+    # Decodes a value that was encoded with "zig-zag" encoding, such as signed
+    # integers that aren't varints.
+    #
+    # @api private
+    #
+    # @example Un-zig-zag the value.
+    #   buffer.un_zig_zag(1241111344224111)
+    #
+    # @param [ Integer ] The zig-zag encoded value.
+    #
+    # @return [ Integer ] The decoded value.
+    #
+    # @since 0.0.0
     def un_zig_zag(value)
       (value >> 1) ^ -(value & 1)
     end
