@@ -149,7 +149,7 @@ module Protocop
     # Read a signed fixed 32 bit integer from the buffer (little endian).
     #
     # @example Read the signed fixed 32 bit value.
-    #   buffer.write_sfixed32
+    #   buffer.read_sfixed32
     #
     # @return [ Integer ] The integer.
     #
@@ -163,7 +163,7 @@ module Protocop
     # Read a signed fixed 64 bit integer from the buffer (little endian).
     #
     # @example Read the signed fixed 64 bit value.
-    #   buffer.write_sfixed64
+    #   buffer.read_sfixed64
     #
     # @return [ Integer ] The integer.
     #
@@ -174,10 +174,30 @@ module Protocop
       un_zig_zag(read_fixed64)
     end
 
+    # Read a 32 bit signed integer from the buffer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_sint32
+    #
+    # @return [ Integer ] value The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_sint32
       un_zig_zag(read_varint)
     end
 
+    # Read a 64 bit signed integer from the buffer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_sint64
+    #
+    # @return [ Integer ] value The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_sint64
       un_zig_zag(read_varint)
     end
