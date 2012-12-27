@@ -129,6 +129,17 @@ module Protocop
       read_int64
     end
 
+    # Read a 64 bit integer from the buffer. The number of bytes that are read
+    # will depend on the value of the variable length integer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_int64
+    #
+    # @return [ Integer ] The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_int64
       value = read_varint
       value -= (1 << 64) if value > Integer::MAX_SIGNED_64BIT

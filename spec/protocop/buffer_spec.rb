@@ -164,6 +164,75 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#read_int64" do
+
+    context "when the integer is positive" do
+
+      context "when reading a small integer" do
+
+        before do
+          buffer.write_int64(1)
+        end
+
+        let(:read) do
+          buffer.read_int64
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(1)
+        end
+      end
+
+      context "when reading the largest 64bit integer" do
+
+        before do
+          buffer.write_int64(Integer::MAX_SIGNED_64BIT)
+        end
+
+        let(:read) do
+          buffer.read_int64
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(Integer::MAX_SIGNED_64BIT)
+        end
+      end
+    end
+
+    context "when the integer is negative" do
+
+      context "when reading a small negative integer" do
+
+        before do
+          buffer.write_int64(-1)
+        end
+
+        let(:read) do
+          buffer.read_int64
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(-1)
+        end
+      end
+
+      context "when reading the smallest 64bit integer" do
+
+        before do
+          buffer.write_int64(Integer::MIN_SIGNED_64BIT)
+        end
+
+        let(:read) do
+          buffer.read_int64
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(Integer::MIN_SIGNED_64BIT)
+        end
+      end
+    end
+  end
+
   describe "#write_boolean" do
 
     context "when the boolean is true" do
