@@ -38,6 +38,17 @@ module Protocop
       @bytes = "".force_encoding(BINARY)
     end
 
+    # Read a boolen from the buffer, removing the byte from the buffer in the
+    # process.
+    #
+    # @example Read a boolean from the buffer.
+    #   buffer.read_boolean
+    #
+    # @return [ true, false ] value The boolean value.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_boolean
       read(1).ord != 0
     end
