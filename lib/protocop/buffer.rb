@@ -114,6 +114,17 @@ module Protocop
       read(4).unpack("e")[0]
     end
 
+    # Read a 32 bit integer from the buffer. The number of bytes that are read
+    # will depend on the value of the variable length integer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_int32
+    #
+    # @return [ Integer ] The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_int32
       read_int64
     end
