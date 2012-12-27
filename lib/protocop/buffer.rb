@@ -54,7 +54,7 @@ module Protocop
     end
 
     # Read a 64bit double from the buffer, removing the bytes from the buffer
-    # in the # process.
+    # in the process.
     #
     # @example Read a double from the buffer.
     #   buffer.read_double
@@ -68,7 +68,8 @@ module Protocop
       read(8).unpack("E")[0]
     end
 
-    # Read a fixed size 32 bit integer from the buffer (little endian).
+    # Read a fixed size 32 bit integer from the buffer (little endian),
+    # removing the bytes from the buffer in the process.
     #
     # @example Read the fixed 32 bit value.
     #   buffer.read_fixed32
@@ -82,7 +83,8 @@ module Protocop
       read(4).unpack("V")[0]
     end
 
-    # Read a fixed size 64 bit integer from the buffer (little endian).
+    # Read a fixed size 64 bit integer from the buffer (little endian),
+    # removing the bytes from the buffer in the process.
     #
     # @example Read the fixed 64 bit value.
     #   buffer.read_fixed64
@@ -97,6 +99,17 @@ module Protocop
       values[0] + (values[1] << 32)
     end
 
+    # Read a 32bit float from the buffer, removing the bytes from the buffer
+    # in the process.
+    #
+    # @example Read a float from the buffer.
+    #   buffer.read_float
+    #
+    # @return [ Float ] value The float value.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_float
       read(4).unpack("e")[0]
     end
