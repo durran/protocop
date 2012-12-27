@@ -261,6 +261,10 @@ module Protocop
     # @example Write the integer to the buffer.
     #   buffer.write_int32(14)
     #
+    # @note If you find you are writing negative numbers more than positive
+    #   ones for int32 it is more efficient to be using sint32 instead since
+    #   negative int32s will take up more space.
+    #
     # @param [ Integer ] value The integer.
     #
     # @raise [ Errors::InvalidInt32 ] If the value is invalid.
@@ -279,6 +283,10 @@ module Protocop
     #
     # @example Write the integer to the buffer.
     #   buffer.write_int64(14)
+    #
+    # @note If you find you are writing negative numbers more than positive
+    #   ones for int64 it is more efficient to be using sint64 instead since
+    #   negative int64s will take up more space.
     #
     # @param [ Integer ] value The integer.
     #
