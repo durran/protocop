@@ -53,6 +53,17 @@ module Protocop
       read(1).ord != 0
     end
 
+    # Read a 64bit double from the buffer, removing the bytes from the buffer
+    # in the # process.
+    #
+    # @example Read a double from the buffer.
+    #   buffer.read_double
+    #
+    # @return [ Float ] value The double value.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_double
       read(8).unpack("E")[0]
     end
