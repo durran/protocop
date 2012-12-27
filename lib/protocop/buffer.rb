@@ -163,7 +163,7 @@ module Protocop
     end
 
     def read_string
-      (length = read_varint) ? read(length) : ""
+      read(read_varint)
     end
 
     def read_uint32
