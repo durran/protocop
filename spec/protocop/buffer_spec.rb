@@ -268,8 +268,8 @@ describe Protocop::Buffer do
       buffer.write_bytes("\x04\x01")
     end
 
-    it "adds the bytes to the buffer" do
-      expect(written.bytes).to eq("\x04\x01")
+    it "adds the bytes and length to the buffer" do
+      expect(written.bytes).to eq("\x02\x04\x01")
     end
 
     it_behaves_like "a fluid interface"
@@ -444,7 +444,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\x01")
+            expect(written.read_int64).to eq(1)
           end
 
           it_behaves_like "a fluid interface"
@@ -457,7 +457,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x7F")
+            expect(written.read_int64).to eq(Integer::MAX_SIGNED_64BIT)
           end
 
           it_behaves_like "a fluid interface"
@@ -473,7 +473,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01")
+            expect(written.read_int64).to eq(-1)
           end
 
           it_behaves_like "a fluid interface"
@@ -486,7 +486,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\x80\x80\x80\x80\x80\x80\x80\x80\x80\x01")
+            expect(written.read_int64).to eq(Integer::MIN_SIGNED_64BIT)
           end
 
           it_behaves_like "a fluid interface"
@@ -519,16 +519,8 @@ describe Protocop::Buffer do
       buffer.write_sfixed32(1000)
     end
 
-    let(:converted) do
-      (1000 << 1) ^ (1000 >> 31)
-    end
-
-    let(:value) do
-      [ converted ].pack("V")
-    end
-
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
+      expect(written.read_sfixed32).to eq(1000)
     end
 
     it_behaves_like "a fluid interface"
@@ -549,16 +541,8 @@ describe Protocop::Buffer do
       buffer.write_sfixed64(1000)
     end
 
-    let(:converted) do
-      (1000 << 1) ^ (1000 >> 63)
-    end
-
-    let(:value) do
-      [ converted & 0xFFFFFFFF, converted >> 32 ].pack("VV")
-    end
-
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq(value)
+      expect(written.read_sfixed64).to eq(1000)
     end
 
     it_behaves_like "a fluid interface"
@@ -582,7 +566,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\x14")
+        expect(written.read_sint32).to eq(10)
       end
 
       it_behaves_like "a fluid interface"
@@ -605,7 +589,7 @@ describe Protocop::Buffer do
     end
 
     it "adds the int to the buffer" do
-      expect(written.bytes).to eq("\xD0\x0F")
+      expect(written.read_sint64).to eq(1000)
     end
 
     it_behaves_like "a fluid interface"
@@ -629,7 +613,7 @@ describe Protocop::Buffer do
       end
 
       it "does not add anything to the buffer" do
-        expect(written.bytes).to eq("")
+        expect(buffer.bytes).to eq("")
       end
 
       it_behaves_like "a fluid interface"
@@ -642,7 +626,7 @@ describe Protocop::Buffer do
       end
 
       it "does not add anything to the buffer" do
-        expect(written.bytes).to eq("")
+        expect(buffer.bytes).to eq("")
       end
 
       it_behaves_like "a fluid interface"
@@ -655,7 +639,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the string to the buffer" do
-        expect(written.bytes).to eq("test")
+        expect(written.read_string).to eq("test")
       end
 
       it_behaves_like "a fluid interface"
@@ -671,7 +655,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\n")
+        expect(written.read_uint32).to eq(10)
       end
 
       it_behaves_like "a fluid interface"
@@ -705,7 +689,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the int to the buffer" do
-        expect(written.bytes).to eq("\n")
+        expect(written.read_uint64).to eq(10)
       end
 
       it_behaves_like "a fluid interface"
@@ -739,7 +723,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the string to the buffer" do
-        expect(written.bytes).to eq("\x05")
+        expect(written.read_varint).to eq(5)
       end
 
       it_behaves_like "a fluid interface"
@@ -752,7 +736,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the string to the buffer" do
-        expect(written.bytes).to eq("\x82\x01")
+        expect(written.read_varint).to eq(130)
       end
 
       it_behaves_like "a fluid interface"
@@ -765,7 +749,7 @@ describe Protocop::Buffer do
       end
 
       it "adds the string to the buffer" do
-        expect(written.bytes).to eq("\xB0\x9F\x01")
+        expect(written.read_varint).to eq(20400)
       end
 
       it_behaves_like "a fluid interface"

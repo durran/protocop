@@ -146,6 +146,35 @@ module Protocop
       value
     end
 
+    def read_sfixed32
+      un_zig_zag(read_fixed32)
+    end
+
+    def read_sfixed64
+      un_zig_zag(read_fixed64)
+    end
+
+    def read_sint32
+      un_zig_zag(read_varint)
+    end
+
+    def read_sint64
+      un_zig_zag(read_varint)
+    end
+
+    def read_string
+      length = read_varint
+      length ? read(length) : ""
+    end
+
+    def read_uint32
+      read_varint
+    end
+
+    def read_uint64
+      read_varint
+    end
+
     # Read a variable byte length integer from the buffer. The number of bytes
     # that are read will depend on the value of the integer.
     #
@@ -453,7 +482,9 @@ module Protocop
     #
     # @since 0.0.0
     def write_string(value)
-      bytes << value.to_s and self
+      return self unless value
+      write_varint(value.length)
+      bytes << value and self
     end
     alias :write_bytes :write_string
 
@@ -467,6 +498,10 @@ module Protocop
 
     def read(length)
       bytes.slice!(0, length)
+    end
+
+    def un_zig_zag(value)
+      (value >> 1) ^ -(value & 1)
     end
 
     # Validate that the value is a proper signed 32 bit integer.
