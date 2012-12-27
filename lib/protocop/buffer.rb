@@ -220,10 +220,30 @@ module Protocop
     end
     alias :read_bytes :read_string
 
+    # Read a 32 bit unsigned integer from the buffer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_uint32
+    #
+    # @return [ Integer ] value The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_uint32
       read_varint
     end
 
+    # Read a 64 bit unsigned integer from the buffer.
+    #
+    # @example Read the integer from the buffer.
+    #   buffer.read_uint64
+    #
+    # @return [ Integer ] value The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_uint64
       read_varint
     end
