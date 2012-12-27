@@ -212,7 +212,7 @@ module Protocop
         unless values.empty?
           packed = Buffer.new
           values.each { |value| yield(value, packed) }
-          buffer.write_varint(packed_key).write_varint(packed.bytes.length)
+          buffer.write_varint(packed_key)
           buffer.write_bytes(packed.bytes)
         else
           buffer

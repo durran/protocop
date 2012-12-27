@@ -22,7 +22,7 @@ module Protocop
       #
       # @since 0.0.0
       def encode_pair(buffer, value)
-        buffer.write_varint(key).write_bytes(value.encode.bytes)
+        buffer.write_bytes(value.encode.bytes)
       end
     end
   end
