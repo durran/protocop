@@ -39,7 +39,7 @@ module Protocop
     end
 
     def read_boolean
-      read(1) != "\x00"
+      read(1).ord != 0
     end
 
     def read_double
@@ -57,6 +57,25 @@ module Protocop
 
     def read_float
       read(4).unpack("e")[0]
+    end
+
+    def read_int32
+      read_int64
+    end
+
+    def read_int64
+      value = read_varint
+      value -= (1 << 64) if value > Integer::MAX_SIGNED_64BIT
+      value
+    end
+
+    def read_varint
+      value, shift = 0, 0
+      while (byte = read(1).ord) do
+        value |= (byte & 0x7F) << shift
+        shift += 7
+        return value if (byte & 0x80) == 0
+      end
     end
 
     # Write a boolean to the buffer.
@@ -322,8 +341,7 @@ module Protocop
         bytes << ((value & 0x7F) | 0x80)
         value >>= 7
       end
-      bytes << (value & 0x7F)
-      self
+      bytes << (value & 0x7F) and self
     end
 
     # Write a string to the buffer via the Protocol Buffer specification.

@@ -95,6 +95,75 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#read_int32" do
+
+    context "when the integer is positive" do
+
+      context "when reading a small integer" do
+
+        before do
+          buffer.write_int32(1)
+        end
+
+        let(:read) do
+          buffer.read_int32
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(1)
+        end
+      end
+
+      context "when reading the largest 32bit integer" do
+
+        before do
+          buffer.write_int32(Integer::MAX_SIGNED_32BIT)
+        end
+
+        let(:read) do
+          buffer.read_int32
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(Integer::MAX_SIGNED_32BIT)
+        end
+      end
+    end
+
+    context "when the integer is negative" do
+
+      context "when reading a small negative integer" do
+
+        before do
+          buffer.write_int32(-1)
+        end
+
+        let(:read) do
+          buffer.read_int32
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(-1)
+        end
+      end
+
+      context "when reading the smallest 32bit integer" do
+
+        before do
+          buffer.write_int32(Integer::MIN_SIGNED_32BIT)
+        end
+
+        let(:read) do
+          buffer.read_int32
+        end
+
+        it "returns the integer" do
+          expect(read).to eq(Integer::MIN_SIGNED_32BIT)
+        end
+      end
+    end
+  end
+
   describe "#write_boolean" do
 
     context "when the boolean is true" do
@@ -224,7 +293,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\x01")
+            expect(written.read_int32).to eq(1)
           end
 
           it_behaves_like "a fluid interface"
@@ -237,7 +306,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\a")
+            expect(written.read_int32).to eq(Integer::MAX_SIGNED_32BIT)
           end
 
           it_behaves_like "a fluid interface"
@@ -253,7 +322,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01")
+            expect(written.read_int32).to eq(-1)
           end
 
           it_behaves_like "a fluid interface"
@@ -266,7 +335,7 @@ describe Protocop::Buffer do
           end
 
           it "adds the int to the buffer" do
-            expect(written.bytes).to eq("\x80\x80\x80\x80\xF8\xFF\xFF\xFF\xFF\x01")
+            expect(written.read_int32).to eq(Integer::MIN_SIGNED_32BIT)
           end
 
           it_behaves_like "a fluid interface"
