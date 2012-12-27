@@ -146,6 +146,17 @@ module Protocop
       value
     end
 
+    # Read a variable byte length integer from the buffer. The number of bytes
+    # that are read will depend on the value of the integer.
+    #
+    # @example Read the varint from the buffer.
+    #   buffer.read_varint
+    #
+    # @return [ Integer ] The integer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
     def read_varint
       value, shift = 0, 0
       while (byte = read(1).ord) do
