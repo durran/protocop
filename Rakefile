@@ -16,6 +16,15 @@ task :install => :build do
   system "sudo gem install protocop-#{Protocop::VERSION}.gem"
 end
 
+def compile!
+  puts "Compiling native extensions..."
+  Dir.chdir(Pathname(__FILE__).dirname + "ext/protocop") do
+    `bundle exec ruby extconf.rb`
+    `make`
+    `cp native.bundle ../../lib/protocop`
+  end
+end
+
 task :release => :build do
   system "git tag -a v#{Protocop::VERSION} -m 'Tagging #{Protocop::VERSION}'"
   system "git push --tags"
@@ -27,4 +36,19 @@ RSpec::Core::RakeTask.new("spec") do |spec|
   spec.pattern = "spec/**/*_spec.rb"
 end
 
-task :default => :spec
+RSpec::Core::RakeTask.new("clean_spec") do |spec|
+  spec.pattern = "spec/**/*_spec.rb"
+end
+
+task :compile do
+  compile!
+end
+
+task :clean do
+  puts "Cleaning out native extensions..."
+  Dir.chdir(Pathname(__FILE__).dirname + "lib/protocop") do
+    `rm native.bundle`
+  end
+end
+
+task :default => [ :compile, :spec, :clean, :clean_spec ]

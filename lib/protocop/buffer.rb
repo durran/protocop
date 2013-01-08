@@ -297,8 +297,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_double(value)
-      bytes << [ value ].pack("E")
-      self
+      append_double(value)
     end
 
     # Write a fixed size 32 bit integer to the buffer (little endian).
@@ -317,8 +316,7 @@ module Protocop
     # @since 0.0.0
     def write_fixed32(value)
       validate_int32!(value)
-      bytes << [ value ].pack("V")
-      self
+      append_fixed32(value)
     end
 
     # Write a fixed size 64 bit integer to the buffer (little endian).
@@ -337,8 +335,7 @@ module Protocop
     # @since 0.0.0
     def write_fixed64(value)
       validate_int64!(value)
-      bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV")
-      self
+      append_fixed64(value)
     end
 
     # Write a 32bit float to the buffer.
@@ -354,8 +351,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_float(value)
-      bytes << [ value ].pack("e")
-      self
+      append_float(value)
     end
 
     # Write a 32 bit integer to the buffer.
@@ -419,6 +415,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sfixed32(value)
+      validate_int32!(value)
       write_fixed32(zig_zag32(value))
     end
 
@@ -437,6 +434,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_sfixed64(value)
+      validate_int64!(value)
       write_fixed64(zig_zag64(value))
     end
 
@@ -534,12 +532,7 @@ module Protocop
     #
     # @since 0.0.0
     def write_varint(value)
-      value += (1 << 64) if value < 0
-      while (value > 0x7F) do
-        bytes << ((value & 0x7F) | 0x80)
-        value >>= 7
-      end
-      bytes << (value & 0x7F) and self
+      append_varint(value)
     end
 
     # Write a string to the buffer via the Protocol Buffer specification.
@@ -556,8 +549,7 @@ module Protocop
     # @since 0.0.0
     def write_string(value)
       return self unless value
-      write_varint(value.length)
-      bytes << value and self
+      append_string(value)
     end
     alias :write_bytes :write_string
 
@@ -568,6 +560,125 @@ module Protocop
     class OutsideRange < Exception; end
 
     private
+
+    # Append a 64bit double to the buffer.
+    #
+    # @api private
+    #
+    # @example Write the double to the buffer.
+    #   buffer.append_double(1.22)
+    #
+    # @param [ Float ] value The double value.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def append_double(value)
+      bytes << [ value ].pack("E") and self
+    end
+
+    # Append a fixed size 32 bit integer to the buffer (little endian).
+    #
+    # @api private
+    #
+    # @example Append the fixed 32 bit value.
+    #   buffer.append_fixed32(1000)
+    #
+    # @param [ Integer ] value The value to append.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def append_fixed32(value)
+      bytes << [ value ].pack("V") and self
+    end
+
+    # Append a fixed size 64 bit integer to the buffer (little endian).
+    #
+    # @api private
+    #
+    # @example Append the fixed 64 bit value.
+    #   buffer.append_fixed64(1000)
+    #
+    # @param [ Integer ] value The value to append.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def append_fixed64(value)
+      bytes << [ value & 0xFFFFFFFF, value >> 32 ].pack("VV") and self
+    end
+
+    # Append a 32bit float to the buffer.
+    #
+    # @api private
+    #
+    # @example Append the float to the buffer.
+    #   buffer.append_float(1.22)
+    #
+    # @param [ Float ] value The float value.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def append_float(value)
+      bytes << [ value ].pack("e") and self
+    end
+
+    # Append a string to the buffer via the Protocol Buffer specification.
+    #
+    # @api private
+    #
+    # @example Append a string to the buffer.
+    #   buffer.append_string("test")
+    #
+    # @param [ String ] value The string to append.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding
+    #
+    # @since 0.0.0
+    def append_string(value)
+      append_varint(value.length)
+      bytes << value and self
+    end
+
+    # Append a varint to the buffer.
+    #
+    # @api private
+    #
+    # @example Append a varint.
+    #   buffer.append_varint(10)
+    #
+    # @note The shift for negative numbers is explained in the protobuf
+    #   documentation: "If you use int32 or int64 as the type for a negative
+    #   number, the resulting varint is always ten bytes long – it is,
+    #   effectively, treated like a very large unsigned integer."
+    #
+    # @param [ Integer ] value The integer to append.
+    #
+    # @return [ Buffer ] The buffer.
+    #
+    # @see https://developers.google.com/protocol-buffers/docs/encoding#varints
+    #
+    # @since 0.0.0
+    def append_varint(value)
+      value += (1 << 64) if value < 0
+      while (value > 0x7F) do
+        bytes << ((value & 0x7F) | 0x80)
+        value >>= 7
+      end
+      bytes << (value & 0x7F) and self
+    end
 
     # Read the provided number of bytes from the buffer and remove them.
     #
