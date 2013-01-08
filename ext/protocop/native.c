@@ -230,19 +230,19 @@ void Init_native()
   VALUE buffer = rb_const_get(protocop, rb_intern("Buffer"));
 
   rb_remove_method(buffer, "append_double");
-  rb_define_method(buffer, "append_double", rb_buffer_append_double, 1);
+  rb_define_private_method(buffer, "append_double", rb_buffer_append_double, 1);
   rb_remove_method(buffer, "append_fixed32");
-  rb_define_method(buffer, "append_fixed32", rb_buffer_append_fixed32, 1);
+  rb_define_private_method(buffer, "append_fixed32", rb_buffer_append_fixed32, 1);
   rb_remove_method(buffer, "append_fixed64");
-  rb_define_method(buffer, "append_fixed64", rb_buffer_append_fixed64, 1);
+  rb_define_private_method(buffer, "append_fixed64", rb_buffer_append_fixed64, 1);
   rb_remove_method(buffer, "append_float");
-  rb_define_method(buffer, "append_float", rb_buffer_append_float, 1);
+  rb_define_private_method(buffer, "append_float", rb_buffer_append_float, 1);
   rb_remove_method(buffer, "append_string");
-  rb_define_method(buffer, "append_string", rb_buffer_append_string, 1);
+  rb_define_private_method(buffer, "append_string", rb_buffer_append_string, 1);
   rb_remove_method(buffer, "append_varint");
-  rb_define_method(buffer, "append_varint", rb_buffer_append_varint, 1);
+  rb_define_private_method(buffer, "append_varint", rb_buffer_append_varint, 1);
   rb_remove_method(buffer, "zig_zag32");
-  rb_define_method(buffer, "zig_zag32", rb_buffer_zig_zag32, 1);
+  rb_define_private_method(buffer, "zig_zag32", rb_buffer_zig_zag32, 1);
   rb_remove_method(buffer, "zig_zag64");
-  rb_define_method(buffer, "zig_zag64", rb_buffer_zig_zag64, 1);
+  rb_define_private_method(buffer, "zig_zag64", rb_buffer_zig_zag64, 1);
 }
