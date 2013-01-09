@@ -201,6 +201,29 @@ static VALUE rb_buffer_decode_double(VALUE self, VALUE value)
 }
 
 /**
+ * Decodes the provided raw bytes as a string into a float value.
+ *
+ * @example Decode the float.
+ *    rb_buffer_decode_float(buffer, 1.313111);
+ *
+ * @param [ Buffer ] self The buffer instance.
+ * @param [ String ] value The raw bytes for the float.
+ *
+ * @return [ Float ] The float value.
+ *
+ * @since 0.0.0
+ */
+static VALUE rb_buffer_decode_float(VALUE self, VALUE value)
+{
+  char * bytes;
+  float v;
+  StringValue(value);
+  bytes = RSTRING_PTR(value);
+  memcpy(&v, bytes, RSTRING_LEN(value));
+  return DBL2NUM((double) v);
+}
+
+/**
  * Zig-zag encode a 32bit integer.
  *
  * @example Encode the integer.
@@ -266,6 +289,8 @@ void Init_native()
   rb_define_private_method(buffer, "append_varint", rb_buffer_append_varint, 1);
   rb_remove_method(buffer, "decode_double");
   rb_define_private_method(buffer, "decode_double", rb_buffer_decode_double, 1);
+  rb_remove_method(buffer, "decode_float");
+  rb_define_private_method(buffer, "decode_float", rb_buffer_decode_float, 1);
   rb_remove_method(buffer, "zig_zag32");
   rb_define_private_method(buffer, "zig_zag32", rb_buffer_zig_zag32, 1);
   rb_remove_method(buffer, "zig_zag64");

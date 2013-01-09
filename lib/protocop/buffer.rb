@@ -111,7 +111,7 @@ module Protocop
     #
     # @since 0.0.0
     def read_float
-      read(4).unpack("e")[0]
+      decode_float(read(4))
     end
 
     # Read a 32 bit integer from the buffer. The number of bytes that are read
@@ -579,22 +579,6 @@ module Protocop
       bytes << [ value ].pack("E") and self
     end
 
-    # Decode the provided raw string bytes into a double value.
-    #
-    # @api private
-    #
-    # @example Decode the double from the string.
-    #   buffer.decode_double("\xDD\xCDS\x1Dr\xB3\xF3?")
-    #
-    # @param [ String ] value The raw string bytes.
-    #
-    # @return [ Float ] The decoded double value.
-    #
-    # @since 0.0.0
-    def decode_double(value)
-      value.unpack("E")[0]
-    end
-
     # Append a fixed size 32 bit integer to the buffer (little endian).
     #
     # @api private
@@ -694,6 +678,38 @@ module Protocop
         value >>= 7
       end
       bytes << (value & 0x7F) and self
+    end
+
+    # Decode the provided raw string bytes into a double value.
+    #
+    # @api private
+    #
+    # @example Decode the double from the string.
+    #   buffer.decode_double("\xDD\xCDS\x1Dr\xB3\xF3?")
+    #
+    # @param [ String ] value The raw string bytes.
+    #
+    # @return [ Float ] The decoded double value.
+    #
+    # @since 0.0.0
+    def decode_double(value)
+      value.unpack("E")[0]
+    end
+
+    # Decode the provided raw string bytes into a float value.
+    #
+    # @api private
+    #
+    # @example Decode the float from the string.
+    #   buffer.decode_float("\xDD\xCDS\x1Dr\xB3")
+    #
+    # @param [ String ] value The raw string bytes.
+    #
+    # @return [ Float ] The decoded double value.
+    #
+    # @since 0.0.0
+    def decode_float(value)
+      read(4).unpack("e")[0]
     end
 
     # Read the provided number of bytes from the buffer and remove them.
