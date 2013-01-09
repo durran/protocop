@@ -17,12 +17,16 @@ task :install => :build do
   system "sudo gem install protocop-#{Protocop::VERSION}.gem"
 end
 
+def extension
+  RUBY_PLATFORM =~ /darwin/ ? "bundle" : "so"
+end
+
 def compile!
   puts "Compiling native extensions..."
   Dir.chdir(Pathname(__FILE__).dirname + "ext/protocop") do
     `bundle exec ruby extconf.rb`
     `make`
-    `cp native.bundle ../../lib/protocop`
+    `cp native.#{extension} ../../lib/protocop`
   end
 end
 
@@ -49,7 +53,7 @@ task :clean do
   puts "Cleaning out native extensions..."
   begin
     Dir.chdir(Pathname(__FILE__).dirname + "lib/protocop") do
-      `rm native.bundle`
+      `rm native.#{extension}`
     end
   rescue Exception => e
     puts e.message
