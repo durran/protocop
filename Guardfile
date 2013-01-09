@@ -6,4 +6,5 @@ guard(
 
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$}) { |match| "spec/#{match[1]}_spec.rb" }
+  watch(%r{^ext/(.+)\.c$}) { "spec/protocop/buffer_spec.rb" }
 end

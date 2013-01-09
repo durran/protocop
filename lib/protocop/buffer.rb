@@ -65,7 +65,7 @@ module Protocop
     #
     # @since 0.0.0
     def read_double
-      read(8).unpack("E")[0]
+      decode_double(read(8))
     end
 
     # Read a fixed size 32 bit integer from the buffer (little endian),
@@ -577,6 +577,22 @@ module Protocop
     # @since 0.0.0
     def append_double(value)
       bytes << [ value ].pack("E") and self
+    end
+
+    # Decode the provided raw string bytes into a double value.
+    #
+    # @api private
+    #
+    # @example Decode the double from the string.
+    #   buffer.decode_double("\xDD\xCDS\x1Dr\xB3\xF3?")
+    #
+    # @param [ String ] value The raw string bytes.
+    #
+    # @return [ Float ] The decoded double value.
+    #
+    # @since 0.0.0
+    def decode_double(value)
+      value.unpack("E")[0]
     end
 
     # Append a fixed size 32 bit integer to the buffer (little endian).

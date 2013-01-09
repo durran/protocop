@@ -3,6 +3,7 @@ Bundler.setup
 
 require "rake"
 require "rspec/core/rake_task"
+require_relative "perf/bench"
 
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 require "protocop/version"
@@ -46,9 +47,29 @@ end
 
 task :clean do
   puts "Cleaning out native extensions..."
-  Dir.chdir(Pathname(__FILE__).dirname + "lib/protocop") do
-    `rm native.bundle`
+  begin
+    Dir.chdir(Pathname(__FILE__).dirname + "lib/protocop") do
+      `rm native.bundle`
+    end
+  rescue Exception => e
+    puts e.message
+  end
+end
+
+namespace :benchmark do
+
+  task :ruby => :clean do
+    puts "Benchmarking pure Ruby..."
+    load "protocop.rb"
+    benchmark!
+  end
+
+  task :c => :compile do
+    puts "Benchmarking with C extensions..."
+    load "protocop.rb"
+    benchmark!
   end
 end
 
 task :default => [ :compile, :spec, :clean, :clean_spec ]
+task :bench => [ "benchmark:ruby", "benchmark:c" ]
