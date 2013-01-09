@@ -144,7 +144,7 @@ static VALUE rb_buffer_append_varint(VALUE self, VALUE value)
 {
   unsigned long long v = NUM2LL(value);
   int size = 0;
-  char chars[4];
+  char chars[10];
   while (v > 0x7F) {
     chars[size++] = (v & 0x7F) | 0x80;
     v >>= 7;
