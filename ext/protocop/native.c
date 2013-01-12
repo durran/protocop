@@ -181,7 +181,7 @@ static VALUE rb_buffer_append_string(VALUE self, VALUE value)
  * Decodes the provided raw bytes as a string into a double value.
  *
  * @example Decode the double.
- *    rb_buffer_decode_double(buffer, 1.313111);
+ *    rb_buffer_decode_double(buffer, "\xDD\xCDS\x1Dr\xB3\xF3?");
  *
  * @param [ Buffer ] self The buffer instance.
  * @param [ String ] value The raw bytes for the double.
@@ -201,10 +201,31 @@ static VALUE rb_buffer_decode_double(VALUE self, VALUE value)
 }
 
 /**
+ * Decodes the provided raw bytes as a string into a 32 bit integer value.
+ *
+ * @example Decode the fixed 32 bit int.
+ *    rb_buffer_decode_fixed32(buffer, "\xD0\a\x00\x00");
+ *
+ * @param [ Buffer ] self The buffer instance.
+ * @param [ String ] value The raw bytes for the int.
+ *
+ * @return [ Integer ] The integer value.
+ *
+ * @since 0.0.0
+ */
+static VALUE rb_buffer_decode_fixed32(VALUE self, VALUE value)
+{
+  const uint8_t *v;
+  StringValue(value);
+  v = (const uint8_t*) RSTRING_PTR(value);
+  return INT2NUM(v[0] + (v[1] << 8) + (v[2] << 16) + (v[3] << 24));
+}
+
+/**
  * Decodes the provided raw bytes as a string into a float value.
  *
  * @example Decode the float.
- *    rb_buffer_decode_float(buffer, 1.313111);
+ *    rb_buffer_decode_float(buffer, "\xDD\xCDS\x1Dr\xB3\xF3?");
  *
  * @param [ Buffer ] self The buffer instance.
  * @param [ String ] value The raw bytes for the float.
@@ -289,6 +310,8 @@ void Init_native()
   rb_define_private_method(buffer, "append_varint", rb_buffer_append_varint, 1);
   rb_remove_method(buffer, "decode_double");
   rb_define_private_method(buffer, "decode_double", rb_buffer_decode_double, 1);
+  rb_remove_method(buffer, "decode_fixed32");
+  rb_define_private_method(buffer, "decode_fixed32", rb_buffer_decode_fixed32, 1);
   rb_remove_method(buffer, "decode_float");
   rb_define_private_method(buffer, "decode_float", rb_buffer_decode_float, 1);
   rb_remove_method(buffer, "zig_zag32");

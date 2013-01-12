@@ -134,5 +134,15 @@ def benchmark!
     end
 
     GC.start
+
+    bench.report("Protocop::Buffer#read_fixed32 --->") do
+      500_000.times do |n|
+        buffer = Protocop::Buffer.new
+        buffer.write_fixed32(256)
+        buffer.read_fixed32
+      end
+    end
+
+    GC.start
   end
 end

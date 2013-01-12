@@ -80,7 +80,7 @@ module Protocop
     #
     # @since 0.0.0
     def read_fixed32
-      read(4).unpack("V")[0]
+      decode_fixed32(read(4))
     end
 
     # Read a fixed size 64 bit integer from the buffer (little endian),
@@ -694,6 +694,22 @@ module Protocop
     # @since 0.0.0
     def decode_double(value)
       value.unpack("E")[0]
+    end
+
+    # Decode the provided raw string bytes into a fixed 32 bit int.
+    #
+    # @api private
+    #
+    # @example Decode the 32bit int.
+    #   buffer.decode_fixed32("\xD0\a\x00\x00")
+    #
+    # @param [ String ] value The raw string bytes.
+    #
+    # @return [ Integer ] The decoded integer.
+    #
+    # @since 0.0.0
+    def decode_fixed32(value)
+      value.unpack("V")[0]
     end
 
     # Decode the provided raw string bytes into a float value.
