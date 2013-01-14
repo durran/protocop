@@ -45,7 +45,7 @@ static VALUE rb_buffer_bytes(VALUE self)
 static VALUE rb_buffer_append_double(VALUE self, VALUE value)
 {
   VALUE bytes = rb_buffer_bytes(self);
-  double v = NUM2DBL(value);
+  const double v = NUM2DBL(value);
   rb_str_cat(bytes, (char*) &v, 8);
   return self;
 }
@@ -67,8 +67,8 @@ static VALUE rb_buffer_append_double(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_append_fixed32(VALUE self, VALUE value)
 {
-  int32_t v = NUM2INT(value);
-  char bytes[4] = { v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255 };
+  const int32_t v = NUM2INT(value);
+  const char bytes[4] = { v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255 };
   rb_str_cat(rb_buffer_bytes(self), bytes, 4);
   return self;
 }
@@ -90,8 +90,8 @@ static VALUE rb_buffer_append_fixed32(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_append_fixed64(VALUE self, VALUE value)
 {
-  int64_t v = NUM2I64(value);
-  char bytes[8] = { v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255,
+  const int64_t v = NUM2I64(value);
+  const char bytes[8] = { v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255,
                (v >> 32) & 255, (v >> 40) & 255, (v >> 48) & 255, (v >> 56) & 255 };
   rb_str_cat(rb_buffer_bytes(self), bytes, 8);
   return self;
@@ -115,7 +115,7 @@ static VALUE rb_buffer_append_fixed64(VALUE self, VALUE value)
 static VALUE rb_buffer_append_float(VALUE self, VALUE value)
 {
   VALUE bytes = rb_buffer_bytes(self);
-  float v = RFLOAT_VALUE(rb_to_float(value));
+  const float v = RFLOAT_VALUE(rb_to_float(value));
   rb_str_cat(bytes, (char*) &v, 4);
   return self;
 }
@@ -171,7 +171,7 @@ static VALUE rb_buffer_append_varint(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_append_string(VALUE self, VALUE value)
 {
-  int length = RSTRING_LEN(value);
+  const int length = RSTRING_LEN(value);
   rb_buffer_append_varint(self, INT2NUM(length));
   rb_str_cat(rb_buffer_bytes(self), RSTRING_PTR(value), length);
   return self;
@@ -192,7 +192,7 @@ static VALUE rb_buffer_append_string(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_decode_double(VALUE self, VALUE value)
 {
-  char * bytes;
+  const char * bytes;
   double v;
   StringValue(value);
   bytes = RSTRING_PTR(value);
@@ -236,7 +236,7 @@ static VALUE rb_buffer_decode_fixed32(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_decode_float(VALUE self, VALUE value)
 {
-  char * bytes;
+  const char * bytes;
   float v;
   StringValue(value);
   bytes = RSTRING_PTR(value);
@@ -261,7 +261,7 @@ static VALUE rb_buffer_decode_float(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_zig_zag32(VALUE self, VALUE value)
 {
-  int64_t v = NUM2I64(value);
+  const int64_t v = NUM2I64(value);
   return I642NUM((v << 1) ^ (v >> 31));
 }
 
@@ -282,7 +282,7 @@ static VALUE rb_buffer_zig_zag32(VALUE self, VALUE value)
  */
 static VALUE rb_buffer_zig_zag64(VALUE self, VALUE value)
 {
-  int64_t v = NUM2I64(value);
+  const int64_t v = NUM2I64(value);
   return I642NUM((v << 1) ^ (v >> 63));
 }
 
