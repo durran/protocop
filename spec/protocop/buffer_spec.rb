@@ -17,622 +17,11 @@ describe Protocop::Buffer do
     end
   end
 
-  describe "#read_boolean" do
-
-    context "when the byte is 1" do
-
-      before do
-        buffer.write_boolean(true)
-      end
-
-      let(:read) do
-        buffer.read_boolean
-      end
-
-      it "returns true" do
-        expect(read).to eq(true)
-      end
-    end
-
-    context "when the byte is 0" do
-
-      before do
-        buffer.write_boolean(false)
-      end
-
-      let(:read) do
-        buffer.read_boolean
-      end
-
-      it "returns false" do
-        expect(read).to eq(false)
-      end
-    end
-  end
-
-  describe "#read_bytes" do
-
-    before do
-      buffer.write_bytes("testing")
-    end
-
-    let(:read) do
-      buffer.read_bytes
-    end
-
-    it "returns the double" do
-      expect(read).to eq("testing")
-    end
-  end
-
-  describe "#read_double" do
-
-    before do
-      buffer.write_double(1.23131)
-    end
-
-    let(:read) do
-      buffer.read_double
-    end
-
-    it "returns the double" do
-      expect(read).to eq(1.23131)
-    end
-  end
-
-  describe "#read_fixed32" do
-
-    before do
-      buffer.write_fixed32(152)
-    end
-
-    let(:read) do
-      buffer.read_fixed32
-    end
-
-    it "returns the double" do
-      expect(read).to eq(152)
-    end
-  end
-
-  describe "#read_fixed64" do
-
-    before do
-      buffer.write_fixed64(142576)
-    end
-
-    let(:read) do
-      buffer.read_fixed64
-    end
-
-    it "returns the double" do
-      expect(read).to eq(142576)
-    end
-  end
-
-  describe "#read_int32" do
-
-    context "when the integer is positive" do
-
-      context "when reading a small integer" do
-
-        before do
-          buffer.write_int32(1)
-        end
-
-        let(:read) do
-          buffer.read_int32
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(1)
-        end
-      end
-
-      context "when reading the largest 32bit integer" do
-
-        before do
-          buffer.write_int32(Integer::MAX_SIGNED_32BIT)
-        end
-
-        let(:read) do
-          buffer.read_int32
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(Integer::MAX_SIGNED_32BIT)
-        end
-      end
-    end
-
-    context "when the integer is negative" do
-
-      context "when reading a small negative integer" do
-
-        before do
-          buffer.write_int32(-1)
-        end
-
-        let(:read) do
-          buffer.read_int32
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(-1)
-        end
-      end
-
-      context "when reading the smallest 32bit integer" do
-
-        before do
-          buffer.write_int32(Integer::MIN_SIGNED_32BIT)
-        end
-
-        let(:read) do
-          buffer.read_int32
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(Integer::MIN_SIGNED_32BIT)
-        end
-      end
-    end
-  end
-
-  describe "#read_int64" do
-
-    context "when the integer is positive" do
-
-      context "when reading a small integer" do
-
-        before do
-          buffer.write_int64(1)
-        end
-
-        let(:read) do
-          buffer.read_int64
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(1)
-        end
-      end
-
-      context "when reading the largest 64bit integer" do
-
-        before do
-          buffer.write_int64(Integer::MAX_SIGNED_64BIT)
-        end
-
-        let(:read) do
-          buffer.read_int64
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(Integer::MAX_SIGNED_64BIT)
-        end
-      end
-    end
-
-    context "when the integer is negative" do
-
-      context "when reading a small negative integer" do
-
-        before do
-          buffer.write_int64(-1)
-        end
-
-        let(:read) do
-          buffer.read_int64
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(-1)
-        end
-      end
-
-      context "when reading the smallest 64bit integer" do
-
-        before do
-          buffer.write_int64(Integer::MIN_SIGNED_64BIT)
-        end
-
-        let(:read) do
-          buffer.read_int64
-        end
-
-        it "returns the integer" do
-          expect(read).to eq(Integer::MIN_SIGNED_64BIT)
-        end
-      end
-    end
-  end
-
-  describe "#read_string" do
-
-    before do
-      buffer.write_string("testing")
-    end
-
-    let(:read) do
-      buffer.read_string
-    end
-
-    it "returns the double" do
-      expect(read).to eq("testing")
-    end
-  end
-
-  describe "#write_boolean" do
-
-    context "when the boolean is true" do
-
-      let(:written) do
-        buffer.write_boolean(true)
-      end
-
-      it "adds the boolean to the buffer" do
-        expect(written.read_boolean).to eq(true)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-
-    context "when the boolean is false" do
-
-      let(:written) do
-        buffer.write_boolean(false)
-      end
-
-      it "adds the boolean to the buffer" do
-        expect(written.read_boolean).to eq(false)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-  end
-
-  describe "#write_bytes" do
-
-    let(:written) do
-      buffer.write_bytes("test")
-    end
-
-    it "adds the bytes and length to the buffer" do
-      expect(written.read_bytes).to eq("test")
-    end
-
-    it_behaves_like "a fluid interface"
-  end
-
-  describe "#write_double" do
-
-    let(:written) do
-      buffer.write_double(1.21)
-    end
-
-    it "adds the double to the buffer" do
-      expect(written.read_double).to eq(1.21)
-    end
-
-    it_behaves_like "a fluid interface"
-  end
-
-  describe "#write_fixed32" do
-
-    let(:written) do
-      buffer.write_fixed32(1)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.read_fixed32).to eq(1)
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 32 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_fixed32(2 ** 34)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_fixed64" do
-
-    let(:written) do
-      buffer.write_fixed64(1)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.read_fixed64).to eq(1)
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 64 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_fixed64(2 ** 65)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_float" do
-
-    let(:written) do
-      buffer.write_float(1.2)
-    end
-
-    it "constrains the float to 4 bytes" do
-      expect(written.bytes.length).to eq(4)
-    end
-
-    pending "adds the float to the buffer" do
-      expect(written.read_float).to eq(1.2)
-    end
-
-    it_behaves_like "a fluid interface"
-  end
-
-  describe "#write_int32" do
-
-    context "when the value is 32 bit" do
-
-      context "when the integer is positive" do
-
-        context "when appending a small integer" do
-
-          let(:written) do
-            buffer.write_int32(1)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int32).to eq(1)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-
-        context "when appending the largest 32bit integer" do
-
-          let(:written) do
-            buffer.write_int32(Integer::MAX_SIGNED_32BIT)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int32).to eq(Integer::MAX_SIGNED_32BIT)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-      end
-
-      context "when the integer is negative" do
-
-        context "when appending a small negative integer" do
-
-          let(:written) do
-            buffer.write_int32(-1)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int32).to eq(-1)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-
-        context "when appending the smallest 32bit integer" do
-
-          let(:written) do
-            buffer.write_int32(Integer::MIN_SIGNED_32BIT)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int32).to eq(Integer::MIN_SIGNED_32BIT)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-      end
-    end
-
-    context "when the value is too high" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_int32(Integer::MAX_SIGNED_32BIT + 1)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-
-    context "when the value is too low" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_int32(Integer::MIN_SIGNED_32BIT - 1)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_int64" do
-
-    context "when the value is 64 bit" do
-
-      context "when the integer is positive" do
-
-        context "when appending a small integer" do
-
-          let(:written) do
-            buffer.write_int64(1)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int64).to eq(1)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-
-        context "when appending the largest 64bit integer" do
-
-          let(:written) do
-            buffer.write_int64(Integer::MAX_SIGNED_64BIT)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int64).to eq(Integer::MAX_SIGNED_64BIT)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-      end
-
-      context "when the integer is negative" do
-
-        context "when appending a small negative integer" do
-
-          let(:written) do
-            buffer.write_int64(-1)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int64).to eq(-1)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-
-        context "when appending the smallest 64bit integer" do
-
-          let(:written) do
-            buffer.write_int64(Integer::MIN_SIGNED_64BIT)
-          end
-
-          it "adds the int to the buffer" do
-            expect(written.read_int64).to eq(Integer::MIN_SIGNED_64BIT)
-          end
-
-          it_behaves_like "a fluid interface"
-        end
-      end
-    end
-
-    context "when the value is too high" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_int64(Integer::MAX_SIGNED_64BIT + 1)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-
-    context "when the value is too low" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_int64(Integer::MIN_SIGNED_64BIT - 1)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_sfixed32" do
-
-    let(:written) do
-      buffer.write_sfixed32(1000)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.read_sfixed32).to eq(1000)
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 32 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_sfixed32(2 ** 34)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_sfixed64" do
-
-    let(:written) do
-      buffer.write_sfixed64(1000)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.read_sfixed64).to eq(1000)
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 64 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_sfixed64(2 ** 65)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_sint32" do
-
-    context "when the value is 32 bit" do
-
-      let(:written) do
-        buffer.write_sint32(10)
-      end
-
-      it "adds the int to the buffer" do
-        expect(written.read_sint32).to eq(10)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-
-    context "when the value is greater than 32 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_sint32(2 ** 34)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
-
-  describe "#write_sint64" do
-
-    let(:written) do
-      buffer.write_sint64(1000)
-    end
-
-    it "adds the int to the buffer" do
-      expect(written.read_sint64).to eq(1000)
-    end
-
-    it_behaves_like "a fluid interface"
-
-    context "when the value is greater than 64 bit" do
-
-      it "raises an error" do
-        expect {
-          buffer.write_sint64(2 ** 65)
-        }.to raise_error(Protocop::Buffer::OutsideRange)
-      end
-    end
-  end
+  it_behaves_like "a serializer", :read_boolean,  :write_boolean, true
+  it_behaves_like "a serializer", :read_boolean,  :write_boolean, false
+  it_behaves_like "a serializer", :read_bytes,    :write_bytes,   "test"
+
+  it_behaves_like "a serializer", :read_string,   :write_string,  "test"
 
   describe "#write_string" do
 
@@ -676,20 +65,149 @@ describe Protocop::Buffer do
     end
   end
 
-  describe "#write_uint32" do
+  it_behaves_like "a serializer", :read_double,   :write_double,  1.23131
 
-    context "when the value is 32 bit" do
+  # it_behaves_like "a serializer", :read_float,    :write_float,   1.23
 
-      let(:written) do
-        buffer.write_uint32(10)
+  it_behaves_like "a serializer", :read_fixed32,  :write_fixed32, 152
+
+  describe "#write_fixed32" do
+
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_fixed32(2 ** 34)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
       end
-
-      it "adds the int to the buffer" do
-        expect(written.read_uint32).to eq(10)
-      end
-
-      it_behaves_like "a fluid interface"
     end
+  end
+
+  it_behaves_like "a serializer", :read_fixed64,  :write_fixed64, 142576
+
+  describe "#write_fixed64" do
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_fixed64(2 ** 65)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_int32,    :write_int32,   1
+  it_behaves_like "a serializer", :read_int32,    :write_int32,   Integer::MAX_SIGNED_32BIT
+  it_behaves_like "a serializer", :read_int32,    :write_int32,   -1
+  it_behaves_like "a serializer", :read_int32,    :write_int32,   Integer::MIN_SIGNED_32BIT
+
+  describe "#write_int32" do
+
+    context "when the value is too high" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int32(Integer::MAX_SIGNED_32BIT + 1)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+
+    context "when the value is too low" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int32(Integer::MIN_SIGNED_32BIT - 1)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_int64,    :write_int64,   1
+  it_behaves_like "a serializer", :read_int64,    :write_int64,   Integer::MAX_SIGNED_64BIT
+  it_behaves_like "a serializer", :read_int64,    :write_int64,   -1
+  it_behaves_like "a serializer", :read_int64,    :write_int64,   Integer::MIN_SIGNED_64BIT
+
+  describe "#write_int64" do
+
+    context "when the value is too high" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int64(Integer::MAX_SIGNED_64BIT + 1)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+
+    context "when the value is too low" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_int64(Integer::MIN_SIGNED_64BIT - 1)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_sfixed32, :write_sfixed32, 1000
+
+  describe "#write_sfixed32" do
+
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sfixed32(2 ** 34)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_sfixed64, :write_sfixed64, 142576
+
+  describe "#write_sfixed64" do
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sfixed64(2 ** 65)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_sint32,   :write_sint32,   1000
+
+  describe "#write_sint32" do
+
+    context "when the value is greater than 32 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sint32(2 ** 34)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_sint64,   :write_sint64,   142576
+
+  describe "#write_sint64" do
+
+    context "when the value is greater than 64 bit" do
+
+      it "raises an error" do
+        expect {
+          buffer.write_sint64(2 ** 65)
+        }.to raise_error(Protocop::Buffer::OutsideRange)
+      end
+    end
+  end
+
+  it_behaves_like "a serializer", :read_uint32,   :write_uint32,   1000
+
+  describe "#write_uint32" do
 
     context "when the value is negative" do
 
@@ -710,20 +228,10 @@ describe Protocop::Buffer do
     end
   end
 
+  it_behaves_like "a serializer", :read_uint64,   :write_uint64,   142576
+
   describe "#write_uint64" do
 
-    context "when the value is 64 bit" do
-
-      let(:written) do
-        buffer.write_uint64(10)
-      end
-
-      it "adds the int to the buffer" do
-        expect(written.read_uint64).to eq(10)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
 
     context "when the value is negative" do
 
@@ -744,45 +252,8 @@ describe Protocop::Buffer do
     end
   end
 
-  describe "#write_varint" do
-
-    context "when provided a 1 byte integer" do
-
-      let(:written) do
-        buffer.write_varint(5)
-      end
-
-      it "adds the string to the buffer" do
-        expect(written.read_varint).to eq(5)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-
-    context "when provided a 2 byte integer" do
-
-      let(:written) do
-        buffer.write_varint(130)
-      end
-
-      it "adds the string to the buffer" do
-        expect(written.read_varint).to eq(130)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-
-    context "when provided a 3 byte integer" do
-
-      let(:written) do
-        buffer.write_varint(20400)
-      end
-
-      it "adds the string to the buffer" do
-        expect(written.read_varint).to eq(20400)
-      end
-
-      it_behaves_like "a fluid interface"
-    end
-  end
+  it_behaves_like "a serializer", :read_varint,   :write_varint,   5
+  it_behaves_like "a serializer", :read_varint,   :write_varint,   130
+  it_behaves_like "a serializer", :read_varint,   :write_varint,   20400
+  it_behaves_like "a serializer", :read_varint,   :write_varint,   10001231231
 end
