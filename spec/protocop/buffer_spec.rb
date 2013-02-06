@@ -50,6 +50,21 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#read_bytes" do
+
+    before do
+      buffer.write_bytes("testing")
+    end
+
+    let(:read) do
+      buffer.read_bytes
+    end
+
+    it "returns the double" do
+      expect(read).to eq("testing")
+    end
+  end
+
   describe "#read_double" do
 
     before do
@@ -233,6 +248,21 @@ describe Protocop::Buffer do
     end
   end
 
+  describe "#read_string" do
+
+    before do
+      buffer.write_string("testing")
+    end
+
+    let(:read) do
+      buffer.read_string
+    end
+
+    it "returns the double" do
+      expect(read).to eq("testing")
+    end
+  end
+
   describe "#write_boolean" do
 
     context "when the boolean is true" do
@@ -265,11 +295,11 @@ describe Protocop::Buffer do
   describe "#write_bytes" do
 
     let(:written) do
-      buffer.write_bytes("\x04\x01")
+      buffer.write_bytes("test")
     end
 
     it "adds the bytes and length to the buffer" do
-      expect(written.bytes).to eq("\x02\x04\x01")
+      expect(written.read_bytes).to eq("test")
     end
 
     it_behaves_like "a fluid interface"
